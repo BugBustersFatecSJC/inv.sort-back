@@ -3,12 +3,103 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "mysql" // ou outro banco de dados que você esteja utilizando
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  name String
+  user_id   Int      @id @default(autoincrement())
+  username  String   @unique
   email String @unique
+
+  password  String
+  role      Role
+  created_at DateTime @default(now())
+  status    Status    @default(ativo)
+  StockMovement StockMovement[] // Relacionamento com movimentação de estoque
+}
+
+model Category {
+  category_id   Int      @id @default(autoincrement())
+  category_name String   @unique
+  Product       Product[]  // Relacionamento com produtos
+}
+
+model Supplier {
+  supplier_id   Int      @id @default(autoincrement())
+  supplier_name String   @unique
+  contact_info  String?
+  address       String?
+  rating        Float
+  Product       Product[]  // Relacionamento com produtos
+}
+
+model Product {
+  product_id   Int       @id @default(autoincrement())
+  product_name String
+  description  String?
+  category     Category? @relation(fields: [category_id], references: [category_id])
+  category_id  Int?
+  supplier     Supplier? @relation(fields: [supplier_id], references: [supplier_id])
+  supplier_id  Int?
+  is_perishable Boolean  @default(false)
+  unit_type    UnitType
+  created_at   DateTime  @default(now())
+  Batch        Batch[]    // Relacionamento com lotes
+  ProductStatistic ProductStatistic[]  // Relacionamento com estatísticas de produto
+}
+
+model Batch {
+  batch_id       Int       @id @default(autoincrement())
+  product        Product   @relation(fields: [product_id], references: [product_id])
+  product_id     Int
+  quantity       Int
+  expiration_date DateTime?
+  manufacture_date DateTime?
+  entry_date     DateTime  @default(now())
+  exit_date      DateTime?
+  StockMovement  StockMovement[]  // Relacionamento com movimentação de estoque
+}
+
+model StockMovement {
+  movement_id   Int        @id @default(autoincrement())
+  batch         Batch      @relation(fields: [batch_id], references: [batch_id])
+  batch_id      Int
+  quantity      Int
+  movement_type MovementType
+  movement_date DateTime   @default(now())
+  user          User       @relation(fields: [user_id], references: [user_id])
+  user_id       Int
+}
+
+model ProductStatistic {
+  stat_id           Int       @id @default(autoincrement())
+  product           Product   @relation(fields: [product_id], references: [product_id])
+  product_id        Int
+  total_sales       Int       @default(0)
+  stock_level       Int       @default(0)
+  average_daily_sales Float   @default(0.0)
+  last_movement_date DateTime?
+}
+
+enum Role {
+  admin
+  gerente
+  funcionario
+}
+
+enum Status {
+  ativo
+  inativo
+}
+
+enum UnitType {
+  un
+  kg
+  lt
+}
+
+enum MovementType {
+  entrada
+  saida
 }
