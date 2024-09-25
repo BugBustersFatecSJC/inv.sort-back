@@ -1,12 +1,21 @@
+import React from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Link
+} from 'react-router-dom';
+import UserPage from './pages/UserPage';
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
+
+function HomePage() {
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
+        <p className="text-blue-500">
           Edit <code>src/App.js</code> and save to reload.
         </p>
         <a
@@ -17,8 +26,22 @@ function App() {
         >
           Learn React
         </a>
+        <nav>
+          <Link to="/user" className="App-link">Go to User Page</Link>
+        </nav>
       </header>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/user" element={<UserPage />} />
+      </Routes>
+    </Router>
   );
 }
 
