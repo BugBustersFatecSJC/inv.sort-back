@@ -9,14 +9,14 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <div className="flex justify-between rounded-lg max-h-10 w-80 bg-orange-400 m-4 p-2 shadow-md">
+    <div className="flex justify-between rounded-lg max-h-6 w-56 bg-[rgb(221,160,89)] m-2">
       <input
-        className="h-10 rounded-lg w-full bg-orange-400 placeholder-gray-700 focus:outline-none px-2"
+        className="h-6 rounded-lg w-[190px] bg-[rgb(221,160,89)] m-0"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search user..."
       />
-      <button onClick={handleSearch} className="ml-2 h-10 bg-orange-700 text-white px-4 rounded">
+      <button onClick={handleSearch} className="relative h-6 mr-2 bg-[rgb(180,81,5)] text-white px-2 rounded">
         Search
       </button>
     </div>
