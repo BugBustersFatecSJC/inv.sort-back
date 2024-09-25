@@ -1,27 +1,17 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE `User` (
+    `user_id` INTEGER NOT NULL AUTO_INCREMENT,
+    `username` VARCHAR(191) NOT NULL,
+    `email` VARCHAR(191) NOT NULL,
+    `password` VARCHAR(191) NOT NULL,
+    `role` ENUM('admin', 'gerente', 'funcionario') NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `status` ENUM('ativo', 'inativo') NOT NULL DEFAULT 'ativo',
 
-  - The primary key for the `user` table will be changed. If it partially fails, the table could be left without primary key constraint.
-  - You are about to drop the column `id` on the `user` table. All the data in the column will be lost.
-  - You are about to drop the column `name` on the `user` table. All the data in the column will be lost.
-  - A unique constraint covering the columns `[username]` on the table `User` will be added. If there are existing duplicate values, this will fail.
-  - Added the required column `password` to the `User` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `role` to the `User` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `user_id` to the `User` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `username` to the `User` table without a default value. This is not possible if the table is not empty.
-
-*/
--- AlterTable
-ALTER TABLE `user` DROP PRIMARY KEY,
-    DROP COLUMN `id`,
-    DROP COLUMN `name`,
-    ADD COLUMN `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    ADD COLUMN `password` VARCHAR(191) NOT NULL,
-    ADD COLUMN `role` ENUM('admin', 'gerente', 'funcionario') NOT NULL,
-    ADD COLUMN `status` ENUM('ativo', 'inativo') NOT NULL DEFAULT 'ativo',
-    ADD COLUMN `user_id` INTEGER NOT NULL AUTO_INCREMENT,
-    ADD COLUMN `username` VARCHAR(191) NOT NULL,
-    ADD PRIMARY KEY (`user_id`);
+    UNIQUE INDEX `User_username_key`(`username`),
+    UNIQUE INDEX `User_email_key`(`email`),
+    PRIMARY KEY (`user_id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Category` (
@@ -94,9 +84,6 @@ CREATE TABLE `ProductStatistic` (
 
     PRIMARY KEY (`stat_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateIndex
-CREATE UNIQUE INDEX `User_username_key` ON `User`(`username`);
 
 -- AddForeignKey
 ALTER TABLE `Product` ADD CONSTRAINT `Product_category_id_fkey` FOREIGN KEY (`category_id`) REFERENCES `Category`(`category_id`) ON DELETE SET NULL ON UPDATE CASCADE;
