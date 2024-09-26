@@ -8,6 +8,9 @@ module.exports = {
         brown: {
           700: '#8B4513',
         },
+        brorange: {
+          800: '#DDA059',
+        }
       },
     },
   },
