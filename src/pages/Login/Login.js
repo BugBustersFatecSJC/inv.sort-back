@@ -19,10 +19,10 @@ function Login() {
                 <a href='#'>
                     Esqueceu sua senha?
                 </a>
-                <a href="#">
+                <p href="#">
                     Lembrar-me
                     <input className='ms-2 rounded shadow-none border' type="checkbox"/>
-                </a>
+                </p>
             </div>
 
             <div className='mt-[40px]'>
