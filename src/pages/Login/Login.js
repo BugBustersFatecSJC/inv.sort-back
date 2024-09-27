@@ -21,7 +21,7 @@ function Login() {
                 </a>
                 <a href="#">
                     Lembrar-me
-                    <input className= 'ms-2' type="checkbox"/>
+                    <input className='ms-2 rounded shadow-none border' type="checkbox"/>
                 </a>
             </div>
 
