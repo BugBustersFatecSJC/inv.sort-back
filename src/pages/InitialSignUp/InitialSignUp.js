@@ -22,7 +22,7 @@ function InitialSignUp() {
             <input value="ativo" type="hidden" name="status" />
 
             <div className='mt-[40px]'>
-              <SendButton Text="ENTRAR"/>
+              <SendButton text="ENTRAR"/>
             </div>
           </div>
         </form>

@@ -11,6 +11,7 @@
   --tertiary-color: #F8B971;
   --quarternary-color: #B45105;
   --quinteral-color: #BF823C;
+  --alt-color: #6B3710;
   --main-black-color: #121212;
 }
 
@@ -60,6 +61,10 @@ code {
   background-color: var(--main-black-color);
 }
 
+.alt-color-bg {
+  background-color: var(--alt-color);
+}
+
 .main-color {
   color: var(--main-color);
 }
@@ -82,4 +87,8 @@ code {
 
 .main-black-color {
   color: var(--main-black-color);
+}
+
+.alt-color {
+  color: var(--alt-color);
 }
