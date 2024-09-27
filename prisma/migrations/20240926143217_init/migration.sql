@@ -28,10 +28,17 @@ CREATE TABLE `Supplier` (
     `supplier_name` VARCHAR(191) NOT NULL,
     `contact_info` VARCHAR(191) NULL,
     `address` VARCHAR(191) NULL,
-    `rating` DOUBLE NOT NULL,
 
     UNIQUE INDEX `Supplier_supplier_name_key`(`supplier_name`),
     PRIMARY KEY (`supplier_id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ProductUnit` (
+    `unit_id` INTEGER NOT NULL AUTO_INCREMENT,
+    `unit_type` ENUM('un', 'kg', 'lt') NOT NULL,
+
+    PRIMARY KEY (`unit_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -39,13 +46,27 @@ CREATE TABLE `Product` (
     `product_id` INTEGER NOT NULL AUTO_INCREMENT,
     `product_name` VARCHAR(191) NOT NULL,
     `description` VARCHAR(191) NULL,
-    `category_id` INTEGER NULL,
-    `supplier_id` INTEGER NULL,
+    `category_id` INTEGER NOT NULL,
+    `unit_id` INTEGER NOT NULL,
+    `supplier_id` INTEGER NOT NULL,
     `is_perishable` BOOLEAN NOT NULL DEFAULT false,
-    `unit_type` ENUM('un', 'kg', 'lt') NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`product_id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `AuditLog` (
+    `log_id` INTEGER NOT NULL AUTO_INCREMENT,
+    `user_id` INTEGER NOT NULL,
+    `action` VARCHAR(191) NOT NULL,
+    `table_name` VARCHAR(191) NOT NULL,
+    `record_id` INTEGER NOT NULL,
+    `old_value` VARCHAR(191) NULL,
+    `new_value` VARCHAR(191) NULL,
+    `action_date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`log_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -74,7 +95,7 @@ CREATE TABLE `StockMovement` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `ProductStatistic` (
+CREATE TABLE `ProductStatistics` (
     `stat_id` INTEGER NOT NULL AUTO_INCREMENT,
     `product_id` INTEGER NOT NULL,
     `total_sales` INTEGER NOT NULL DEFAULT 0,
@@ -86,10 +107,16 @@ CREATE TABLE `ProductStatistic` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `Product` ADD CONSTRAINT `Product_category_id_fkey` FOREIGN KEY (`category_id`) REFERENCES `Category`(`category_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Product` ADD CONSTRAINT `Product_category_id_fkey` FOREIGN KEY (`category_id`) REFERENCES `Category`(`category_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Product` ADD CONSTRAINT `Product_supplier_id_fkey` FOREIGN KEY (`supplier_id`) REFERENCES `Supplier`(`supplier_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Product` ADD CONSTRAINT `Product_supplier_id_fkey` FOREIGN KEY (`supplier_id`) REFERENCES `Supplier`(`supplier_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Product` ADD CONSTRAINT `Product_unit_id_fkey` FOREIGN KEY (`unit_id`) REFERENCES `ProductUnit`(`unit_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `AuditLog` ADD CONSTRAINT `AuditLog_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Batch` ADD CONSTRAINT `Batch_product_id_fkey` FOREIGN KEY (`product_id`) REFERENCES `Product`(`product_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -101,4 +128,4 @@ ALTER TABLE `StockMovement` ADD CONSTRAINT `StockMovement_batch_id_fkey` FOREIGN
 ALTER TABLE `StockMovement` ADD CONSTRAINT `StockMovement_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ProductStatistic` ADD CONSTRAINT `ProductStatistic_product_id_fkey` FOREIGN KEY (`product_id`) REFERENCES `Product`(`product_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ProductStatistics` ADD CONSTRAINT `ProductStatistics_product_id_fkey` FOREIGN KEY (`product_id`) REFERENCES `Product`(`product_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
