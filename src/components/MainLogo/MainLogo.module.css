@@ -1,0 +1,12 @@
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(.9);
+  }
+  50% {
+    transform: scale(1);
+  }
+}
+
+.pulsingText {
+  animation: pulse 1.6s infinite;
+}
