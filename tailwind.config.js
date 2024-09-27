@@ -11,6 +11,8 @@ module.exports = {
         brorange: {
           800: '#DDA059',
         }
+          700: '#8B4513', // Exemplo de cor marrom
+        },
       },
     },
   },

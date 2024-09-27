@@ -1,10 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=VT323&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
+:root {
+  --main-color: #DDA059;
+  --secondary-color: #3E1A00;
+  --tertiary-color: #F8B971;
+  --quarternary-color: #B45105;
+  --quinteral-color: #BF823C;
+  --main-black-color: #121212;
+}
+
+
+* {
   margin: 0;
-  font-family: 'VT323', monospace;
+  padding: 0;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -12,4 +29,56 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.font-pixel {
+  font-family: 'VT323', monospace;
+}
+
+.main-color-bg {
+  background-color: var(--main-color);
+}
+
+.secondary-color-bg {
+  background-color: var(--secondary-color);
+}
+
+.tertiary-color-bg {
+  background-color: var(--tertiary-color);
+}
+
+.quarternary-color-bg {
+  background-color: var(--quarternary-color);
+}
+
+.quinteral-color-bg {
+  background-color: var(--quinteral-color);
+}
+
+.main-black-color-bg {
+  background-color: var(--main-black-color);
+}
+
+.main-color {
+  color: var(--main-color);
+}
+
+.secondary-colo {
+  color: var(--secondary-color);
+}
+
+.tertiary-color {
+  color: var(--tertiary-color);
+}
+
+.quarternary-color {
+  color: var(--quarternary-color);
+}
+
+.quinteral-color {
+  color: var(--quinteral-color);
+}
+
+.main-black-color {
+  color: var(--main-black-color);
 }
