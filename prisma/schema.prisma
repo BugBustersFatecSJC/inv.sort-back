@@ -16,6 +16,89 @@ model User {
   created_at DateTime @default(now())
   status     Status    @default(ativo)
   user_img   String?
+  auditLogs  AuditLog[]
+  stockMovements StockMovement[]
+}
+
+model Category {
+  category_id    Int     @id @default(autoincrement())
+  category_name  String  @unique
+  category_image String?
+  products       Product[]
+}
+
+model Supplier {
+  supplier_id   Int     @id @default(autoincrement())
+  supplier_name String   @unique
+  contact_info  String?
+  supplier_img  String?
+  address       String?
+  products      Product[]
+}
+
+model ProductUnit {
+  unit_id   Int     @id @default(autoincrement())
+  unit_type UnitType
+  products  Product[]
+}
+
+model Product {
+  product_id      Int             @id @default(autoincrement())
+  product_name    String
+  description     String?
+  product_img     String?
+  category_id     Int
+  supplier_id     Int
+  unit_id         Int
+  is_perishable   Boolean         @default(false)
+  created_at      DateTime        @default(now())
+  category        Category        @relation(fields: [category_id], references: [category_id])
+  supplier        Supplier        @relation(fields: [supplier_id], references: [supplier_id])
+  unit            ProductUnit     @relation(fields: [unit_id], references: [unit_id])
+  batches         Batch[]
+  statistics      ProductStatistics[]
+}
+
+model AuditLog {
+  log_id      Int      @id @default(autoincrement())
+  user_id     Int
+  action      String
+  table_name  String
+  old_value   String?
+  new_value   String?
+  action_date DateTime @default(now())
+  user        User     @relation(fields: [user_id], references: [user_id])
+}
+
+model Batch {
+  batch_id         Int       @id @default(autoincrement())
+  product_id       Int
+  quantity         Int
+  expiration_date  DateTime?
+  manufacture_date DateTime?
+  product          Product   @relation(fields: [product_id], references: [product_id])
+  stockMovements   StockMovement[]
+}
+
+model StockMovement {
+  movement_id   Int      @id @default(autoincrement())
+  batch_id      Int
+  quantity      Int
+  movement_type MovementType
+  movement_date DateTime  @default(now())
+  user_id       Int
+  batch         Batch     @relation(fields: [batch_id], references: [batch_id])
+  user          User      @relation(fields: [user_id], references: [user_id])
+}
+
+model ProductStatistics {
+  stat_id           Int      @id @default(autoincrement())
+  product_id        Int
+  total_sales       Int      @default(0)
+  stock_level       Int      @default(0)
+  average_daily_sales Float   @default(0.0)
+  last_movement_date DateTime?
+  product           Product   @relation(fields: [product_id], references: [product_id])
 }
 
 enum Role {
@@ -29,78 +112,10 @@ enum Status {
   inativo
 }
 
-model Category {
-  category_id   Int      @id @default(autoincrement())
-  category_name String   @unique
-  category_image Bytes?
-}
-
-model Supplier {
-  supplier_id   Int      @id @default(autoincrement())
-  supplier_name String   @unique
-  contact_info  String?
-  supplier_img  String?
-  address       String?
-}
-
-model ProductUnit {
-  unit_id   Int    @id @default(autoincrement())
-  unit_type UnitType
-}
-
 enum UnitType {
   un
   kg
   lt
-}
-
-model Product {
-  product_id      Int      @id @default(autoincrement())
-  product_name    String
-  description     String?
-  product_img     String?
-  category_id     Int?
-  supplier_id     Int?
-  unit_id         Int?
-  is_perishable   Boolean   @default(false)
-  created_at      DateTime @default(now())
-
-  category        Category? @relation(fields: [category_id], references: [category_id])
-  supplier        Supplier? @relation(fields: [supplier_id], references: [supplier_id])
-  unit            ProductUnit? @relation(fields: [unit_id], references: [unit_id])
-}
-model AuditLog {
-  log_id      Int      @id @default(autoincrement())
-  user_id     Int?
-  action      String
-  table_name  String
-  old_value   String?
-  new_value   String?
-  action_date DateTime @default(now())
-
-  user        User? @relation(fields: [user_id], references: [user_id])
-}
-
-model Batch {
-  batch_id        Int      @id @default(autoincrement())
-  product_id      Int
-  quantity        Int
-  expiration_date DateTime?
-  manufacture_date DateTime?
-
-  product        Product @relation(fields: [product_id], references: [product_id])
-}
-
-model StockMovement {
-  movement_id    Int      @id @default(autoincrement())
-  batch_id       Int
-  quantity       Int
-  movement_type  MovementType
-  movement_date  DateTime @default(now())
-  user_id        Int
-
-  batch          Batch @relation(fields: [batch_id], references: [batch_id])
-  user           User @relation(fields: [user_id], references: [user_id])
 }
 
 enum MovementType {
