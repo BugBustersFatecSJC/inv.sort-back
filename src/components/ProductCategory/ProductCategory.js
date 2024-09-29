@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import './ProductCategory.module.css'
 import styles from './ProductCategory.module.css'
-import api from '../../services/api';
-import Loading from '../Loading/Loading';
+import api from '../../services/api'
+import Loading from '../Loading/Loading'
+import 'react-tippy/dist/tippy.css'
+import { Tooltip } from 'react-tippy'
 
 function ProductCategory(props) {
   /**
@@ -73,10 +75,10 @@ function ProductCategory(props) {
     /**
      * Abre e fecha o modal de cadastro
      */
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
+    const openModal = () => setIsModalOpen(true)
+    const closeModal = () => setIsModalOpen(false)
 
     /**
      * Criação da requisição para envio ao servidor back-end
@@ -119,10 +121,33 @@ function ProductCategory(props) {
     return (
     <div className='w-full alt-color-2-bg rounded border-[15px] border-[#6B3710] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] mt-4'>
         <div className='border-l-[6px] border-r-[6px] border-[#D87B26] p-[1rem] h-[200px] overflow-y-auto flex flex-wrap'>
-            {props.products.map((_, index) => (
-                <div key={index} className={`w-12 h-12 mb-4 bg-transparent border-l-[3px] border-b-[3px] border-[#FFE4A1] cursor-pointer ${styles.borderDepth}`}></div>
-            ))}
+            {/*
+              Aqui ocorre a criação de cada quadrado, é obtido uma lista com todos os produtos
+              que são mapeados, cada produto irá gerar um quadrado e cada quadrado terá sua tooltip           
+            */}
+            {props.products.map((product, index) => (
+              <Tooltip
+              key={index}
+              content={
+                <div>
+                  <strong>Nome:</strong> {product.product_name}<br />
+                  <strong>Unidade:</strong> {}<br />
+                  <strong>Perecível:</strong> {product.is_perishable ? 'Sim' : 'Não'}
+                </div>
+              }
+              title={product.product_name}
+              arrow={true}
+              // animation="shift-away"
+              delay={100}
+              theme="light"
+              trigger='click'
+            >
+              <div key={index} className={`w-12 h-12 mb-4 bg-transparent border-l-[3px] border-b-[3px] border-[#FFE4A1] cursor-pointer ${styles.borderDepth}`} id={product.product_id}>
+              </div>
+            </Tooltip>
+          ))}
 
+            {/* Botão para adicionar novo produto */}
             <button
                 onClick={openModal}
                 className="w-12 h-12 alt-color-4-bg border-[3px] border-[#D87B26] flex items-center justify-center text-2xl"
@@ -131,6 +156,7 @@ function ProductCategory(props) {
             </button>
         </div>
 
+        {/* Modal de produto */}
         {isModalOpen && (
           <div className="modal modal-open text-slate-400">
           <div className="modal-box">
