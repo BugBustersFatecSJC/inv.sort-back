@@ -14,6 +14,7 @@ import MainPage from './pages/MainPage/MainPage';
 import ProductCategory from './components/ProductCategory/ProductCategory';
 import Category from './components/Category/Category';
 import Loading from './components/Loading/Loading';
+// import UserPage from './pages/UserPage'
 
 function App() {
   /**
@@ -70,7 +71,7 @@ function App() {
   }
 
   /**
-   * Funcionalidade para checar se algum usuário no banco de dados, se sim,
+   * Funcionalidade para checar se há algum usuário no banco de dados, se sim,
    * exibirá a tela de login, senão o usuário será redirecionado para a tela
    * de primeiro cadastro
    */
@@ -78,7 +79,7 @@ function App() {
   useEffect(() => {
     api
       .get("/users")
-      .then(response => setAdminExists(response.data.exists))
+      .then(response => setAdminExists(response.data))
       .catch((err) => {
         console.log(err)
       })
@@ -93,7 +94,7 @@ function App() {
           <Route path="/login" element={<Login />} />
         </Routes>
       </Router> */}
-      {/* {adminExists ? <Login /> : <InitialSignUp />} */}
+
       <MainPage title="Produtos">
         {loading ? (
           <Loading />
@@ -106,6 +107,7 @@ function App() {
         })}
         <Category onCategoryAdded={addCategory} />
       </MainPage>
+      {/* <UserPage /> */}
     </div>
   );
 }
