@@ -26,7 +26,7 @@ function Login() {
             </div>
 
             <div className='mt-[40px]'>
-                <SendButton Text="ENTRAR"/>
+                <SendButton text="ENTRAR"/>
             </div>
             <a className='font-pixel mt-[20px] secondary-color' href='#'>
                 Não tem cadastro?
