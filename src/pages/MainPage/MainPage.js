@@ -8,7 +8,7 @@ function MainPage(props) {
   const loadingIcon = () => {
     setloading((prevLoading) => !prevLoading);
   };
-
+  
   return (
     <div className='main-color-bg flex'>
       <Sidebar />
