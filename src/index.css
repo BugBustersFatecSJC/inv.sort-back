@@ -15,6 +15,7 @@
   --alt-color-2: #FFC376;
   --alt-color-3 : #D87B26;
   --alt-color-4 : #FFCB8F;
+  --alt-color-5 : #3E1900;
   --main-black-color: #121212;
 }
 
@@ -79,6 +80,10 @@ code {
 
 .alt-color-4-bg {
   background-color: var(--alt-color-4);
+}
+
+.alt-color-5-bg {
+  background-color: var(--alt-color-5);
 }
 
 .main-color {

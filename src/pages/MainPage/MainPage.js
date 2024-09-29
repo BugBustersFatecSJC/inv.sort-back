@@ -2,6 +2,7 @@ import {useState} from 'react';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import UserProfileIcon from '../../components/UserProfileIcon/UserProfileIcon';
 import Loading from '../../components/Loading/Loading';
+import CategoryButtons from '../../components/CategoryButtons/CategoryButtons';
 
 function MainPage(props) {
   const [loading, setloading] = useState(false);
