@@ -8,7 +8,7 @@ import Watermark from '../../components/Watermark/Watermark'
 import api from '../../services/api'
 
 function InitialSignUp() {
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
   /**
    * Requisição para o login
    */
@@ -40,7 +40,7 @@ function InitialSignUp() {
         setUserPassword('')
         setUserPasswordConfirmation('')
         
-        // navigate('/login')
+        navigate('/login')
     } catch(err) {
       console.log(err)
     }
