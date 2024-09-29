@@ -15,20 +15,23 @@ model User {
   role       Role
   created_at DateTime @default(now())
   status     Status    @default(ativo)
+  user_img   String?
   auditLogs  AuditLog[]
   stockMovements StockMovement[]
 }
 
 model Category {
-  category_id Int     @id @default(autoincrement())
-  category_name String @unique
-  products    Product[]
+  category_id    Int     @id @default(autoincrement())
+  category_name  String  @unique
+  category_image String?
+  products       Product[]
 }
 
 model Supplier {
   supplier_id   Int     @id @default(autoincrement())
-  supplier_name String  @unique
+  supplier_name String   @unique
   contact_info  String?
+  supplier_img  String?
   address       String?
   products      Product[]
 }
@@ -43,9 +46,10 @@ model Product {
   product_id      Int             @id @default(autoincrement())
   product_name    String
   description     String?
+  product_img     String?
   category_id     Int
-  unit_id         Int
   supplier_id     Int
+  unit_id         Int
   is_perishable   Boolean         @default(false)
   created_at      DateTime        @default(now())
   category        Category        @relation(fields: [category_id], references: [category_id])
@@ -60,7 +64,6 @@ model AuditLog {
   user_id     Int
   action      String
   table_name  String
-  record_id   Int
   old_value   String?
   new_value   String?
   action_date DateTime @default(now())
@@ -73,8 +76,6 @@ model Batch {
   quantity         Int
   expiration_date  DateTime?
   manufacture_date DateTime?
-  entry_date       DateTime  @default(now())
-  exit_date        DateTime?
   product          Product   @relation(fields: [product_id], references: [product_id])
   stockMovements   StockMovement[]
 }
