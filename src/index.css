@@ -12,6 +12,9 @@
   --quarternary-color: #B45105;
   --quinteral-color: #BF823C;
   --alt-color: #6B3710;
+  --alt-color-2: #FFC376;
+  --alt-color-3 : #D87B26;
+  --alt-color-4 : #FFCB8F;
   --main-black-color: #121212;
 }
 
@@ -26,6 +29,7 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: var(--secondary-color);
 }
 
 code {
@@ -65,6 +69,18 @@ code {
   background-color: var(--alt-color);
 }
 
+.alt-color-2-bg {
+  background-color: var(--alt-color-2);
+}
+
+.alt-color-3-bg {
+  background-color: var(--alt-color-3);
+}
+
+.alt-color-4-bg {
+  background-color: var(--alt-color-4);
+}
+
 .main-color {
   color: var(--main-color);
 }
@@ -91,4 +107,16 @@ code {
 
 .alt-color {
   color: var(--alt-color);
+}
+
+.alt-color-2 {
+  color: var(--alt-color-2);
+}
+
+.alt-color-3 {
+  color: var(--alt-color-3);
+}
+
+.alt-color-4 {
+  color: var(--alt-color-4);
 }

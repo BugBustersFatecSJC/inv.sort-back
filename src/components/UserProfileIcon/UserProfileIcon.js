@@ -6,7 +6,7 @@ function UserProfileIcon() {
         <p className='font-pixel text-xl me-3'>
             Usuário
         </p>
-        <figure className='bg-white rounded-full w-[5rem] h-[5rem]'>
+        <figure className='bg-white rounded-full w-[4rem] h-[4rem]'>
         
         </figure>
     </div>

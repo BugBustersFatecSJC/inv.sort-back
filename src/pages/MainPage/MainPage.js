@@ -1,10 +1,9 @@
 import {useState} from 'react';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import UserProfileIcon from '../../components/UserProfileIcon/UserProfileIcon';
-import SendButton from '../../components/SendButton/SendButton';
 import Loading from '../../components/Loading/Loading';
 
-function MainPage() {
+function MainPage(props) {
   const [loading, setloading] = useState(false);
   const loadingIcon = () => {
     setloading((prevLoading) => !prevLoading);
@@ -19,11 +18,14 @@ function MainPage() {
           <UserProfileIcon />
         </div>
 
-        <div className='w-full flex justify-center'>
-          <button onClick={loadingIcon}>Testing</button>
-        </div>
-        <div className='w-full flex justify-center'>
-          {loading ? <Loading /> : <p>Não está carregando...</p>}
+        <div className='w-[90%] mx-auto flex flex-col'>
+          <div className='w-full flex justify-start'>
+            <h1 className='text-4xl font-pixel'>{props.title}</h1>
+          </div>
+
+          <main>
+            {props.children}
+          </main>
         </div>
       </div>
     </div>
