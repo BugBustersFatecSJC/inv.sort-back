@@ -11,6 +11,7 @@ function ProductCategory(props) {
    * Criação da renderização do componente de loading
    */
   const [loading, setLoading] = useState(true)
+
   /**
    * Criação dos quadrados dos produtos no inventário
    */
@@ -117,6 +118,20 @@ function ProductCategory(props) {
       }
   }
 
+  /**
+   * Deleta o produto
+   */
+  const handleDelete = async (product_id) => {
+    try {
+      await api
+        .delete(`/products/${product_id}`)
+        .then((response) => {
+          props.onProductDeleted(response.data)
+        });
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
     return (
     <div className='w-full alt-color-2-bg rounded border-[15px] border-[#6B3710] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] mt-4'>
@@ -125,27 +140,30 @@ function ProductCategory(props) {
               Aqui ocorre a criação de cada quadrado, é obtido uma lista com todos os produtos
               que são mapeados, cada produto irá gerar um quadrado e cada quadrado terá sua tooltip           
             */}
-            {props.products.map((product, index) => (
-              <Tooltip
-              key={index}
-              content={
-                <div>
-                  <strong>Nome:</strong> {product.product_name}<br />
-                  <strong>Unidade:</strong> {}<br />
-                  <strong>Perecível:</strong> {product.is_perishable ? 'Sim' : 'Não'}
+            {props.products.map((product, index) => {
+              const unit = units.find((u) => u.unit_id === product.unit_id)?.unit_type || 'N/A'
+              return (
+                <Tooltip
+                key={index}
+                html={(
+                  <div className={styles.myTippyTheme}>
+                    <strong>Nome:</strong> {product.product_name}<br />
+                    <strong>Unidade:</strong> {unit}<br />
+                    <strong>Perecível:</strong> {product.is_perishable ? 'Sim' : 'Não'}
+                  </div>
+                )}
+                title={product.product_name}
+                arrow={true}
+                theme='dark'
+                delay={20}
+                trigger='mouseenter'
+              >
+                <div key={index} className={`relative w-12 h-12 mb-4 bg-transparent border-l-[3px] border-b-[3px] border-[#FFE4A1] cursor-pointer ${styles.borderDepth}`} id={product.product_id}>
+                  <i class="fa-solid fa-trash absolute top-[-10px] right-[-5px] text-red-500 cursor-pointer" onClick={() => handleDelete(product.product_id)}></i>
                 </div>
-              }
-              title={product.product_name}
-              arrow={true}
-              // animation="shift-away"
-              delay={100}
-              theme="light"
-              trigger='click'
-            >
-              <div key={index} className={`w-12 h-12 mb-4 bg-transparent border-l-[3px] border-b-[3px] border-[#FFE4A1] cursor-pointer ${styles.borderDepth}`} id={product.product_id}>
-              </div>
-            </Tooltip>
-          ))}
+              </Tooltip>
+              )
+            })}
 
             {/* Botão para adicionar novo produto */}
             <button

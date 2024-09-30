@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import styles from './Login.module.css'
 import MainLogo from "../../components/MainLogo/MainLogo"
 import Field from "../../components/Field/Field"
@@ -7,6 +8,12 @@ import Watermark from '../../components/Watermark/Watermark'
 
 
 function Login() {
+    const navigate = useNavigate()
+
+    const handleClick = () => {
+        navigate('/products')
+    }
+    
   return (
     <div className='main-color-bg h-screen flex flex-col items-center justify-center'>
         <form className='flex flex-col items-center w-[30%]'>
@@ -25,7 +32,7 @@ function Login() {
                 </p>
             </div>
 
-            <div className='mt-[40px]'>
+            <div className='mt-[40px]' onClick={handleClick}>
                 <SendButton text="ENTRAR"/>
             </div>
             <a className='font-pixel mt-[20px] secondary-color' href='#'>

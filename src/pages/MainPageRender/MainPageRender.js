@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import api from "../../services/api"
 import MainPage from '../MainPage/MainPage';
 import ProductCategory from '../../components/ProductCategory/ProductCategory';
@@ -7,9 +7,9 @@ import Loading from '../../components/Loading/Loading';
 
 
 function MainPageRender() {
-      /**
-   * Renderização do componente de loading
-   */
+    /**
+     * Renderização do componente de loading
+     */
   const [loading, setLoading] = useState(true)
 
   /**
@@ -61,6 +61,13 @@ function MainPageRender() {
   }
 
   /**
+   * Função para dinamicamente remover o produto após ele ser excluído
+   */
+  const removeProduct = (productId) => {
+    setProducts((prevProducts) => prevProducts.filter(product => product.product_id !== productId));
+  };
+
+  /**
    * Funcionalidade para checar se há algum usuário no banco de dados, se sim,
    * exibirá a tela de login, senão o usuário será redirecionado para a tela
    * de primeiro cadastro
@@ -75,18 +82,18 @@ function MainPageRender() {
   //     })
   // }, [])
     return (
-               <MainPage title="Produtos">
-        {loading ? (
-          <Loading />
-        ) :
-        categories.map((category) => {
-          const categoryProducts = products.filter(product => product.category_id === category.category_id);
-          return (
-              <ProductCategory key={category.category_id} categoryKey={category.category_id} products={categoryProducts} onProductAdded={addProduct} />
-          )
-        })}
-        <Category onCategoryAdded={addCategory} />
-      </MainPage> 
+        <MainPage title="Produtos">
+            {loading ? (
+            <Loading />
+            ) :
+            categories.map((category) => {
+            const categoryProducts = products.filter(product => product.category_id === category.category_id);
+            return (
+                <ProductCategory key={category.category_id} categoryKey={category.category_id} products={categoryProducts} onProductAdded={addProduct} onProductDeleted={removeProduct} />
+            )
+            })}
+            <Category onCategoryAdded={addCategory} />
+        </MainPage> 
     )
   }
   
