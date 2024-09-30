@@ -21,6 +21,7 @@ function App() {
           <Route path="/" element={<InitialSignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/products" element={<MainPageRender />} />
+          {/* <Route path="/userpage" element={<UserPage />} /> */}
         </Routes>
       </Router>
     </div>

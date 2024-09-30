@@ -61,6 +61,13 @@ function MainPageRender() {
   }
 
   /**
+   * Função para dinamicamente remover o produto após ele ser excluído
+   */
+  const removeProduct = (productId) => {
+    setProducts((prevProducts) => prevProducts.filter(product => product.product_id !== productId));
+  };
+
+  /**
    * Funcionalidade para checar se há algum usuário no banco de dados, se sim,
    * exibirá a tela de login, senão o usuário será redirecionado para a tela
    * de primeiro cadastro
@@ -82,7 +89,7 @@ function MainPageRender() {
             categories.map((category) => {
             const categoryProducts = products.filter(product => product.category_id === category.category_id);
             return (
-                <ProductCategory key={category.category_id} categoryKey={category.category_id} products={categoryProducts} onProductAdded={addProduct} />
+                <ProductCategory key={category.category_id} categoryKey={category.category_id} products={categoryProducts} onProductAdded={addProduct} onProductDeleted={removeProduct} />
             )
             })}
             <Category onCategoryAdded={addCategory} />

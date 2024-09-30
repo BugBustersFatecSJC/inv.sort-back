@@ -8,3 +8,15 @@ button {
     border-top: 3px solid #D68F54;
     border-right: 3px solid #D68F54;
 }
+
+.myTippyTheme {
+    background-color: #FFCB8F;
+    color: #3E1A00;
+    font-family: 'VT323', monospace;
+    font-size: 1.4rem;
+    padding: 8px;
+}
+
+.myTippyTheme .tippy-arrow {
+    color: #FFCB8F;
+}
