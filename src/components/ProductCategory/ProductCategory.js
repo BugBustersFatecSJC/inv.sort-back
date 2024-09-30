@@ -133,6 +133,8 @@ function ProductCategory(props) {
     }
   }
 
+  const [hoveredProductId, setHoveredProductId] = useState(null)
+
     return (
     <div className='w-full alt-color-2-bg rounded border-[15px] border-[#6B3710] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] mt-4'>
         <div className='border-l-[6px] border-r-[6px] border-[#D87B26] p-[1rem] h-[200px] overflow-y-auto flex flex-wrap'>
@@ -158,8 +160,14 @@ function ProductCategory(props) {
                 delay={20}
                 trigger='mouseenter'
               >
-                <div key={index} className={`relative w-12 h-12 mb-4 bg-transparent border-l-[3px] border-b-[3px] border-[#FFE4A1] cursor-pointer ${styles.borderDepth}`} id={product.product_id}>
-                  <i class="fa-solid fa-trash absolute top-[-10px] right-[-5px] text-red-500 cursor-pointer" onClick={() => handleDelete(product.product_id)}></i>
+                <div key={index} className={`relative w-12 h-12 mb-4 bg-transparent border-l-[3px] border-b-[3px] border-[#FFE4A1] cursor-pointer ${styles.borderDepth}`} id={product.product_id} onMouseEnter={() => setHoveredProductId(product.product_id)}
+                onMouseLeave={() => setHoveredProductId(null)}>
+                {hoveredProductId === product.product_id && (
+                  <i 
+                    className="fa-solid fa-trash absolute top-[-10px] right-[-5px] text-red-500 cursor-pointer" 
+                    onClick={() => handleDelete(product.product_id)}
+                  ></i>
+                )}
                 </div>
               </Tooltip>
               )
@@ -185,7 +193,7 @@ function ProductCategory(props) {
                 <label className="label">
                   <span className="label-text text-white">Nome do produto</span>
                 </label>
-                <input type="text" placeholder="Digite o nome do produto" className="input input-bordered placeholder:text-slate-300" required name='product_name' value={productName} onChange={(e) => setProductName(e.target.value)} />
+                <input type="texconst [hoveredProductId, setHoveredProductId] = useState(null)" placeholder="Digite o nome do produto" className="input input-bordered placeholder:text-slate-300" required name='product_name' value={productName} onChange={(e) => setProductName(e.target.value)} />
               </div>
 
               <div className="form-control mb-4">
