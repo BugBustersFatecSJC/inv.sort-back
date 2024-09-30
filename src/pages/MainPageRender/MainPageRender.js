@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import api from "../../services/api"
 import MainPage from '../MainPage/MainPage';
 import ProductCategory from '../../components/ProductCategory/ProductCategory';
@@ -7,9 +7,9 @@ import Loading from '../../components/Loading/Loading';
 
 
 function MainPageRender() {
-      /**
-   * Renderização do componente de loading
-   */
+    /**
+     * Renderização do componente de loading
+     */
   const [loading, setLoading] = useState(true)
 
   /**
@@ -75,18 +75,18 @@ function MainPageRender() {
   //     })
   // }, [])
     return (
-               <MainPage title="Produtos">
-        {loading ? (
-          <Loading />
-        ) :
-        categories.map((category) => {
-          const categoryProducts = products.filter(product => product.category_id === category.category_id);
-          return (
-              <ProductCategory key={category.category_id} categoryKey={category.category_id} products={categoryProducts} onProductAdded={addProduct} />
-          )
-        })}
-        <Category onCategoryAdded={addCategory} />
-      </MainPage> 
+        <MainPage title="Produtos">
+            {loading ? (
+            <Loading />
+            ) :
+            categories.map((category) => {
+            const categoryProducts = products.filter(product => product.category_id === category.category_id);
+            return (
+                <ProductCategory key={category.category_id} categoryKey={category.category_id} products={categoryProducts} onProductAdded={addProduct} />
+            )
+            })}
+            <Category onCategoryAdded={addCategory} />
+        </MainPage> 
     )
   }
   
