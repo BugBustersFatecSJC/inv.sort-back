@@ -37,7 +37,7 @@ const getProductsbyId = async (req, res) => {
 }
 
 const createProduct = async (req, res) => {
-    const { product_name, description, category_id, supplier_id, is_perishable, unit_id, created_at } = req.body;
+    const { product_name, description, category_id, supplier_id, is_perishable, unit_id } = req.body;
 
     try {
         const createProd = await prisma.product.create({
@@ -47,8 +47,7 @@ const createProduct = async (req, res) => {
                 category_id,
                 supplier_id,
                 is_perishable,
-                unit_id,
-                created_at
+                unit_id
             },
             include: {
                 category: true,
