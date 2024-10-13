@@ -27,8 +27,8 @@ const data = [
   ];
 const Mainchart = () => {
   return (
-    <ResponsiveContainer width="70%" height="100%">
-    <BarChart width={70} height={40} data={data}>
+    <ResponsiveContainer className={"m-auto"} width="50%" height="80%">
+    <BarChart width={50} height={40} data={data}>
       <Bar dataKey="uv" fill="#3e1900" />
     </BarChart>
   </ResponsiveContainer>
