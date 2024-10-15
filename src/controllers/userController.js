@@ -2,12 +2,11 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const { hashSync, compareSync } = require('bcrypt');
 
-// Registra dados do usuário
 const createUser = async (req, res) => {
     const { username, email, password, role, status } = req.body;
 
     try {
-        // Verifica se o e-mail já está em uso
+
         const existingUser = await prisma.user.findUnique({
             where: { email: email },
         })
@@ -22,7 +21,6 @@ const createUser = async (req, res) => {
 
         const hashedPassword = hashSync(password, 10);
 
-        // Criação um novo usuário com a senha hasheada
         let user = await prisma.user.create({
             data: {
                 username: username,
@@ -33,8 +31,8 @@ const createUser = async (req, res) => {
             },
         });
 
-        // Retorne o usuário criado com a senha hasheada
-        const { password: _, ...userWithoutPassword } = user; // Remove a senha da resposta
+        
+        const { password: _, ...userWithoutPassword } = user; 
         return res.status(201).json(userWithoutPassword);
     } catch (error) {
         console.log(error)
@@ -43,7 +41,7 @@ const createUser = async (req, res) => {
 };
 
 
-// Retorna todos os usuários
+
 const getAllUsers = async (req, res) => {
     try {
         const users = await prisma.user.findMany();
@@ -57,7 +55,39 @@ const getAllUsers = async (req, res) => {
     }
 };
 
+
+const loginUser = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+   
+        const user = await prisma.user.findUnique({
+            where: { email: email },
+        });
+
+        if (!user) {
+            return res.status(401).json({ error: "E-mail ou senha inválidos." });
+        }
+
+       
+        const isPasswordValid = compareSync(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({ error: "E-mail ou senha inválidos." });
+        }
+
+        const { password: _, ...userWithoutPassword } = user;
+        return res.status(200).json(userWithoutPassword);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Erro ao fazer login." });
+    }
+};
+
+
 module.exports = {
     createUser,
     getAllUsers,
+    loginUser, 
 };
+
+
