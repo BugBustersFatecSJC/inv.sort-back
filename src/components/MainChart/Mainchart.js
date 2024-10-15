@@ -1,37 +1,50 @@
-import { BarChart, Bar, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, ResponsiveContainer,Tooltip,LabelList,XAxis,YAxis,Label } from 'recharts';
 const data = [
     {
-      name: 'Page A',
-      uv: 4000,
-      pv: 2400,
+      name: '1° TRI',
+      uv: 4000
+      
       
     },
     {
-      name: 'Page B',
-      uv: 3000,
-      pv: 1398,
+      name: '2° TRI',
+      uv: 3000
+      
       
     },
     {
-      name: 'Page C',
-      uv: 2000,
-      pv: 9800,
+      name: '3° TRI',
+      uv: 2000
+      
       
     },
     {
-      name: 'Page D',
-      uv: 2780,
-      pv: 3908,
+      name: '4° TRI',
+      uv: 2780
+      
       
     }
   ];
+  console.log(data);
+  ;
+  
+  
 const Mainchart = () => {
   return (
-    <ResponsiveContainer className={"m-auto"} width="50%" height="80%">
-    <BarChart width={50} height={40} data={data}>
-      <Bar dataKey="uv" fill="#3e1900" />
-    </BarChart>
+    
+    <ResponsiveContainer  className={"m-auto"} width={350} height={220} >
+      
+    <BarChart className='m-auto '  width={90}  data={data}  margin={{ top: 25, right: 0, left: 0, bottom: 0 }}>
+    <XAxis dataKey="name" className='poppins-semibold' position="top" style={{ textAnchor: 'middle', fontSize: '80%', fill: '#3e1900' }}>
+    </XAxis>
+    <Bar barSize={55} dataKey="uv" fill="#3e1900">
+      <LabelList dataKey="uv" className='poppins-semibold' position="top" style={{ textAnchor: 'middle', fontSize: '80%', fill: '#3e1900' }} />
+    </Bar>
+  </BarChart>
   </ResponsiveContainer>
-  );
+  
+
+
+);
 }
 export default Mainchart;

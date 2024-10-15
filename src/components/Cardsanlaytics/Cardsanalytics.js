@@ -3,7 +3,7 @@ const Cardsanalytics = () => {
 
 
     return (
-        <  ><div className='px-12 mt-2 w-[100%] h-[40px] flex justify-between text-center align-center'>
+        <  ><div className='px- mt-2 w-[100%] h-[40px] flex justify-between text-center align-center'>
         <span className="flex flex-col ">
     
             <div className="h-[40px] px-2 flex items-center self-center justify-between w-[200px] border-4 rounded border-[#B45105] bg-[#FFC376] ">
@@ -41,7 +41,7 @@ const Cardsanalytics = () => {
   </span>
  
     </div>
-     <div className="flex justify-start w-full px-12 m-1 mb-4">
+     <div className="flex justify-start w-full my-1 mx-1/2 px-1/2 mb-4">
      <p className="text-[10px]" >Dados referentes ao mês anterior</p>
      </div>
     </>
