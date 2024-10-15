@@ -7,6 +7,7 @@ const productController = require('./controllers/productController');
 const categoryController = require('./controllers/categoryController')
 const unitController = require('./controllers/unitController')
 const supplierController = require('./controllers/supplierController')
+const { loginUser } = require('./controllers/userController'); // Importando o controlador
 
 
 //Inicio das Rotas
@@ -14,6 +15,7 @@ const supplierController = require('./controllers/supplierController')
 // Rotas de Usuários
 router.post('/users', userController.createUser);
 router.get('/users', userController.getAllUsers);
+router.post('/login', userController.loginUser);
 
 //Rotas de Produtos
 router.post('/products', productController.createProduct);
