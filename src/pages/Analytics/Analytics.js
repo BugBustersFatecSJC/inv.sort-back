@@ -14,11 +14,11 @@ function Analytics(props) {
   };
   
   return (
-    <div className='main-color-bg flex'>
+    <div className='main-color-bg h-[100%] flex'>
       
       <Sidebar />
      
-      <div id='main' className='w-full px-12 h-[100%] flex overflow-scroll overflow-x-hidden flex-wrap flex-col items-center'>
+      <div id='main' className='w-[100%] min-h-[100vh] px-12 h-[100%] grid-col-2 flex overflow-scroll overflow-x-hidden flex-wrap flex-col  text-center justify-start items-center'>
       
         <div className='flex flex-col w-full items-end justify-start p-4'>
           <UserProfileIcon />
@@ -26,23 +26,18 @@ function Analytics(props) {
         
         <Cardsanalytics/>
        
-        <div className='w-[100%] h-[250px] overflow-x-hidden flex mx-auto  justify-center text-center align-center  '>
-            <div className='h-[100%] px-2 py-2 flex items-center self-center justify-between w-[100%] border-4 rounded border-[#B45105] bg-[#FFC376]'>
-              <Mainchart />
-              </div>       
-              
-
+        <div className='w-[100%] h-[100%] mt-12 grid grid-cols-3 gap-6'>
+        <div className='col-span-2 flex flex-col  h-[100%] px-2 py-2  flex justify-center border-4 rounded border-[#B45105] bg-[#FFC376]'>
+          <h1 className='poppins-semibold'></h1>
+          <Mainchart />
         </div>
-        
-          <div className='min-h-[50px] flex'>
-            
-          </div>
 
-        <div className='h-[100%]  mx-12 px-2 py-2 flex items-center self-center justify-between w-[100%] border-4 rounded border-[#B45105] bg-[#FFC376]'>
-        <Sectorchart />
-        
-          </div>  
+        <div className='h-[100%] col-span-1 px-2 py-2 flex flex-col items-center self-center w-[100%] border-4 rounded border-[#B45105] bg-[#FFC376]'>
+        <h1 className='poppins-semibold'>Vendas por Categorias </h1>
+          <Sectorchart />
         </div>
+      </div>
+            </div>
       </div>
     
   );
