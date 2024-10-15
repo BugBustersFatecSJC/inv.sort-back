@@ -62,10 +62,21 @@ function MainPageRender() {
   }
 
   /**
-   * Função para remover o produto
+   * Função para remover dinamicamente o produto
    */
   const removeProduct = (productId) => {
     setProducts((prevProducts) => prevProducts.filter(product => product.product_id !== productId))
+  }
+
+  /**
+   * Função para editar dinamicamente o produto
+   */
+  const updateProduct = (productId, updatedProduct) => {
+    setProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.product_id === productId ? { ...product, ...updatedProduct } : product
+      )
+    )
   }
 
   /**
@@ -110,7 +121,7 @@ function MainPageRender() {
             categories.map((category) => {
             const categoryProducts = products.filter(product => product.category_id === category.category_id);
             return (
-                <ProductCategory key={category.category_id} categoryKey={category.category_id} products={categoryProducts} onProductAdded={addProduct} onProductDeleted={removeProduct} categoryName={category.category_name} onCategoryUpdated={updateCategory} onCategoryDeleted={removeCategory} />
+                <ProductCategory key={category.category_id} categoryKey={category.category_id} products={categoryProducts} onProductAdded={addProduct} onProductDeleted={removeProduct} categoryName={category.category_name} onCategoryUpdated={updateCategory} onCategoryDeleted={removeCategory} onProductUpdated={updateProduct} />
             )
             })}
             <Category onCategoryAdded={addCategory} />

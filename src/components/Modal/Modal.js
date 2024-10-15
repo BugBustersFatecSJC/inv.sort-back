@@ -10,8 +10,8 @@ function Modal(props) {
             {props.children}
 
             <div className="modal-action">
-            <label htmlFor={props.modalName} className="btn" onClick={props.closeModal}>Cancelar</label>
-            <button type="submit" className="btn btn-primary">Salvar</button>
+              <label htmlFor={props.modalName} className="btn" onClick={props.closeModal}>Cancelar</label>
+              <button type="submit" className="btn btn-primary">Salvar</button>
             </div>
         </form>
         </div>

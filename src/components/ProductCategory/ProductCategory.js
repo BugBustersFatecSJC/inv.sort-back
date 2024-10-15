@@ -145,6 +145,65 @@ function ProductCategory(props) {
     }
   }
 
+  /**
+   * Edição do produto
+   */
+  const [isProdEditModalOpen, setIsProdEditModalOpen] = useState(false)
+  const [currentProduct, setCurrentProduct] = useState(null)
+
+  const openProdEditModal = (product) => {
+    setCurrentProduct(product)
+    setProductName(product.product_name)
+    setProductDescription(product.description)
+    setProductUnitId(product.unit_id)
+    setProductSupplierId(product.supplier_id)
+    setIsPerishable(product.is_perishable)
+
+    setIsProdEditModalOpen(true)
+  }
+
+  const closeProdEditModal = () => {
+    setIsProdEditModalOpen(false)
+    setCurrentProduct(null)
+  }
+
+  const handleProdUpdate = async (e) => {
+    e.preventDefault()
+
+    const updatedProductData = {
+      product_name: productName,
+      description: productDescription,
+      category_id: props.categoryKey,
+      supplier_id: productSupplierId,
+      is_perishable: isPerishable,
+      unit_id: productUnitId,
+    }
+
+    try {
+      await api
+        .put(`/products/${currentProduct.product_id}`, updatedProductData)
+        .then(response => console.log(response))
+
+        /**
+         * ATEÇÃO
+         * TODO: Aqui está ocorrendo um erro com o react tippy (que faz o tooltip)
+         * e a atualização dinâmica do componente, o erro em questão é que
+         * o react tippy não consegue carregar código jsx depois de atualizar
+         * o produto, então como quebra galho após a atualizaçaõ do produto, a página
+         * é recarregada, para mostrar as alterações
+         */
+        window.location.reload()
+        // props.onProductUpdated(currentProduct.product_id, updatedProductData)
+
+        closeProdEditModal()
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
+  /**
+   * Hover de cada produto
+   */
   const [hoveredProductId, setHoveredProductId] = useState(null)
 
   /**
@@ -239,7 +298,9 @@ function ProductCategory(props) {
                 trigger='mouseenter'
               >
                 <div key={index} className={`relative w-12 h-12 mb-4 bg-transparent border-l-[3px] border-b-[3px] border-[#FFE4A1] cursor-pointer ${styles.borderDepth}`} id={product.product_id} onMouseEnter={() => setHoveredProductId(product.product_id)}
-                onMouseLeave={() => setHoveredProductId(null)}>
+                onMouseLeave={() => setHoveredProductId(null)}
+                onClick={() => openProdEditModal(product)}
+                >
                 {hoveredProductId === product.product_id && (
                   <i 
                     className="fa-solid fa-trash absolute top-[-10px] right-[-5px] text-red-500 cursor-pointer" 
@@ -323,6 +384,7 @@ function ProductCategory(props) {
           </div>
       )}
 
+      {/* Modal para editar a categoria do produto */}
       {isCategoryModalOpen && (
         <Modal closeModal={closeCategoryModal} handleSubmit={handleCategoryUpdate} title="Atualizar categoria" modalName="category-modal">
               <div className="form-control mb-4">
@@ -333,6 +395,57 @@ function ProductCategory(props) {
               </div>
         </Modal>
       )}
+
+      {/* Modal para editar produto */}
+      {isProdEditModalOpen && (
+        <Modal closeModal={closeProdEditModal} title="Editar Produto" handleSubmit={handleProdUpdate}>
+          <div className="form-control mb-4">
+            <label className="label">
+              <span className="label-text text-white">Nome do produto</span>
+            </label>
+            <input type="text" className="input input-bordered" value={productName} onChange={(e) => setProductName(e.target.value)} />
+          </div>
+
+          <div className="form-control mb-4">
+            <label className="label">
+              <span className="label-text text-white">Descrição</span>
+            </label>
+            <textarea className="textarea textarea-bordered" value={productDescription} onChange={(e) => setProductDescription(e.target.value)}></textarea>
+          </div>
+
+          <div className="form-control mb-4">
+            <label className="label">
+              <span className="label-text text-white">Unidade</span>
+            </label>
+            <select value={productUnitId} onChange={(e) => setProductUnitId(parseInt(e.target.value))} className="select select-bordered">
+              <option disabled value="">Selecionar unidade</option>
+              {units.map((unit) => (
+                <option key={unit.unit_id} value={unit.unit_id}>{unit.unit_type}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-control mb-4">
+            <label className="label">
+              <span className="label-text text-white">Fornecedor</span>
+            </label>
+            <select value={productSupplierId} onChange={(e) => setProductSupplierId(parseInt(e.target.value))} className="select select-bordered">
+              <option disabled value="">Selecionar fornecedor</option>
+              {suppliers.map((supplier) => (
+                <option key={supplier.supplier_id} value={supplier.supplier_id}>{supplier.supplier_name}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-control mb-4">
+            <label className="cursor-pointer label">
+              <span className="label-text text-white">É perecível</span>
+              <input type="checkbox" className="toggle toggle-primary" checked={isPerishable} onChange={(e) => setIsPerishable(e.target.checked)} />
+            </label>
+          </div>
+        </Modal>
+      )}
+
     </div>
     )
 }
