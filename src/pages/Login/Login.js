@@ -54,6 +54,7 @@ function Login() {
       // }
     } catch (error) {
       console.error('Erro na requisição:', error);
+      alert("Usuario ou Senha Invalidos")
     }
   };
 
