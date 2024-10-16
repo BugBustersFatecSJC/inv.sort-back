@@ -11,7 +11,7 @@ const { loginUser } = require('./controllers/userController'); // Importando o c
 
 
 //Inicio das Rotas
-
+router.get('/check-login', userController.checkFirstLogin);
 // Rotas de Usuários
 router.post('/users', userController.createUser);
 router.get('/users', userController.getAllUsers);
