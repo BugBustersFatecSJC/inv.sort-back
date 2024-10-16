@@ -10,7 +10,7 @@ import './App.css';
 import Login from './pages/Login/Login'; 
 import InitialSignUp from './pages/InitialSignUp/InitialSignUp'
 import api from "./services/api"
-// import UserPage from './pages/UserPage'
+import UserPage from './pages/UserPage'
 import MainPageRender from './pages/MainPageRender/MainPageRender'
 
 function App() {
@@ -18,10 +18,10 @@ function App() {
     <div>
       <Router>
         <Routes>
-          <Route path="/" element={<InitialSignUp />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/cadastro" element={<InitialSignUp />} />
+          <Route path="/" element={<Login />} />
           <Route path="/products" element={<MainPageRender />} />
-          {/* <Route path="/userpage" element={<UserPage />} /> */}
+          <Route path="/userpage" element={<UserPage />} />
         </Routes>
       </Router>
     </div>

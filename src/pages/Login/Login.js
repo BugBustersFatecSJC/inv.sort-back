@@ -1,18 +1,33 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import styles from './Login.module.css'
-import MainLogo from "../../components/MainLogo/MainLogo"
-import Field from "../../components/Field/Field"
-import SendButton from '../../components/SendButton/SendButton'
-import Watermark from '../../components/Watermark/Watermark'
-
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import styles from './Login.module.css';
+import MainLogo from "../../components/MainLogo/MainLogo";
+import Field from "../../components/Field/Field";
+import SendButton from '../../components/SendButton/SendButton';
+import Watermark from '../../components/Watermark/Watermark';
 
 function Login() {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
 
-    const handleClick = () => {
-        navigate('/products')
-    }
+  // Use Effect para a Verificação Inicial do Login
+  useEffect(() => {
+    // Faz a chamada ao back-end para verificar usuários
+    axios.get('http://localhost:3001/check-login')
+      .then(response => {
+        if (response.data.needsRegistration) {
+          // Se precisar de cadastro, redirecione para a página de cadastro
+          navigate('/cadastro');
+        }
+      })
+      .catch(error => {
+        console.error("Erro ao verificar usuários:", error);
+      });
+  }, [navigate]);
+
+  const handleClick = () => {
+      navigate('/products') // Isso continuará funcionando para o botão enviar
+  };
     
   return (
     <div className='main-color-bg h-screen flex flex-col items-center justify-center'>
@@ -43,7 +58,7 @@ function Login() {
           <Watermark/>
         </div>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;
