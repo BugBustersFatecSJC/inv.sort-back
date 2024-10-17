@@ -1,69 +1,44 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import styles from './Login.module.css';
 import MainLogo from "../../components/MainLogo/MainLogo";
 import Field from "../../components/Field/Field";
 import SendButton from '../../components/SendButton/SendButton';
 import Watermark from '../../components/Watermark/Watermark';
-import axios from 'axios';
-import api from '../../services/api';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+  // UseEffect para verificar se precisamos redirecionar para o cadastro
+  useEffect(() => {
+    axios.get('http://localhost:3001/check-login')
+      .then(response => {
+        if (response.data.needsRegistration) {
+          navigate('/cadastro'); // Redireciona para cadastro se necessário
+        }
+      })
+      .catch(error => {
+        console.error("Erro ao verificar usuários:", error);
+      });
+  }, [navigate]);
+
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      const data = {
-        email,
-        password,
-      }; // Create a data object with email and password
+      const data = { email, password };
 
-      // const response = await axios.post('http://localhost:3001/login', data); // Send the data object in the request bod
-      await api
-       .post("/login",data)
-       .then(function(response){
-        localStorage.setItem("user",JSON.stringify(response.data))
-       })
-       navigate('/products');
-      //  .then(data => {
-      //     console.log(data)
-      //    localStorage.setItem('user', JSON.stringify(data)); // Armazena no localStorage
-      //  })
-      //  .then(response => localStorage.setItem( "user_id", response.user_id))
-      //  .then(response => localStorage.setItem( "username", response.username))
-      //  .then(response => localStorage.setItem( "email", response.email))
-      //  .then(response => localStorage.setItem( "role",response.role))
-
-          // ,
-          // ,
-          // ,
-          // "created_at", response.role,
-          // "status", response.role,
-          // "user_img", response.user.
-
-      // if (response.status === 200) {
-      //   // Requisição bem-sucedida, redirecionar para outra página
-        
-      //   console.log(response)
-      // } else {
-      //   // Tratar erros caso o status não seja 200
-      //   console.error('Falha ao fazer login:', response.data);
-      // }
+      await axios.post('http://localhost:3001/login', data)
+        .then(response => {
+          localStorage.setItem("user", JSON.stringify(response.data));
+          navigate('/products'); // Redireciona após login bem-sucedido
+        });
     } catch (error) {
       console.error('Erro na requisição:', error);
-      alert("Usuario ou Senha Invalidos")
+      alert("Usuário ou Senha Inválidos");
     }
-  };
-
-  const handleClick = () => {
-    // Access and use the email and password values here
-    console.log('Email:', email);
-    console.error('Password:', password); // Use console.error for passwords for security reasons
-
-    handleSubmit(); // Call the handleSubmit function
   };
 
   return (
