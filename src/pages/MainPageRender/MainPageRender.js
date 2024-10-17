@@ -5,11 +5,10 @@ import ProductCategory from '../../components/ProductCategory/ProductCategory'
 import Category from '../../components/Category/Category'
 import Loading from '../../components/Loading/Loading'
 
-
 function MainPageRender() {
-    /**
-     * Renderização do componente de loading
-     */
+  /**
+   * Renderização do componente de loading
+   */
   const [loading, setLoading] = useState(true)
 
   /**
@@ -114,18 +113,18 @@ function MainPageRender() {
   //     })
   // }, [])
     return (
-        <MainPage title="Produtos">
-            {loading ? (
-            <Loading />
-            ) :
-            categories.map((category) => {
-            const categoryProducts = products.filter(product => product.category_id === category.category_id);
-            return (
-                <ProductCategory key={category.category_id} categoryKey={category.category_id} products={categoryProducts} onProductAdded={addProduct} onProductDeleted={removeProduct} categoryName={category.category_name} onCategoryUpdated={updateCategory} onCategoryDeleted={removeCategory} onProductUpdated={updateProduct} />
-            )
-            })}
-            <Category onCategoryAdded={addCategory} />
-        </MainPage> 
+      <MainPage title="Produtos">
+          {loading ? (
+          <Loading />
+          ) :
+          categories.map((category) => {
+          const categoryProducts = products.filter(product => product.category_id === category.category_id);
+          return (
+              <ProductCategory key={category.category_id} categoryKey={category.category_id} products={categoryProducts} onProductAdded={addProduct} onProductDeleted={removeProduct} categoryName={category.category_name} onCategoryUpdated={updateCategory} onCategoryDeleted={removeCategory} onProductUpdated={updateProduct} />
+          )
+          })}
+          <Category onCategoryAdded={addCategory} />
+      </MainPage> 
     )
   }
   

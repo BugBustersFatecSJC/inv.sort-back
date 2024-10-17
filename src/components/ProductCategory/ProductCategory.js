@@ -6,10 +6,11 @@ import Loading from '../Loading/Loading'
 import Modal from '../Modal/Modal'
 import 'react-tippy/dist/tippy.css'
 import { Tooltip } from 'react-tippy'
+import FlashMessage from '../../components/FlashMessage/FlashMessage'
 
-/**
- * Componente que exibe o container da categoria com os produtos dentro
- */
+/******************************************************************************
+ * Componente que exibe o container da categoria com os produtos dentro       *
+ *****************************************************************************/
 
 function ProductCategory(props) {
   /**
@@ -31,6 +32,27 @@ function ProductCategory(props) {
       } finally {
         setLoading(false)
       }
+    }
+
+    /**
+     * Renderização da flash message
+     */
+    const [flash, setFlash] = useState(null)
+
+    const flashSuccess = () => {
+      setFlash({ message: 'Item adicionado com sucesso!', type: 'success' });
+    }
+
+    const flashError = () => {
+      setFlash({ message: 'Um erro aconteceu', type: 'error' });
+    };
+
+    const flashInfo = () => {
+      setFlash({ message: 'Item atualizado', type: 'info' });
+    }
+
+    const flashDelete = () => {
+      setFlash({ message: 'Item deletado', type: 'success' });
     }
     
     /**
@@ -95,7 +117,7 @@ function ProductCategory(props) {
     const closeCategoryModal = () => setIsCategoryModalOpen(false)
 
     /**
-     * Criação da requisição para envio ao servidor back-end
+     * Registra o produto
      */
     const [productName, setProductName] = useState('')
     const [productDescription, setProductDescription] = useState(null)
@@ -126,8 +148,10 @@ function ProductCategory(props) {
           setProductSupplierId('')
           setIsPerishable(false)
           closeModal()
+          flashSuccess()
       } catch (err) {
           console.log(err)
+          flashError()
       }
   }
 
@@ -140,8 +164,10 @@ function ProductCategory(props) {
         .delete(`/products/${product_id}`)
         .then((response) => {console.log(response)})
         props.onProductDeleted(product_id)
+        flashDelete()
     } catch (err) {
       console.log(err)
+      flashError()
     }
   }
 
@@ -184,20 +210,23 @@ function ProductCategory(props) {
         .put(`/products/${currentProduct.product_id}`, updatedProductData)
         .then(response => console.log(response))
 
-        /**
-         * ATEÇÃO
-         * TODO: Aqui está ocorrendo um erro com o react tippy (que faz o tooltip)
-         * e a atualização dinâmica do componente, o erro em questão é que
-         * o react tippy não consegue carregar código jsx depois de atualizar
-         * o produto, então como quebra galho após a atualizaçaõ do produto, a página
-         * é recarregada, para mostrar as alterações
-         */
+        /******************************************************************************
+         * ATEÇÃO                                                                     *
+         * TODO: Aqui está ocorrendo um erro com o react tippy (que faz o tooltip)    *
+         * e a atualização dinâmica do componente, o erro em questão é que            *
+         * o react tippy não consegue carregar código jsx depois de atualizar         *
+         * o produto, então como quebra galho após a atualizaçaõ do produto, a página *
+         * é recarregada, para mostrar as alterações                                  * 
+         * TAMBÉM ACONTECE AO EXCLUIR :(                                              *
+         ******************************************************************************/
         window.location.reload()
         // props.onProductUpdated(currentProduct.product_id, updatedProductData)
 
         closeProdEditModal()
+        flashInfo()
     } catch(err) {
       console.log(err)
+      flashError()
     }
   }
 
@@ -236,8 +265,10 @@ function ProductCategory(props) {
           setCategoryName('')
 
           closeCategoryModal()
+          flashInfo()
       } catch (err) {
           console.log(err)
+          flashError()
       }
   }
 
@@ -251,8 +282,11 @@ function ProductCategory(props) {
         .then((response) => {console.log(response)})
 
         props.onCategoryDeleted(category_id)
+        
+        flashDelete()
     } catch (err) {
       console.log(err)
+      flashError()
     }
   }
 
@@ -444,6 +478,15 @@ function ProductCategory(props) {
             </label>
           </div>
         </Modal>
+      )}
+
+      {/* Componente flash message, verifica se o estado flash é true e então renderiza a flash message */}
+      {flash && (
+        <FlashMessage
+          message={flash.message}
+          type={flash.type}
+          duration={3000}
+        />
       )}
 
     </div>
