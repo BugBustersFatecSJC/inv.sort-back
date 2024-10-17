@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import api from '../../services/api'
+import FlashMessage from '../../components/FlashMessage/FlashMessage'
 
 /**
  * Container para adicionar uma nova categoria
@@ -14,6 +15,27 @@ function Category(props) {
 
     const openModal = () => setIsModalOpen(true)
     const closeModal = () => setIsModalOpen(false)
+
+    /**
+     * Renderização da flash message
+     */
+    const [flash, setFlash] = useState(null)
+
+    const flashSuccess = () => {
+        setFlash({ message: 'Item adicionado com sucesso!', type: 'success' });
+    }
+
+    const flashError = () => {
+        setFlash({ message: 'Um erro aconteceu', type: 'error' });
+    };
+
+    const flashInfo = () => {
+        setFlash({ message: 'Item atualizado', type: 'info' });
+    }
+
+    const flashDelete = () => {
+        setFlash({ message: 'Item deletado', type: 'success' });
+    }
 
     /**
      * Form para enviar os dados da categoria
@@ -33,6 +55,7 @@ function Category(props) {
             setCategoryName('')
 
             closeModal()
+            flashSuccess()
         } catch (err) {
             console.log(err)
         }
@@ -67,7 +90,16 @@ function Category(props) {
                     </form>
                 </div>
             </div>
-        )}
+            )}
+
+            {/* Componente flash message, verifica se o estado flash é true e então renderiza a flash message */}
+            {flash && (
+                <FlashMessage
+                message={flash.message}
+                type={flash.type}
+                duration={3000}
+                />
+            )}
         </>
     )
 }
