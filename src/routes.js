@@ -7,10 +7,12 @@ const productController = require('./controllers/productController');
 const categoryController = require('./controllers/categoryController')
 const unitController = require('./controllers/unitController')
 const supplierController = require('./controllers/supplierController')
-
+const filterController = require('./controllers/filterController')
 
 //Inicio das Rotas
-
+//Rotas do filtro
+router.get('/mensal', filterController.filterMonth);
+router.get('/trimestral', filterController.filterTrimester);
 // Rotas de Usuários
 router.post('/users', userController.createUser);
 router.get('/users', userController.getAllUsers);
