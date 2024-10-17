@@ -1,50 +1,47 @@
-import { BarChart, Bar, ResponsiveContainer,Tooltip,LabelList,XAxis,YAxis,Label } from 'recharts';
-const data = [
-    {
-      name: '1° TRI',
-      uv: 4000
-      
-      
-    },
-    {
-      name: '2° TRI',
-      uv: 3000
-      
-      
-    },
-    {
-      name: '3° TRI',
-      uv: 2000
-      
-      
-    },
-    {
-      name: '4° TRI',
-      uv: 2780
-      
-      
-    }
-  ];
-  console.log(data);
-  ;
-  
-  
+import { useState, useEffect } from 'react';
+import { BarChart, Bar, ResponsiveContainer, LabelList, XAxis } from 'recharts';
+import api from '../../services/api';
+import FilterButton from '../../components/FilterButtons/Filterbutton';
+
 const Mainchart = () => {
+  const [selectedValue, setSelectedValue] = useState('/mensal'); // Default value
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get(`${selectedValue}`);
+        const data = response.data;
+        console.log("dados", data);
+        setData(data);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+
+    fetchData();
+  }, [selectedValue]); // Fetch data whenever selectedValue changes
+
   return (
-    
-    <ResponsiveContainer  className={"m-auto"} width={350} height={220} >
-      
-    <BarChart className='m-auto '  width={90}  data={data}  margin={{ top: 25, right: 0, left: 0, bottom: 0 }}>
-    <XAxis dataKey="name" className='poppins-semibold' position="top" style={{ textAnchor: 'middle', fontSize: '80%', fill: '#3e1900' }}>
-    </XAxis>
-    <Bar barSize={55} dataKey="uv" fill="#3e1900">
-      <LabelList dataKey="uv" className='poppins-semibold' position="top" style={{ textAnchor: 'middle', fontSize: '80%', fill: '#3e1900' }} />
-    </Bar>
-  </BarChart>
-  </ResponsiveContainer>
-  
+    <>
+      <FilterButton selectedValue={selectedValue} setSelectedValue={setSelectedValue} />
+      <ResponsiveContainer className="m-auto px-4" barGap="20" width={600} height={220}>
+        <BarChart
+          className="m-auto px-2"
+          data={data}
+          margin={{ top: 55, right: 45, left: 85, bottom: 0 }}
+          width={500}
+          barGap={10} // Adjust the gap between bars
+          barCategoryGap="20%" // Adjust the category gap between bars
+        >
+          <XAxis dataKey="name" width={20} angle={10} className="poppins-semibold" position="top" style={{ textAnchor: 'middle', fontSize: '55%', fill: '#3e1900' }} />
+          <Bar barSize={55} dataKey="value" fill="#3e1900">
+            <LabelList dataKey="value" barGap={150} className="poppins-semibold" position="top" style={{ margin: 'auto', textAnchor: 'middle', fontSize: '80%', fill: '#3e1900' }} />
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+    </>
+  );
+};
 
-
-);
-}
 export default Mainchart;

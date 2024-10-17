@@ -11,22 +11,22 @@ function MainPage(props) {
   };
   
   return (
-    <div className='main-color-bg flex'>
+    <div className='flex main-color-bg  '>
       
       <Sidebar />
 
-      <div className='w-full flex flex-col items-center'>
+      <div className='w-[100%]  flex flex-col items-center'>
       
         <div className='flex flex-col w-full items-end justify-start p-4'>
           <UserProfileIcon />
         </div>
         
-        <div className='w-[90%] mx-auto flex flex-col'>
+        <div className='w-[90%]  mx-auto flex flex-col'>
           <div className='w-full flex justify-start'>
             <h1 className='text-4xl font-pixel'>{props.title}</h1>
           </div>
 
-          <main>
+          <main className=''>
             {props.children}
           </main>
         </div>

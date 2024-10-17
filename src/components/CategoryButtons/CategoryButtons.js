@@ -9,19 +9,17 @@ function CategoryButtons() {
   // }
 
   return (
-    <div>
-      <button className="w-full p-2 alt-color-5-bg text-black shadow-lg font-pixel mb-1 text-2xl main-color border-4 border-black">
+    <div className='w-[90%] justify-center  absolute flex flex-col justify-between align-middle'>
+      <a className=" text-center my-8  w-full p-2 alt-color-5-bg text-black shadow-lg font-pixel mb-1 text-2xl main-color border-4 border-black">
         Usuários
-      </button>
-      <button className="w-full p-2 alt-color-5-bg text-black shadow-lg font-pixel mb-1 text-2xl main-color border-4 border-black">
+      </a>
+      <a href='/products' className="text-center my-8  w-full p-2 alt-color-5-bg text-black shadow-lg font-pixel mb-1 text-2xl main-color border-4 border-black">
         Produtos
-      </button>
-      <button className="w-full p-2 alt-color-5-bg text-black shadow-lg font-pixel mb-1 text-2xl main-color border-4 border-black">
-        Histórico
-      </button>
-      <button className="w-full p-2 alt-color-5-bg text-black shadow-lg font-pixel text-2xl main-color border-4 border-black">
-        Análise
-      </button>
+      </a>
+      
+      <a href='/analytics' className="text-center my-8 w-100% p-2 alt-color-5-bg text-black shadow-lg font-pixel text-2xl main-color border-4 border-black">
+       Analytics
+      </a>
     </div>
   );
 }
