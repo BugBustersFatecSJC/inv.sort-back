@@ -2,23 +2,27 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function CategoryButtons() {
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
 
-  // const handleClick = () => {
-  //     navigate('/userpage')
-  // }
+  const navigateUserpage = () => {
+      navigate('/userpage')
+  }
 
   return (
-    <div className='w-[90%] justify-center  absolute flex flex-col justify-between align-middle'>
-      <a className=" text-center my-8  w-full p-2 alt-color-5-bg text-black shadow-lg font-pixel mb-1 text-2xl main-color border-4 border-black">
+    <div className='flex flex-col w-full'>
+      <a onClick={navigateUserpage} className="text-center mb-3  w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel mb-1 text-xl main-color border-3 border-black cursor-pointer hvr-grow">
         Usuários
       </a>
-      <a href='/products' className="text-center my-8  w-full p-2 alt-color-5-bg text-black shadow-lg font-pixel mb-1 text-2xl main-color border-4 border-black">
+      <a href='' className="text-center mb-3  w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel mb-1 text-xl main-color border-3 border-black hvr-grow">
         Produtos
       </a>
       
-      <a href='/analytics' className="text-center my-8 w-100% p-2 alt-color-5-bg text-black shadow-lg font-pixel text-2xl main-color border-4 border-black">
+      <a href='' className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black hvr-grow">
        Analytics
+      </a>      
+
+      <a href='' className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black hvr-grow">
+       Histórico
       </a>
     </div>
   );

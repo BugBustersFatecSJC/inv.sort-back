@@ -219,7 +219,7 @@ function ProductCategory(props) {
          * é recarregada, para mostrar as alterações                                  * 
          * TAMBÉM ACONTECE AO EXCLUIR :(                                              *
          ******************************************************************************/
-        window.location.reload()
+        // window.location.reload()
         // props.onProductUpdated(currentProduct.product_id, updatedProductData)
 
         closeProdEditModal()
