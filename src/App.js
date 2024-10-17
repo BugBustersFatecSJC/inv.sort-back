@@ -10,6 +10,7 @@ import './App.css';
 import Login from './pages/Login/Login'; 
 import InitialSignUp from './pages/InitialSignUp/InitialSignUp'
 import api from "./services/api"
+import Analytics from './pages/Analytics/Analytics'
 // import UserPage from './pages/UserPage'
 import MainPageRender from './pages/MainPageRender/MainPageRender'
 
@@ -21,6 +22,7 @@ function App() {
           <Route path="/" element={<InitialSignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/products" element={<MainPageRender />} />
+          <Route path="/analytics" element={<Analytics />} />
           {/* <Route path="/userpage" element={<UserPage />} /> */}
         </Routes>
       </Router>
