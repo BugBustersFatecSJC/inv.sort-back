@@ -4,7 +4,8 @@ import {
   Route,
   Routes,
   Link,
-  Navigate
+  Navigate,
+  redirect
 } from 'react-router-dom';
 import './App.css'; 
 import Login from './pages/Login/Login'; 
@@ -14,14 +15,27 @@ import Analytics from './pages/Analytics/Analytics'
 // import UserPage from './pages/UserPage'
 import MainPageRender from './pages/MainPageRender/MainPageRender'
 
+/*ProtectedRoute redireciona o usuario para a pagina de login, caso o mesmo não eseteja logado
+IMPORTANTE: Use essa função em toda pagina que não deve ser acessada antes do login*/
+function ProtectedRoute({ element: Element }) {
+  const user = localStorage.getItem("user");
+  return user ? <Element /> : <Navigate to="/login" />;
+}
+
+/*ProtectedLogin redireciona o usuario da pagina de login para a pagina de produtos, caso o mesmo já esteja logado*/
+function ProtectedLogin({ element: Element }) {
+  const user = localStorage.getItem("user");
+  return !user ? <Element /> : <Navigate to="/products" />;
+}
+
 function App() {
   return (
     <div>
       <Router>
         <Routes>
           <Route path="/" element={<InitialSignUp />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/products" element={<MainPageRender />} />
+          <Route path="/login" element={<ProtectedLogin element={Login} />} /> {/*Adicionado ProtectedLogin na pagina de login*/}
+          <Route path="/products" element={<ProtectedRoute element={MainPageRender} />} /> {/*Adicionado ProtectedRoute na pagina de produtos*/}
           <Route path="/analytics" element={<Analytics />} />
           {/* <Route path="/userpage" element={<UserPage />} /> */}
         </Routes>
