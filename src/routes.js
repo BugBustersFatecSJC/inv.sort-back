@@ -12,9 +12,12 @@ const { loginUser } = require('./controllers/userController'); // Importando o c
 
 
 //Inicio das Rotas
-//Rotas do filtro
+
+router.get('/check-login', userController.checkFirstLogin);
+
 router.get('/mensal', filterController.filterMonth);
 router.get('/trimestral', filterController.filterTrimester);
+
 // Rotas de Usuários
 router.post('/users', userController.createUser);
 router.get('/users', userController.getAllUsers);

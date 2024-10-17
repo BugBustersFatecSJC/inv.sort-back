@@ -87,10 +87,29 @@ const loginUser = async (req, res) => {
     }
 };
 
+const checkFirstLogin = async (req, res) => {
+    try {
+        const users = await prisma.user.findMany();
+        console.log("Quantidade de usuários encontrados:", users.length);
+
+        // Fornece uma informação clara sobre a situação dos usuários
+        if (users.length === 0) {
+            return res.json({ needsRegistration: true }); // Indica ao front-end que o registro é necessário
+        }
+
+        return res.json({ needsRegistration: false }); // Indica ao front-end que pode fazer login
+    } catch (error) {
+        console.error("Erro ao verificar usuários:", error);
+        return res.status(500).json({ error: "Erro ao verificar usuários." });
+    }
+};
+
+
 
 module.exports = {
     createUser,
     getAllUsers,
     loginUser, // Adicione esta linha
+    checkFirstLogin,
 };
 
