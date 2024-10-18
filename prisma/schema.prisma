@@ -130,7 +130,26 @@ model AuditLog {
   new_value          Json?
   action_date        DateTime  @default(now()) @db.Timestamp(6)
 
+  
+  product_id         Int?
+  product_name       String? 
+  category_id        Int?
+  category_name      String?  
+  supplier_id        Int?
+  supplier_name      String?
+  unit_id            Int?
+  sector_id          Int?
+  local_id           Int?
+  batch_id           Int?
+
   user               User      @relation(fields: [user_id], references: [user_id])
+  product            Product?     @relation(fields: [product_id], references: [product_id])
+  category           Category?    @relation(fields: [category_id], references: [category_id])
+  supplier           Supplier?    @relation(fields: [supplier_id], references: [supplier_id])
+  unit               ProductUnit? @relation(fields: [unit_id], references: [unit_id])
+  sector             Sector?      @relation(fields: [sector_id], references: [sector_id])
+  local              Local?       @relation(fields: [local_id], references: [local_id])
+  batch              Batch?       @relation(fields: [batch_id], references: [batch_id])
 }
 
 model Batch {
