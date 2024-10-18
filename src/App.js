@@ -12,6 +12,7 @@ import InitialSignUp from './pages/InitialSignUp/InitialSignUp'
 import api from "./services/api"
 // import UserPage from './pages/UserPage'
 import MainPageRender from './pages/MainPageRender/MainPageRender'
+import MovimentsPage from './pages/MovementPage/MovementPage'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/" element={<InitialSignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/products" element={<MainPageRender />} />
+          <Route path="/movements" element={<MovimentsPage />} />
           {/* <Route path="/userpage" element={<UserPage />} /> */}
         </Routes>
       </Router>
