@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React from 'react'
 import {
   BrowserRouter as Router,
   Route,
@@ -8,11 +8,13 @@ import {
 import './App.css'
 import Login from './pages/Login/Login'
 import InitialSignUp from './pages/InitialSignUp/InitialSignUp'
-import api from "./services/api"
 import MainPageRender from './pages/MainPageRender/MainPageRender'
-import MovimentsPage from './pages/MovementPage/MovementPage'
+import MovementPage from './pages/MovementPage/MovementPage'
 import UserPage from './pages/UserPage/UserPage'
 import Analytics from './pages/Analytics/Analytics'
+import Batch from './pages/Batch/Batch'
+import Sector from './pages/Sector/Sector'
+import Supplier from './pages/Supplier/Supplier'
 
 /* ProtectedRoute redireciona o usuario para a pagina de login, caso o mesmo não esteja logado
 IMPORTANTE: Use essa função em toda página que não deve ser acessada antes do login */
@@ -32,15 +34,18 @@ function App() {
     <div>
       <Router>
         <Routes>
-          /*
+          {/*
           * TODO: Usar o /products como nosso index (/)
-          */
+          */}
           <Route path="/cadastro" element={<InitialSignUp />} />
           <Route path="/login" element={<ProtectedLogin element={Login} />} />
           <Route path="/products" element={<ProtectedRoute element={MainPageRender} />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/userpage" element={<ProtectedRoute element={UserPage} />} />
-          <Route path="/movements" element={<MovimentsPage />} />
+          <Route path="/movements" element={<ProtectedRoute element={MovementPage} />} />
+          <Route path="/batches" element={<ProtectedRoute element={Batch} />} />
+          <Route path="/sectors" element={<ProtectedRoute element={Sector} />} />
+          <Route path="/suppliers" element={<ProtectedRoute element={Supplier} />} />
         </Routes>
       </Router>
     </div>
