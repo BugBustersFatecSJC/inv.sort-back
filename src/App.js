@@ -9,7 +9,7 @@ import './App.css';
 import Login from './pages/Login/Login'; 
 import InitialSignUp from './pages/InitialSignUp/InitialSignUp';
 import api from "./services/api";
-import UserPage from './pages/UserPage';
+import UserPage from './pages/UserPage/UserPage';
 import Analytics from './pages/Analytics/Analytics';
 import MainPageRender from './pages/MainPageRender/MainPageRender';
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import SearchBar from '../components/SearchBar/SearchBar';
-import UserDetails from '../components/UserDetails/UserDetails';
+import SearchBar from '../../components/SearchBar/SearchBar';
+import UserDetails from '../../components/UserDetails/UserDetails';
 
 const UserPage = () => {
   const [users, setUsers] = useState([]);
