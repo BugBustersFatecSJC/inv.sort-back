@@ -15,6 +15,7 @@ import Analytics from './pages/Analytics/Analytics'
 import Batch from './pages/Batch/Batch'
 import Sector from './pages/Sector/Sector'
 import Supplier from './pages/Supplier/Supplier'
+import UserProfile from './pages/UserProfile/UserProfile'
 
 /* ProtectedRoute redireciona o usuario para a pagina de login, caso o mesmo não esteja logado
 IMPORTANTE: Use essa função em toda página que não deve ser acessada antes do login */
@@ -46,6 +47,7 @@ function App() {
           <Route path="/batches" element={<ProtectedRoute element={Batch} />} />
           <Route path="/sectors" element={<ProtectedRoute element={Sector} />} />
           <Route path="/suppliers" element={<ProtectedRoute element={Supplier} />} />
+          <Route path="/profile" element={<ProtectedRoute element={UserProfile} />} />
         </Routes>
       </Router>
     </div>
