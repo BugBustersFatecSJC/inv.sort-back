@@ -39,20 +39,27 @@ function ProductCategory(props) {
      */
     const [flash, setFlash] = useState(null)
 
+    const showFlashMessage = (message, type) => {
+      setFlash(null)
+      setTimeout(() => {
+          setFlash({ message, type })
+      }, 0)
+    }
+
     const flashSuccess = () => {
-      setFlash({ message: 'Item adicionado com sucesso!', type: 'success' });
+      showFlashMessage('Item adicionado com sucesso!','success');
     }
 
     const flashError = () => {
-      setFlash({ message: 'Um erro aconteceu', type: 'error' });
+      showFlashMessage('Um erro aconteceu','error');
     };
 
     const flashInfo = () => {
-      setFlash({ message: 'Item atualizado', type: 'info' });
+      showFlashMessage('Item atualizado', 'info');
     }
 
     const flashDelete = () => {
-      setFlash({ message: 'Item deletado', type: 'success' });
+      showFlashMessage('Item deletado', 'success');
     }
     
     /**
@@ -490,13 +497,13 @@ function ProductCategory(props) {
 
       {/* Componente flash message, verifica se o estado flash é true e então renderiza a flash message */}
       {flash && (
-        <FlashMessage
-          message={flash.message}
-          type={flash.type}
-          duration={3000}
-        />
+          <FlashMessage
+              message={flash.message}
+              type={flash.type}
+              duration={3000}
+              onClose={() => setFlash(null)}
+          />
       )}
-
     </div>
     )
 }
