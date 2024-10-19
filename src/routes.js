@@ -8,7 +8,6 @@ const categoryController = require('./controllers/categoryController')
 const unitController = require('./controllers/unitController')
 const supplierController = require('./controllers/supplierController')
 const filterController = require('./controllers/filterController')
-const { loginUser } = require('./controllers/userController'); // Importando o controlador
 
 
 //Inicio das Rotas
@@ -27,6 +26,7 @@ router.post('/login', userController.loginUser);
 router.post('/products', productController.createProduct);
 router.get('/products', productController.getAllProducts);
 router.get('/products/:product_id', productController.getProductsbyId);
+router.get('/products/category/:category_id', productController.getProductsByCategory);
 router.put('/products/:product_id', productController.updateProduct);
 router.delete('/products/:product_id', productController.deleteProduct);
 
