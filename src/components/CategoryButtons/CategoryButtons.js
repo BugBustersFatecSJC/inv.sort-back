@@ -32,6 +32,10 @@ function CategoryButtons() {
       navigate('/suppliers')
   }
 
+  const navigateBuyAndSell = () => {
+      navigate('/buyandsell')
+  }
+
   return (
     <div className='flex flex-col w-full'>
       <a onClick={navigateUserpage} className="text-center mb-3  w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel mb-1 text-xl main-color border-3 border-black cursor-pointer cursor-pointer hvr-grow">
@@ -60,6 +64,10 @@ function CategoryButtons() {
 
       <a onClick={navigateSectors} className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black cursor-pointer hvr-grow">
        Setores
+      </a>
+
+      <a onClick={navigateBuyAndSell} className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black cursor-pointer hvr-grow">
+       Fluxo de Estoque
       </a>
     </div>
   );
