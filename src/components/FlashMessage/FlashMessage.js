@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './FlashMessage.css'
 
-const FlashMessage = ({ message, type, duration }) => {
+const FlashMessage = ({ message, type, duration, onClose }) => {
   const [visible, setVisible] = useState(true)
   const [exit, setExit] = useState(false)
 
@@ -11,17 +11,15 @@ const FlashMessage = ({ message, type, duration }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setExit(true)
+      setTimeout(() => {
+        onClose()
+      }, 500)
     }, duration - 500)
-
-    const removeTimer = setTimeout(() => {
-      setVisible(false)
-    }, duration)
 
     return () => {
       clearTimeout(timer)
-      clearTimeout(removeTimer)
     }
-  }, [duration])
+  }, [duration, onClose])
 
   if (!visible) return null
 

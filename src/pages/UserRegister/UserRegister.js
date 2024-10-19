@@ -1,52 +1,72 @@
-import { useState } from 'react';
-import api from "../../services/api"; // Certifique-se de que o caminho está correto
-import { useNavigate } from 'react-router-dom'; // Importa o useNavigate
-import Field from "../../components/Field/Field"; // Importa seu componente de input
-import MainPage from '../MainPage/MainPage'; // Se precisar do layout da página
+import { useState } from 'react'
+import api from "../../services/api"
+import Field from "../../components/Field/Field"
+import MainPage from '../MainPage/MainPage'
+import FlashMessage from '../../components/FlashMessage/FlashMessage'
 
 function UserRegister() {
-    const [name, setName] = useState('');
-    const [role, setRole] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [status, setStatus] = useState('ativo'); // Estado para o status
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(null);
-    const navigate = useNavigate();
+    const [name, setName] = useState('')
+    const [role, setRole] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [status, setStatus] = useState('ativo')
+
+    /**
+     * Renderização da flash message
+     */
+    const [flash, setFlash] = useState(null)
+
+    const showFlashMessage = (message, type) => {
+        setFlash(null)
+        setTimeout(() => {
+            setFlash({ message, type })
+        }, 0)
+    }
+
+    const flashSuccess = () => {
+        showFlashMessage('Usuário cadastrado com sucesso!', 'success')
+    }
+
+    const flashErrorPassword = () => {
+        showFlashMessage('As senhas não coincidem', 'error')
+    }
+
+    const flashError = () => {
+        showFlashMessage('As senhas não coincidem', 'error')
+    }
+
+    const flashInfo = () => {
+        showFlashMessage('Item atualizado', 'info')
+    }
 
     const registerUser = async (event) => {
         event.preventDefault();
 
-        setError(null);
-        setSuccess(null);
-
         if (password !== confirmPassword) {
-            setError('As senhas não coincidem.');
-            return;
+            flashErrorPassword()
+            return
         }
 
         try {
-            const response = await api.post('/users', {
+            await api.post('/users', {
                 username: name,
                 role: role,
                 email: email,
                 password: password,
                 confirmPassword: confirmPassword,
                 status: status,
-            });
+            })
 
-            // Atualize a mensagem de sucesso aqui
-            setSuccess("Usuário cadastrado com sucesso!");
-            console.log('Usuário cadastrado:', response.data.user);
+            setName('')
+            setEmail('')
+            setPassword('')
+            setConfirmPassword('')
 
-            // Redirecionar após um atraso (opcional)
-            setTimeout(() => {
-                navigate('/user-register');
-            }, 2000); // Atraso de 2 segundos
+            flashSuccess()
         } catch (err) {
-            setError(err.response?.data?.error || 'Erro ao cadastrar usuário.');
-            console.error(err);
+            console.error(err)
+            flashError()
         }
     };
 
@@ -70,7 +90,7 @@ function UserRegister() {
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 className="w-full h-[70.87px] border rounded p-2 border-[#D87B26] font-family:'VT323'"
-                                required
+                                required={true}
                             />
                         </div>
                         <div className="flex flex-col w-full md:w-1/2">
@@ -81,7 +101,7 @@ function UserRegister() {
                                 value={role}
                                 onChange={(e) => setRole(e.target.value)}
                                 className="w-full h-[70.87px] border rounded p-2 border-[#D87B26] font-family:'VT323'"
-                                required
+                                required={true}
                             />
                         </div>
                     </div>
@@ -93,7 +113,7 @@ function UserRegister() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             className="w-full h-[70.87px] border rounded p-2 border-[#D87B26] font-family:'VT323'"
-                            required
+                            required={true}
                         />
                     </div>
                     <div className="flex flex-col w-full mt-2">
@@ -104,7 +124,7 @@ function UserRegister() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             className="w-full h-[70.87px] border rounded p-2 border-[#D87B26] font-family:'VT323'"
-                            required
+                            required={true}
                         />
                     </div>
                     <div className="flex flex-col w-full mt-2">
@@ -115,7 +135,7 @@ function UserRegister() {
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             className="w-full h-[70.87px] border rounded p-2 border-[#D87B26] font-family:'VT323'"
-                            required
+                            required={true}
                         />
                     </div>
                     <div className="flex flex-col w-full mt-2">
@@ -125,19 +145,27 @@ function UserRegister() {
                             value={status}
                             onChange={(e) => setStatus(e.target.value)}
                             className="w-full h-[70.87px] border rounded p-2 border-[#D87B26] font-family:'VT323'"
-                            required
+                            required={true}
                         >
                             <option value="ativo">Ativo</option>
                             <option value="inativo">Inativo</option>
                         </select>
                     </div>
                     <button type="submit" className="mt-4 p-2 bg-[#FFC376] rounded border border-[#D87B26] hover:bg-[#D87B26] hover:text-white transition duration-300">Registrar</button>
-                    {error && <p className="text-red-500 mt-2">{error}</p>}
-                    {success && <p className="text-green-500 mt-2">{success}</p>}
                 </div>
             </form>
+
+            {/* Componente flash message, verifica se o estado flash é true e então renderiza a flash message */}
+            {flash && (
+                <FlashMessage
+                    message={flash.message}
+                    type={flash.type}
+                    duration={3000}
+                    onClose={() => setFlash(null)}
+                />
+            )}
         </MainPage>
-    );
+    )
 }
 
 export default UserRegister;
