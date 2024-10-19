@@ -1,11 +1,9 @@
-import { useState } from 'react';
-import Sidebar from '../../components/Sidebar/Sidebar';
-import UserProfileIcon from '../../components/UserProfileIcon/UserProfileIcon';
-import ProductTable from '../../components/ProductTable/ProductTable';
-import MainPage from '../MainPage/MainPage';
+import React from 'react'
+import ProductTable from '../../components/ProductTable/ProductTable'
+import MainPage from '../MainPage/MainPage'
 
 
-function MovementPage(props) {
+function MovementPage() {
   
   return (
     <MainPage title="Movimentação de produtos">
@@ -13,7 +11,7 @@ function MovementPage(props) {
         <ProductTable/>
       </div>
     </MainPage>
-  );
+  )
 }
 
-export default MovementPage;
+export default MovementPage
