@@ -14,6 +14,7 @@ const Mainchart = () => {
   const [categories, setCategories] = useState([])
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [products, setProducts] = useState([])
+  const [selectedProduct, setSelectedProduct] = useState(null)
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -42,13 +43,12 @@ const Mainchart = () => {
       fetchProductsByCategory()
     }
   }, [selectedCategory])
-
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get(`${selectedValue}`);
+        const response = await api.get(`${selectedValue}/?category=${selectedCategory}&product=${selectedProduct}`);
         const data = response.data;
-        console.log("dados", data);
         setData(data);
       } catch (err) {
         console.error("Error fetching data:", err);
@@ -56,7 +56,7 @@ const Mainchart = () => {
     };
 
     fetchData();
-  }, [selectedValue]); // Fetch data whenever selectedValue changes
+  }, [selectedValue,selectedCategory,selectedProduct]); // Fetch data whenever selectedValue changes
 
   return (
     <>
