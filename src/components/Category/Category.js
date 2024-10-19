@@ -12,6 +12,7 @@ function Category(props) {
      */
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [categoryName, setCategoryName] = useState('')
+    const [categoryImage, setCategoryImage] = useState(null)
 
     const openModal = () => setIsModalOpen(true)
     const closeModal = () => setIsModalOpen(false)
@@ -43,21 +44,27 @@ function Category(props) {
     const handleSubmit = async(e) => {
         e.preventDefault()
 
-        const categoryData = {
-            category_name: categoryName,
-        }
+        const formData = new FormData();
+        formData.append('category_name', categoryName)
+        formData.append('category_image', categoryImage)
 
         try {
             await api
-            .post("/category", categoryData)
+            .post("/category", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
             .then(response => props.onCategoryAdded(response.data))
 
             setCategoryName('')
+            setCategoryImage(null)
 
             closeModal()
             flashSuccess()
-        } catch (err) {
+        } catch(err) {
             console.log(err)
+            flashError()
         }
     }
 
@@ -81,6 +88,13 @@ function Category(props) {
                                 <span className="label-text text-white">Nome da categoria</span>
                             </label>
                             <input type="text" placeholder="Digite o nome da categoria" className="input input-bordered placeholder:text-slate-300" required value={categoryName} onChange={(e) => setCategoryName(e.target.value)} name='category-name' />
+                        </div>
+
+                        <div className="form-control mb-4">
+                            <label className="label">
+                                <span className="label-text text-white">Selecione uma imagem</span>
+                            </label>
+                            <input type="file" className="input input-bordered placeholder:text-slate-300" onChange={(e) => setCategoryImage(e.target.files[0])} name='category-image' />
                         </div>
 
                         <div className="modal-action">

@@ -295,7 +295,15 @@ function ProductCategory(props) {
     <div className='w-full alt-color-2-bg rounded border-[15px] border-[#6B3710] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] mt-4'>
         <div className='border-l-[6px] border-r-[6px] border-[#D87B26] p-[1rem] h-[200px] overflow-y-auto flex flex-wrap relative'>
           <div className={`transition-opacity duration-200 absolute inset-0 alt-color-6-bg z-10 flex flex-col items-center justify-center ${!showCategoryProducts ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-            <div className='w-[6rem] h-[6rem] rounded-full alt-color-4-bg border-4 border-[#D87B26] shadow-[inset_-2px_3px_2px_4px_rgba(0,0,0,0.2)]'></div>
+          <figure className='w-[6rem] h-[6rem] rounded-full alt-color-4-bg border-4 border-[#D87B26] shadow-[inset_-2px_3px_2px_4px_rgba(0,0,0,0.2)]'>
+            {props.categoryImage ? (
+              <img
+                src={`http://localhost:3001${props.categoryImage}`}
+                alt={props.categoryName}
+                className='w-full h-full object-cover rounded-full'
+              />
+            ) : null}
+          </figure>
             <p className='my-2 font-pixel text-xl'>{ props.categoryName }</p>
             <div className='flex justify-evenly w-[10%]'>
               <p className='cursor-pointer' onClick={handleClickShow}>

@@ -17,7 +17,7 @@ function CategoryButtons() {
   }
 
   const navigateMovements = () => {
-      navigate('/movements')
+      navigate('/historic')
   }
 
   const navigateBatches = () => {
@@ -47,7 +47,7 @@ function CategoryButtons() {
       </a>      
 
       <a onClick={navigateMovements} className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black cursor-pointer hvr-grow">
-       Movimentações
+       Histórico
       </a>
 
       <a onClick={navigateBatches} className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black cursor-pointer hvr-grow">
@@ -60,6 +60,10 @@ function CategoryButtons() {
 
       <a onClick={navigateSectors} className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black cursor-pointer hvr-grow">
        Setores
+      </a>
+
+      <a onClick={navigateSectors} className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black cursor-pointer hvr-grow">
+       Movimentações
       </a>
     </div>
   );
