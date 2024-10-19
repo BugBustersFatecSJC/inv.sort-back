@@ -10,16 +10,26 @@ import MainPage from '../MainPage/MainPage'
 
 
 function Analytics(props) {
-  const [loading, setloading] = useState(false);
-  const loadingIcon = () => {
-    setloading((prevLoading) => !prevLoading);
-  };
+//  const [loading, setloading] = useState(false);
+//const loadingIcon = () => {
+//  setloading((prevLoading) => !prevLoading);
+//};
+
   
   return (
-    <MainPage title="Análise dos itens">
-      <Cardsanalytics/>
+    <div className='main-color-bg h-[100%] flex'>
       
-      <div className='w-[100%] h-[100%] mt-12 grid grid-cols-3 gap-6'>
+      <Sidebar />
+     
+      <div id='main' className='w-[100%] min-h-[100vh] px-12 h-[100%] grid-col-2 flex overflow-scroll overflow-x-hidden flex-wrap flex-col  text-center justify-start items-center'>
+      
+        <div className='flex flex-col w-full items-end justify-start p-4'>
+          <UserProfileIcon />
+        </div>
+        
+        <Cardsanalytics/>
+       
+        <div className='w-[100%] h-[100%] mt-12 grid grid-cols-3 gap-6'>
         <div className='col-span-2 flex flex-col  h-[100%] px-2 py-2  flex justify-center border-4 rounded border-[#B45105] bg-[#FFC376]'>
           {/* <h1 className='poppins-semibold'></h1> */}
           <Mainchart />
