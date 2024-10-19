@@ -97,10 +97,31 @@ const deleteProduct = async (req, res) => {
     }
 }
 
+const getProductsByCategory = async (req, res) => {
+    const { category_id } = req.params
+  
+    try {
+      const products = await prisma.product.findMany({
+        where: {
+          category_id: parseInt(category_id),
+        },
+        include: {
+          category: true,
+          supplier: true,
+          unit: true,
+        },
+      })
+      res.status(200).json(products)
+    } catch (error) {
+      res.status(500).json({ error: "Erro ao buscar produtos por categoria" })
+    }
+}
+
 module.exports = {
     getAllProducts,
     createProduct,
     updateProduct,
     deleteProduct,
-    getProductsbyId
-};
+    getProductsbyId,
+    getProductsByCategory,
+}
