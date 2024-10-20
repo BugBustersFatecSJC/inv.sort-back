@@ -47,7 +47,7 @@ const filterMonth = async (req, res) => {
           WHERE movement_type = 'venda' AND category_id = ${category}  and product_id = ${product} AND MONTH(movement_date) = ${currentMonth} AND YEAR(movement_date) = ${currentYear};
         `;
         const totalDifference = results[0]?.vendas ?? 0;
-        result.push({ name: `${currentMonth}-${currentYear}`, value: totalDifference });
+        result.push({ name: `${currentMonth}/${currentYear-2000}`, value: totalDifference });
       } else {
         results = await prisma.$queryRaw`
           SELECT 
@@ -57,7 +57,7 @@ const filterMonth = async (req, res) => {
         `;
           
         const totalDifference = results[0]?.vendas ?? 0;  
-        result.push({ name: `${currentMonth}-${currentYear}`, value: totalDifference });
+        result.push({ name: `${currentMonth}/${currentYear-2000}`, value: totalDifference });
       }
       
       
