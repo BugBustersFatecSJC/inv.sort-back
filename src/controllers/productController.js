@@ -123,6 +123,7 @@ const deleteProduct = async (req, res) => {
     }
 }
 
+<<<<<<< HEAD
 
 
 // Método para obter todos os lotes
@@ -132,6 +133,25 @@ const getAllBatches = async (req, res) => {
         res.json(batches);
     } catch (error) {
         res.status(500).json({ error: "Erro ao buscar lotes." });
+=======
+const getProductsByCategory = async (req, res) => {
+    const { category_id } = req.params
+  
+    try {
+      const products = await prisma.product.findMany({
+        where: {
+          category_id: parseInt(category_id),
+        },
+        include: {
+          category: true,
+          supplier: true,
+          unit: true,
+        },
+      })
+      res.status(200).json(products)
+    } catch (error) {
+      res.status(500).json({ error: "Erro ao buscar produtos por categoria" })
+>>>>>>> 7a6b10459323d54a6eee93b7601f6c48e207cc21
     }
 }
 
@@ -140,6 +160,12 @@ module.exports = {
     createProduct,
     updateProduct,
     deleteProduct,
+<<<<<<< HEAD
     getProductsbyId,  
     getAllBatches,
 };
+=======
+    getProductsbyId,
+    getProductsByCategory,
+}
+>>>>>>> 7a6b10459323d54a6eee93b7601f6c48e207cc21

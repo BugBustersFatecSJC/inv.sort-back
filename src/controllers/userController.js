@@ -4,7 +4,8 @@ const { hashSync, compareSync } = require('bcrypt');
 
 // Registra dados do usuário
 const createUser = async (req, res) => {
-    const { username, email, password, role, status } = req.body;
+    const { username, email, password, role, status } = req.body
+    const userImage = req.file ? `/uploads/${req.file.filename}` : null
 
     try {
 
@@ -31,6 +32,7 @@ const createUser = async (req, res) => {
                 password: hashedPassword,
                 role: role,
                 status: status,
+                user_img: userImage
             },
         });
 
@@ -39,7 +41,7 @@ const createUser = async (req, res) => {
         return res.status(201).json(userWithoutPassword);
     } catch (error) {
         console.log(error)
-        return res.status(500).json({ error: "Erro ao criar usuário." });
+        return res.status(500).json({ error: `Erro ao criar usuário. ${error}` });
     }
 };
 
