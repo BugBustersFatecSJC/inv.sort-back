@@ -74,7 +74,7 @@ const Mainchart = () => {
           disabled={products.length === 0}
         />
       </div>
-      <ResponsiveContainer className="m-auto px-4" barGap="20" >
+      <ResponsiveContainer className="m-auto px-4" width={400} height={270} barGap="20" >
         <BarChart
           className="m-auto px-2"
           data={data}

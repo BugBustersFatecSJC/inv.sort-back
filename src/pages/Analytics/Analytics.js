@@ -6,6 +6,7 @@ import CategoryButtons from '../../components/CategoryButtons/CategoryButtons';
 import Mainchart from '../../components/MainChart/Mainchart';
 import Sectorchart from '../../components/Sectorchart/Sectorchart'
 import Cardsanalytics from '../../components/Cardsanlaytics/Cardsanalytics';
+import MainPage from '../MainPage/MainPage';
 
 
 function Analytics(props) {
@@ -15,23 +16,12 @@ function Analytics(props) {
   };
   
   return (
-    <MainPage>
-    <div className='main-color-bg h-[100%] flex'/>
+    <MainPage title="Análise dos itens">
+      <Cardsanalytics/>
       
-      <Sidebar />
-     
-      <div id='main' className='w-[100%] min-h-[100vh] px-12 h-[100%] grid-col-2 flex overflow-scroll overflow-x-hidden flex-wrap flex-col  text-center justify-start items-center'/>
-      
-        <div className='flex flex-col w-full items-end justify-start p-4'>
-          
-        </div>
-        
-        <Cardsanalytics/>
-       
-        <div className='w-[100%] h-[100%] mt-12 grid grid-cols-3 gap-6'>
+      <div className='w-[100%] h-[100%] mt-12 grid grid-cols-3 gap-6'>
         <div className='col-span-2 flex flex-col  h-[100%] px-2 py-2  flex justify-center border-4 rounded border-[#B45105] bg-[#FFC376]'>
-          <h1 className='poppins-semibold'></h1>
-          
+          {/* <h1 className='poppins-semibold'></h1> */}
           <Mainchart />
         </div>
 
@@ -40,9 +30,7 @@ function Analytics(props) {
           <Sectorchart />
         </div>
       </div>
-            </div>
-      </div>
-    
+    </MainPage>  
   );
 }
 
