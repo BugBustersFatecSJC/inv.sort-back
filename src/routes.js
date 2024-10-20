@@ -9,6 +9,7 @@ const unitController = require('./controllers/unitController')
 const supplierController = require('./controllers/supplierController')
 const filterController = require('./controllers/filterController')
 const { loginUser } = require('./controllers/userController'); // Importando o controlador
+const auditLogMiddleware = require('./controllers/auditController');
 
 
 //Inicio das Rotas
@@ -24,15 +25,16 @@ router.get('/users', userController.getAllUsers);
 router.post('/login', userController.loginUser);
 
 //Rotas de Produtos
-router.post('/products', productController.createProduct);
+router.post('/products', productController.createProduct, auditLogMiddleware);
 router.get('/products', productController.getAllProducts);
 router.get('/products/:product_id', productController.getProductsbyId);
-router.put('/products/:product_id', productController.updateProduct);
-router.delete('/products/:product_id', productController.deleteProduct);
+router.put('/products/:product_id',auditLogMiddleware, productController.updateProduct);
+router.delete('/products/:product_id',auditLogMiddleware, productController.deleteProduct);
 
 //Rotas de Categorias
 router.post('/category', categoryController.createCategory);
 router.get('/category', categoryController.getAllCategories);
+router.get('/category/filter', categoryController.filterCategories);
 router.put('/category/:category_id', categoryController.updateCategory);
 router.delete('/category/:category_id', categoryController.deleteCategory);
 
