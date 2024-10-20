@@ -64,7 +64,12 @@ function MainPageRender() {
    * Função para remover dinamicamente o produto
    */
   const removeProduct = (productId) => {
+    const user = localStorage.getItem("user")
+    const jsonUser = JSON.parse(user)
+    if (jsonUser.role === "admin") {
     setProducts((prevProducts) => prevProducts.filter(product => product.product_id !== productId))
+    }
+    else {alert("Você não tem permissão para fazer isso")}
   }
 
   /**
@@ -93,10 +98,15 @@ function MainPageRender() {
    * Função para remover a categoria
    */
   const removeCategory = (categoryId) => {
+    const user = localStorage.getItem("user")
+    const jsonUser = JSON.parse(user)
+    if (jsonUser.role === "admin") {
     setCategories((prevCategories) => prevCategories.filter(
       category => category.category_id !== categoryId 
-    ))
+     ))
   }
+    else {alert("Você não tem permissão para fazer isso")}
+}
 
   /**
    * Funcionalidade para checar se há algum usuário no banco de dados, se sim,
