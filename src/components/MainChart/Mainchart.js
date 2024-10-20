@@ -74,18 +74,18 @@ const Mainchart = () => {
         />
     
       </div>
-      <ResponsiveContainer className="m-auto px-4" width={400} height={270} barGap="20" >
+      <ResponsiveContainer className="m-auto px-4" width={800} height={270} barGap="30" >
         <BarChart
           className="m-auto px-2"
           data={data}
-          margin={{ top: 155, right: 45, left: 85, bottom: 0 }}
+          margin={{ top: 155, right: 85, left: 85, bottom: 0 }}
           width={600}
-          barGap={10} // Adjust the gap between bars
-          barCategoryGap="20%" // Adjust the category gap between bars
+          barGap='20' // Adjust the gap between bars
+          barCategoryGap="40%" // Adjust the category gap between bars
         >
           <XAxis dataKey="name" width={20} interval={0} dy={5} className="poppins-semibold" position="top" style={{ textAnchor: 'middle', fontSize: '55%', fill: '#3e1900' }} />
-          <Bar barSize={55} dataKey="value" fill="#3e1900">
-            <LabelList dataKey="value" barGap={150} className="poppins-semibold" position="top" style={{ margin: 'auto', textAnchor: 'middle', fontSize: '80%', fill: '#3e1900' }} />
+          <Bar barSize={55} barGap={5} dataKey="value" fill="#3e1900">
+            <LabelList dataKey="value"  className="poppins-semibold" position="top" style={{ margin: 'auto', textAnchor: 'middle', fontSize: '80%', fill: '#3e1900' }} />
           </Bar>
         </BarChart>
       </ResponsiveContainer>
