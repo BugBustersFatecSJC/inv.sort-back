@@ -7,10 +7,10 @@ import api from '../../services/api';
 
 
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#ff8888' , ' #A9A9A9'];
 
 const Sectorchart = () => {
-  const [selectedValue, setSelectedValue] = useState('/sectormensal'); // Default value
+  const [selectedValue, setSelectedValue] = useState('/sectoranual'); // Default value
   const [data, setData] = useState([]);
 
   /**
@@ -65,30 +65,35 @@ const Sectorchart = () => {
   console.log("selected",data);
   return (
   
-    <ResponsiveContainer width={'90%'} height={270} className={'flex mx-auto flex-col justify-center align-center items-center text-center'}>
+    <ResponsiveContainer width={'100%'} height={270} className={'flex mx-auto flex-col justify-center align-center items-center text-center'}>
       <PieChart className='h-[100%] p-2' >
       <Tooltip content={<Tooltipporcentagem />} />
           
         <Pie 
 
-          
+          labelLine={false}
+                
           data={data}
           cx={`50%`}
           cy={`50%`}
           innerRadius={60}
-          outerRadius={80}
+          outerRadius={90}
           fill="#8884d8"
           paddingAngle={5}
-          dataKey="value"
+          dataKey="total_difference"
+          stroke="#B45105"
+          strokeWidth={2.5}
+          paddingAngle={6} 
+          
         >
          
           {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            <Cell  str key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
         
       </PieChart>
-      <div className='flex flex-wrap w-[100%] text-center justify-center'><Label  data={data} colors={COLORS} />   </div>
+      <div className='flex flex-wrap w-[100%] text-center justify-center'><Label className='border-[#B45105] border-4'  data={data} colors={COLORS} />   </div>
     </ResponsiveContainer>
     
   );

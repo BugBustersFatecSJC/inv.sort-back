@@ -17,6 +17,7 @@ import Sector from './pages/Sector/Sector'
 import Supplier from './pages/Supplier/Supplier'
 import UserProfile from './pages/UserProfile/UserProfile'
 import BuyAndSell from './pages/BuyAndSell/BuyAndSell'
+import UserRegister from './pages/UserRegister/UserRegister'
 
 /* ProtectedRoute redireciona o usuario para a pagina de login, caso o mesmo não esteja logado
 IMPORTANTE: Use essa função em toda página que não deve ser acessada antes do login */
@@ -44,12 +45,14 @@ function App() {
           <Route path="/products" element={<ProtectedRoute element={MainPageRender} />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/userpage" element={<ProtectedRoute element={UserPage} />} />
-          <Route path="/movements" element={<ProtectedRoute element={MovementPage} />} />
+          <Route path="/historic" element={<ProtectedRoute element={MovementPage} />} />
           <Route path="/batches" element={<ProtectedRoute element={Batch} />} />
           <Route path="/sectors" element={<ProtectedRoute element={Sector} />} />
           <Route path="/suppliers" element={<ProtectedRoute element={Supplier} />} />
           <Route path="/profile" element={<ProtectedRoute element={UserProfile} />} />
           <Route path="/buyandsell" element={<ProtectedRoute element={BuyAndSell}/>}/>
+          <Route path="/cadastra-usuario" element={<ProtectedRoute element={UserRegister} />} />
+
         </Routes>
       </Router>
     </div>

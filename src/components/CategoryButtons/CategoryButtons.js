@@ -17,7 +17,7 @@ function CategoryButtons() {
   }
 
   const navigateMovements = () => {
-      navigate('/movements')
+      navigate('/historic')
   }
 
   const navigateBatches = () => {
@@ -35,11 +35,19 @@ function CategoryButtons() {
   const navigateBuyAndSell = () => {
       navigate('/buyandsell')
   }
+  
+  const navigateRegisterUser = () => {
+      navigate('/cadastra-usuario')
+  }
 
   return (
     <div className='flex flex-col w-full'>
-      <a onClick={navigateUserpage} className="text-center mb-3  w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel mb-1 text-xl main-color border-3 border-black cursor-pointer cursor-pointer hvr-grow">
+      <a onClick={navigateRegisterUser} className="text-center mb-3  w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel mb-1 text-xl main-color border-3 border-black cursor-pointer cursor-pointer hvr-grow">
         Usuários
+      </a>
+
+      <a onClick={navigateUserpage} className="text-center mb-3  w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel mb-1 text-xl main-color border-3 border-black cursor-pointer cursor-pointer hvr-grow">
+        Gerenciar
       </a>
 
       <a onClick={navigateProducts} className="text-center mb-3  w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel mb-1 text-xl main-color border-3 border-black cursor-pointer hvr-grow">
@@ -51,7 +59,7 @@ function CategoryButtons() {
       </a>      
 
       <a onClick={navigateMovements} className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black cursor-pointer hvr-grow">
-       Movimentações
+       Histórico
       </a>
 
       <a onClick={navigateBatches} className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black cursor-pointer hvr-grow">
@@ -68,6 +76,10 @@ function CategoryButtons() {
 
       <a onClick={navigateBuyAndSell} className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black cursor-pointer hvr-grow">
        Fluxo de Estoque
+       </a>
+
+      <a onClick={navigateSectors} className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black cursor-pointer hvr-grow">
+       Movimentações
       </a>
     </div>
   );
