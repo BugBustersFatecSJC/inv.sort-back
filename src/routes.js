@@ -9,9 +9,8 @@ const categoryController = require('./controllers/categoryController')
 const unitController = require('./controllers/unitController')
 const supplierController = require('./controllers/supplierController')
 const filterController = require('./controllers/filterController')
+const auditLogMiddleware = require('./controllers/auditController');
 const sectorchartController = require('./controllers/sectorchartController')
-// const sectorchartController = require('./controllers/sectorchartController')
-
 
 //Inicio das Rotas
 
@@ -26,17 +25,18 @@ router.post('/users', upload.single('user_img'), userController.createUser);
 router.get('/users', userController.getAllUsers);
 router.post('/login', userController.loginUser);
 
-// Rotas de Produtos
-router.post('/products', productController.createProduct);
+//Rotas de Produtos
+router.post('/products', productController.createProduct, auditLogMiddleware);
 router.get('/products', productController.getAllProducts);
 router.get('/products/:product_id', productController.getProductsbyId);
+router.put('/products/:product_id',auditLogMiddleware, productController.updateProduct);
+router.delete('/products/:product_id',auditLogMiddleware, productController.deleteProduct);
 router.get('/products/category/:category_id', productController.getProductsByCategory);
-router.put('/products/:product_id', productController.updateProduct);
-router.delete('/products/:product_id', productController.deleteProduct);
 
 // Rotas de Categorias
 router.post('/category', upload.single('category_image'), categoryController.createCategory);
 router.get('/category', categoryController.getAllCategories);
+router.get('/category/filter', categoryController.filterCategories);
 router.put('/category/:category_id', upload.single('category_image'), categoryController.updateCategory);
 router.delete('/category/:category_id', categoryController.deleteCategory);
 
