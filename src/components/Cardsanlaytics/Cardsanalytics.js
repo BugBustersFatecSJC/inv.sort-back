@@ -1,7 +1,20 @@
-
+import api from '../../services/api';
+import { useState, useEffect } from 'react';
 const Cardsanalytics = () => {
 
+    const [cards, setCards] = useState([])
+    useEffect(() => {
+        const fetchCards = async () => {
+            try {
+                const response = await api.get('/cards')
+                setCards(response.data)
+            } catch (err) {
+                console.error("Error fetching cards:", err);
+            }
+        }
 
+        fetchCards()
+    }, [])
     return (
         <  ><div className='px- mt-2 w-[100%] h-[40px] flex justify-between text-center align-center'>
         <span className="flex flex-col ">
