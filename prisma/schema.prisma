@@ -7,6 +7,149 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  user_id        Int             @id @default(autoincrement())
+  username       String          @unique
+  email          String          @unique
+  password       String
+  role           Role
+  created_at     DateTime        @default(now())
+  status         Status          @default(ativo)
+  user_img       String? // pode ser null
+  stockMovements StockMovement[]
+  auditLogs      AuditLog[]
+}
+
+model Category {
+  category_id    Int             @id @default(autoincrement())
+  category_name  String          @unique
+  category_image String? // pode ser null
+  created_at     DateTime        @default(now())
+  products       Product[]
+  auditLogs      AuditLog[]
+  StockMovement  StockMovement[]
+}
+
+model Supplier {
+  supplier_id   Int        @id @default(autoincrement())
+  supplier_name String     @unique
+  contact_info  String?
+  supplier_img  String? // pode ser null
+  address       String?
+  created_at    DateTime   @default(now())
+  products      Product[]
+  auditLogs     AuditLog[]
+}
+
+model ProductUnit {
+  unit_id   Int       @id @default(autoincrement())
+  unit_type UnitType
+  products  Product[]
+}
+
+model Product {
+  product_id      Int             @id @default(autoincrement())
+  product_name    String
+  description     String?
+  product_img     String? // pode ser null
+  category_id     Int
+  prod_brand      String?
+  prod_model      String?
+  supplier_id     Int
+  unit_id         Int
+  is_perishable   Boolean         @default(false)
+  created_at      DateTime        @default(now())
+  prod_cost_value Float?
+  prod_sell_value Float?
+  category        Category        @relation(fields: [category_id], references: [category_id])
+  supplier        Supplier        @relation(fields: [supplier_id], references: [supplier_id])
+  productUnit     ProductUnit     @relation(fields: [unit_id], references: [unit_id])
+  batches         Batch[]
+  auditLogs       AuditLog[]
+  StockMovement   StockMovement[]
+
+  @@index([product_name], name: "idx_product_name")
+  @@index([category_id], name: "idx_products_category")
+  @@index([supplier_id], name: "idx_products_supplier")
+  @@index([unit_id], name: "idx_products_unit")
+}
+
+model Local {
+  local_id      Int        @id @default(autoincrement())
+  local_name    String?
+  local_address String?
+  created_at    DateTime   @default(now())
+  auditLogs     AuditLog[]
+  Sector        Sector[]
+}
+
+model Sector {
+  sector_id   Int        @id @default(autoincrement())
+  local_id    Int
+  sector_name String
+  created_at  DateTime   @default(now())
+  auditLogs   AuditLog[]
+  Local       Local      @relation(fields: [local_id], references: [local_id])
+}
+
+model Batch {
+  batch_id          Int             @id @default(autoincrement())
+  product_id        Int
+  quantity          Int
+  expiration_date   DateTime?
+  manufacture_date  DateTime?
+  batch_value_total Float?
+  created_at        DateTime        @default(now())
+  product           Product         @relation(fields: [product_id], references: [product_id])
+  stockMovements    StockMovement[]
+  auditLogs         AuditLog[]
+}
+
+model StockMovement {
+  movement_id   Int          @id @default(autoincrement())
+  batch_id      Int
+  quantity      Int
+  movement_type MovementType
+  movement_date DateTime     @default(now())
+  user_id       Int
+  category_id   Int?
+  product_id    Int?
+  category      Category?    @relation(fields: [category_id], references: [category_id])
+  product       Product?     @relation(fields: [product_id], references: [product_id])
+  batch         Batch        @relation(fields: [batch_id], references: [batch_id])
+  user          User         @relation(fields: [user_id], references: [user_id])
+
+  @@index([batch_id], name: "idx_stock_movements_batch")
+  @@index([user_id], name: "idx_stock_movements_user")
+  @@index([movement_type], name: "idx_stock_movements_type")
+}
+
+model AuditLog {
+  log_id            Int       @id @default(autoincrement())
+  user_id           Int
+  local_id          Int?
+  sector_id         Int?
+  supplier_id       Int?
+  batch_id          Int?
+  category_id       Int?
+  product_id        Int?
+  action            Action
+  table_name        String
+  primary_key_value String
+  old_value         String?
+  new_value         String?
+  action_date       DateTime  @default(now())
+  user              User      @relation(fields: [user_id], references: [user_id])
+  batch             Batch?    @relation(fields: [batch_id], references: [batch_id])
+  local             Local?    @relation(fields: [local_id], references: [local_id])
+  sector            Sector?   @relation(fields: [sector_id], references: [sector_id])
+  product           Product?  @relation(fields: [product_id], references: [product_id])
+  supplier          Supplier? @relation(fields: [supplier_id], references: [supplier_id])
+  category          Category? @relation(fields: [category_id], references: [category_id])
+}
+
+// Enums
+
 enum Role {
   admin
   gerente
@@ -24,166 +167,13 @@ enum UnitType {
   lt
 }
 
+enum MovementType {
+  compra
+  venda
+}
+
 enum Action {
   INSERT
   UPDATE
   DELETE
-}
-
-enum MovementType {
-  entrada
-  saida
-}
-
-model User {
-  user_id    Int      @id @default(autoincrement())
-  username   String   @unique @db.VarChar(50)
-  email      String   @unique @db.VarChar(255)
-  password   String   @db.VarChar(255)
-  role       Role
-  created_at DateTime @default(now()) @db.Timestamp(6)
-  status     Status   @default(ativo)
-  user_img   String?  @db.Text
-
-  auditLogs      AuditLog[]
-  stockMovements StockMovement[]
-}
-
-model Category {
-  category_id    Int     @id @default(autoincrement())
-  category_name  String  @unique @db.VarChar(50)
-  category_image String? @db.Text
-
-  products Product[]
-  AuditLog AuditLog[]
-
-  @@index([category_name], name: "idx_category_name")
-}
-
-model Supplier {
-  supplier_id   Int     @id @default(autoincrement())
-  supplier_name String  @unique @db.VarChar(100)
-  contact_info  String? @db.VarChar(255)
-  supplier_img  String? @db.Text
-  address       String? @db.VarChar(255)
-
-  products Product[]
-  AuditLog AuditLog[]
-
-  @@index([supplier_name], name: "idx_supplier_name")
-}
-
-model ProductUnit {
-  unit_id   Int      @id @default(autoincrement())
-  unit_type UnitType
-
-  products Product[]
-  AuditLog AuditLog[]
-}
-
-model Product {
-  product_id      Int      @id @default(autoincrement())
-  product_name    String   @db.VarChar(100)
-  description     String?  @db.Text
-  product_img     String?  @db.Text
-  category_id     Int?
-  prod_brand      String?  @db.VarChar(100)
-  prod_model      String?  @db.VarChar(100)
-  supplier_id     Int?
-  unit_id         Int?
-  is_perishable   Boolean  @default(false)
-  created_at      DateTime @default(now()) @db.Timestamp(6)
-  prod_cost_value Decimal? @db.Decimal(10, 2)
-  prod_sell_value Decimal? @db.Decimal(10, 2)
-
-  category Category?    @relation(fields: [category_id], references: [category_id])
-  supplier Supplier?    @relation(fields: [supplier_id], references: [supplier_id])
-  unit     ProductUnit? @relation(fields: [unit_id], references: [unit_id])
-  batches  Batch[]
-  AuditLog AuditLog[]
-
-  @@index([product_name], name: "idx_product_name")
-  @@index([category_id], name: "idx_products_category")
-  @@index([supplier_id], name: "idx_products_supplier")
-  @@index([unit_id], name: "idx_products_unit")
-}
-
-model Sector {
-  sector_id   Int    @id @default(autoincrement())
-  sector_name String @db.VarChar(255)
-
-  locals   Local[]
-  AuditLog AuditLog[]
-}
-
-model Local {
-  local_id      Int     @id @default(autoincrement())
-  sector_id     Int
-  local_name    String? @db.VarChar(100)
-  local_address String? @db.VarChar(255)
-
-  sector   Sector     @relation(fields: [sector_id], references: [sector_id])
-  AuditLog AuditLog[]
-}
-
-model AuditLog {
-  log_id            Int      @id @default(autoincrement())
-  user_id           Int
-  action            Action
-  table_name        String   @db.VarChar(50)
-  primary_key_value String   @db.VarChar(255)
-  old_value         Json?
-  new_value         Json?
-  action_date       DateTime @default(now()) @db.Timestamp(6)
-
-  product_id    Int?
-  product_name  String?
-  category_id   Int?
-  category_name String?
-  supplier_id   Int?
-  supplier_name String?
-  unit_id       Int?
-  sector_id     Int?
-  local_id      Int?
-  batch_id      Int?
-
-  user     User         @relation(fields: [user_id], references: [user_id])
-  product  Product?     @relation(fields: [product_id], references: [product_id])
-  category Category?    @relation(fields: [category_id], references: [category_id])
-  supplier Supplier?    @relation(fields: [supplier_id], references: [supplier_id])
-  unit     ProductUnit? @relation(fields: [unit_id], references: [unit_id])
-  sector   Sector?      @relation(fields: [sector_id], references: [sector_id])
-  local    Local?       @relation(fields: [local_id], references: [local_id])
-  batch    Batch?       @relation(fields: [batch_id], references: [batch_id])
-}
-
-model Batch {
-  batch_id          Int       @id @default(autoincrement())
-  product_id        Int
-  quantity          Int
-  expiration_date   DateTime? @db.Date
-  manufacture_date  DateTime? @db.Date
-  batch_value_total Decimal?  @db.Decimal(10, 2)
-
-  product         Product         @relation(fields: [product_id], references: [product_id])
-  stock_movements StockMovement[]
-  AuditLog        AuditLog[]
-
-  @@index([product_id], name: "idx_batches_product")
-}
-
-model StockMovement {
-  movement_id   Int          @id @default(autoincrement())
-  batch_id      Int
-  quantity      Int
-  movement_type MovementType
-  movement_date DateTime     @default(now()) @db.Timestamp(6)
-  user_id       Int
-
-  batch Batch @relation(fields: [batch_id], references: [batch_id])
-  user  User  @relation(fields: [user_id], references: [user_id])
-
-  @@index([batch_id], name: "idx_stock_movements_batch")
-  @@index([user_id], name: "idx_stock_movements_user")
-  @@index([movement_type], name: "idx_stock_movements_type")
 }
