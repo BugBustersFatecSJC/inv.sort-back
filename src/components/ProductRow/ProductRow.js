@@ -1,15 +1,15 @@
 import React from 'react';
 
-const ProductRow = ({ product, color }) => {
+const ProductRow = ({ product, bgColor }) => {
   return (
-    <tr className={`border-b border-orange-300 hover:bg-orange-100 bg-red-500 ${color}`}>
-      <td className="border border-orange-400 p-4 text-orange-700">{product.product_id}</td>
-      <td className="border border-orange-400 p-4 text-orange-700">{product.product_name}</td>
-      <td className="border border-orange-400 p-4 text-orange-700">{product.unit.unity_type}</td>
-      <td className="border border-orange-400 p-4 text-orange-700">{product.quantity}</td>
-      <td className="border border-orange-400 p-4 text-orange-700">{product.stock}</td>
-      <td className="border border-orange-400 p-4 text-orange-700">{product.prod_cost_value}</td>
-      <td className="border border-orange-400 p-4 text-orange-700">{product.lots}</td>
+    <tr className={`border-b border-orange-300 hover:bg-orange-100 ${bgColor}`}>
+      <td className="border border-orange-400 p-2">{product.product_id}</td>
+      <td className="border border-orange-400 p-2">{product.product_name}</td>
+      <td className="border border-orange-400 p-2">{product.unit.unity_type}</td>
+      <td className="border border-orange-400 p-2">{product.quantity}</td>
+      <td className="border border-orange-400 p-2">{product.stock}</td>
+      <td className="border border-orange-400 p-2">{product.prod_cost_value}</td>
+      <td className="border border-orange-400 p-2">{product.lots}</td>
     </tr>
   );
 };

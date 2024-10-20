@@ -1,5 +1,7 @@
 import React from 'react'
 import MainPage from '../MainPage/MainPage';
+import SearchBar from '../../components/SearchBar/SearchBar'
+
 // Pagina para registrar compra e venda de estoque
 function BuyAndSell() {
   return (
@@ -8,10 +10,7 @@ function BuyAndSell() {
       {/* Conteúdo */}
       <section className="border-4 border-[rgb(180,81,5)] h-full w-full shadow-sm shadow-inner">
         {/* Barra de pesquisa */}
-        <div className="flex justify-between rounded-lg max-h-6 w-56 bg-[rgb(221,160,89)] m-2 ">
-          <input className="h-6 rounded-lg w-[190px] bg-[rgb(221,160,89)] m-0" />
-          <img className="relative h-6 mr-2 top-[2%]" src="lupa.png" alt="lupa" />
-        </div>
+          <SearchBar />
         {/* Tabela */}
         <div className="m-4 pr-1 max-h-60 align-middle content-center self-center overflow-auto">
           <div className="flex vt323-regular justify-between mx-2">
