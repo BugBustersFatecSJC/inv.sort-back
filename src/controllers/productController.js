@@ -117,6 +117,43 @@ const getProductsByCategory = async (req, res) => {
     }
 }
 
+const filterProducts = async (req, res) => {
+    try {
+        const { product_name, unit, unit_id, supplier_id } = req.query;
+
+        const filters = {};
+        if (product_name) {
+            filters.product_name = { contains: product_name, mode: 'insensitive' };
+        }
+        if (unit_id) {
+            filters.unit_id = parseInt(unit_id);
+        }
+        if (supplier_id) {
+            filters.supplier_id = parseInt(supplier_id);
+        }
+        if (unit) {
+            filters.unit = {
+                unit_type: { contains: unit, mode: 'insensitive' }
+            };
+        }
+
+        const filteredProducts = await prisma.product.findMany({
+            where: filters,
+            include: {
+                unit: true,
+                supplier: true,
+                // other relations if needed
+            }
+        });
+
+        res.status(200).json(filteredProducts);
+
+    } catch (error) {
+        res.status(500).json({ error: "Erro ao filtrar produtos" });
+    }
+};
+
+
 module.exports = {
     getAllProducts,
     createProduct,
@@ -124,4 +161,5 @@ module.exports = {
     deleteProduct,
     getProductsbyId,
     getProductsByCategory,
-}
+    filterProducts, 
+};

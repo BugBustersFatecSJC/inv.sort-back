@@ -1,20 +1,30 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
+// categoryController.js
 const createCategory = async (req, res) => {
     const { category_name } = req.body;
+    
+    // Adicionar log para depuração
+    console.log("Categoria recebida:", category_name);
+
+    if (!category_name) {
+        return res.status(400).json({ error: "Nome da categoria é obrigatório" });
+    }
 
     try {
         const catName = await prisma.category.create({
             data: {
-                category_name
+                category_name,
             },
         });
         res.status(201).json(catName);
     } catch (error) {
-        res.status(400).json({error: "Erro ao criar categoria"});
+        console.error("Erro ao criar categoria:", error);
+        res.status(400).json({ error: "Erro ao criar categoria" });
     }
 };
+
 
 const getAllCategories = async (req, res) => {
     try {
