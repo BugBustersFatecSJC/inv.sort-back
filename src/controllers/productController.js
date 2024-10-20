@@ -7,11 +7,12 @@ const getAllProducts = async (req, res) => {
             include: {
                 category: true,
                 supplier: true,
-                unit: true
+                productUnit: true
             }
         });
         res.json(prod);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ error: "Erro ao buscar produtos. "});
     }
 }
@@ -26,7 +27,7 @@ const getProductsbyId = async (req, res) => {
             include: {
                 category: true,
                 supplier: true,
-                unit: true
+                productUnit: true
             }
         })
         res.status(201).json(findProduct)
@@ -51,7 +52,7 @@ const createProduct = async (req, res, next) => {
             include: {
                 category: true,
                 supplier: true,
-                unit: true
+                productUnit: true
             }
         });
 
@@ -132,7 +133,7 @@ const getProductsByCategory = async (req, res) => {
         include: {
           category: true,
           supplier: true,
-          unit: true,
+          productUnit: true,
         },
       })
       res.status(200).json(products)
