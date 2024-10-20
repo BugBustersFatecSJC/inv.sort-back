@@ -40,9 +40,13 @@ const auditLogMiddleware = async (req, res, next) => {
                     const primaryKeyValue = product.product_id;
                     const userId = parseInt(req.headers['x-user-id']);
 
-                    if (!userId) {
-                        console.error("User ID is undefined. Cannot create audit log.");
-                        return; // Se não houver userId, não crie o log
+                    const userExists = await prisma.user.findUnique({
+                        where: { user_id: userId }
+                    });
+
+                    if (!userExists) {
+                        console.error("Usuário com o ID fornecido não foi encontrado.");
+                        return; 
                     }
 
                     // Buscar nomes da categoria e fornecedor, se não for DELETE
@@ -74,7 +78,6 @@ const auditLogMiddleware = async (req, res, next) => {
                             product: action !== 'DELETE' && product.product_id ? { connect: { product_id: product.product_id } } : undefined,
                             category: product.category_id ? { connect: { category_id: product.category_id } } : undefined,
                             supplier: product.supplier_id ? { connect: { supplier_id: product.supplier_id } } : undefined,
-                            unit: product.unit_id ? { connect: { unit_id: product.unit_id } } : undefined
                         }
                     });
                 }

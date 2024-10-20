@@ -51,7 +51,7 @@ const createProduct = async (req, res, next) => {
             include: {
                 category: true,
                 supplier: true,
-                unit: true
+                productUnit: true
             }
         });
 
@@ -61,7 +61,8 @@ const createProduct = async (req, res, next) => {
 
         res.status(201).json(createProd);
     } catch (error) {
-        res.status(400).json({ error: "Erro ao criar produto" });
+        console.error("Erro ao criar produto:", error);
+        res.status(400).json({ error: "Erro ao criar produto"});
     }
 };
 
