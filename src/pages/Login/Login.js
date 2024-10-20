@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../services/api';
 import styles from './Login.module.css';
 import MainLogo from "../../components/MainLogo/MainLogo";
 import Field from "../../components/Field/Field";
@@ -14,7 +14,7 @@ function Login() {
 
   // UseEffect para verificar se precisamos redirecionar para o cadastro
   useEffect(() => {
-    axios.get('http://localhost:3001/check-login')
+    api.get('/check-login')
       .then(response => {
         if (response.data.needsRegistration) {
           navigate('/cadastro'); // Redireciona para cadastro se necessário
@@ -30,11 +30,12 @@ function Login() {
     try {
       const data = { email, password };
 
-      await axios.post('http://localhost:3001/login', data)
+      await api.post('/login', data)
         .then(response => {
           localStorage.setItem("user", JSON.stringify(response.data));
           navigate('/products'); // Redireciona após login bem-sucedido
         });
+        api.defaults.headers["X-User-Id"] = JSON.parse(localStorage.getItem("user"))?.user_id;
     } catch (error) {
       console.error('Erro na requisição:', error);
       alert("Usuário ou Senha Inválidos");

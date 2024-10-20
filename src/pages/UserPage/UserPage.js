@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../services/api';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import UserDetails from '../../components/UserDetails/UserDetails';
 
@@ -10,7 +10,7 @@ const UserPage = () => {
 
   // Carregar todos os usuários ao carregar a página
   useEffect(() => {
-    axios.get('http://localhost:3001/users') // Alterar para a URL correta do back-end
+    api.get('/users') // Alterar para a URL correta do back-end
       .then(response => {
         setUsers(response.data); // Definir os usuários vindos do back-end
       })
