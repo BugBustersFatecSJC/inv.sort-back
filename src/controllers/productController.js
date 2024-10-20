@@ -7,7 +7,10 @@ const getAllProducts = async (req, res) => {
             include: {
                 category: true,
                 supplier: true,
-                unit: true
+                unit: true,
+                batches: true,     
+                local: true,
+                sector: true
             }
         });
         res.json(prod);
@@ -26,7 +29,8 @@ const getProductsbyId = async (req, res) => {
             include: {
                 category: true,
                 supplier: true,
-                unit: true
+                unit: true,
+                
             }
         })
         res.status(201).json(findProduct)
@@ -37,29 +41,51 @@ const getProductsbyId = async (req, res) => {
 }
 
 const createProduct = async (req, res) => {
-    const { product_name, description, category_id, supplier_id, is_perishable, unit_id } = req.body;
+    const { 
+        product_name, 
+        description, 
+        product_img, 
+        category_id, 
+        prod_brand, 
+        prod_model, 
+        supplier_id, 
+        unit_id, 
+        is_perishable, 
+        prod_cost_value, 
+        prod_sell_value 
+    } = req.body;
 
     try {
-        const createProd = await prisma.product.create({
+        const newProduct = await prisma.product.create({
             data: {
                 product_name,
                 description,
+                product_img,
                 category_id,
+                prod_brand,
+                prod_model,
                 supplier_id,
+                unit_id,
                 is_perishable,
-                unit_id
+                prod_cost_value,
+                prod_sell_value
             },
             include: {
-                category: true,
-                supplier: true,
-                unit: true
+                category: true,   
+                supplier: true,    
+                productUnit: true,        
+                batches: true,     
+               
+
             }
         });
-        res.status(201).json(createProd);
+
+        res.status(201).json(newProduct);
     } catch (error) {
-        res.status(400).json({error: "Erro ao criar produto"});
+        console.error(error);
+        res.status(400).json({ error: "Erro ao criar produto" });
     }
-}
+};
 
 const updateProduct = async (req, res) => {
     try {
@@ -97,10 +123,23 @@ const deleteProduct = async (req, res) => {
     }
 }
 
+
+
+// Método para obter todos os lotes
+const getAllBatches = async (req, res) => {
+    try {
+        const batches = await prisma.batch.findMany();
+        res.json(batches);
+    } catch (error) {
+        res.status(500).json({ error: "Erro ao buscar lotes." });
+    }
+}
+
 module.exports = {
     getAllProducts,
     createProduct,
     updateProduct,
     deleteProduct,
-    getProductsbyId
+    getProductsbyId,  
+    getAllBatches,
 };

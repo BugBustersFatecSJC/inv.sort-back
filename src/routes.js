@@ -4,15 +4,15 @@ const router = express.Router();
 // Importar controllers aqui
 const userController = require('./controllers/userController');
 const productController = require('./controllers/productController');
-const categoryController = require('./controllers/categoryController')
-const unitController = require('./controllers/unitController')
-const supplierController = require('./controllers/supplierController')
-const filterController = require('./controllers/filterController')
-const { loginUser } = require('./controllers/userController'); // Importando o controlador
+const categoryController = require('./controllers/categoryController');
+const unitController = require('./controllers/unitController');
+const supplierController = require('./controllers/supplierController');
+const filterController = require('./controllers/filterController');
+const localController = require('./controllers/localController'); 
+const sectorController = require('./controllers/sectorController'); 
+const batchController = require('./controllers/batchController')
 
-
-//Inicio das Rotas
-
+// Rotas para login e filtros
 router.get('/check-login', userController.checkFirstLogin);
 
 router.get('/mensal', filterController.filterMonth);
@@ -23,31 +23,49 @@ router.post('/users', userController.createUser);
 router.get('/users', userController.getAllUsers);
 router.post('/login', userController.loginUser);
 
-//Rotas de Produtos
+// Rotas de Produtos
 router.post('/products', productController.createProduct);
 router.get('/products', productController.getAllProducts);
 router.get('/products/:product_id', productController.getProductsbyId);
 router.put('/products/:product_id', productController.updateProduct);
 router.delete('/products/:product_id', productController.deleteProduct);
 
-//Rotas de Categorias
+// Rotas de Localizações (Locais)
+router.post('/local', localController.createLocal);
+router.get('/local', localController.getAllLocals); 
+router.put('/local/:local_id', localController.updateLocal); 
+router.delete('/local/:local_id', localController.deleteLocal); 
+
+// Rotas de Setores
+router.post('/sector', sectorController.createSector); 
+router.get('/sector', sectorController.getAllSectors); 
+router.put('/sector/:sector_id', sectorController.updateSector); 
+router.delete('/sector/:sector_id', sectorController.deleteSector); 
+
+// Rotas de Lotes
+router.post('/batch', batchController.createBatch);
+router.get('/batch', batchController.getAllBatches);
+router.put('/batch/:batch_id', batchController.updateBatch);
+router.delete('/batch/:batch_id', batchController.deleteBatch);
+
+// Rotas de Categorias
 router.post('/category', categoryController.createCategory);
 router.get('/category', categoryController.getAllCategories);
 router.put('/category/:category_id', categoryController.updateCategory);
 router.delete('/category/:category_id', categoryController.deleteCategory);
 
-//Rotas de Unidadaes
+// Rotas de Unidades
 router.post('/unit', unitController.setUnit);
 router.get('/unit', unitController.getAllUnits);
 router.put('/unit/:unit_id', unitController.updateUnit);
 router.delete('/unit/:unit_id', unitController.deleteUnit);
 
-//Rotas de Suppliers
+// Rotas de Suppliers
 router.post('/supplier', supplierController.createSupplier);
 router.get('/supplier', supplierController.getAllSuppliers);
 router.put('/supplier/:supplier_id', supplierController.updateSupplier);
 router.delete('/supplier/:supplier_id', supplierController.deleteSupplier);
 
-//Fim das Rotas
+// fim das rotas
 
 module.exports = router;
