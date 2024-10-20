@@ -121,7 +121,7 @@ function UserRegister() {
 
                     {imagePreview && (
                         <div className="mt-4">
-                            <img src={imagePreview} alt="preview da imagem" className="h-32 w-32 object-cover rounded" />
+                            <img src={imagePreview} alt="preview da imagem" className="w-full h-full z-10 object-cover relative top-0 left-0" />
                         </div>
                     )}
                 </div>
