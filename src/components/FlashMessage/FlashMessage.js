@@ -33,7 +33,7 @@ const FlashMessage = ({ message, type, duration, onClose }) => {
       case 'error':
         return '/img/alien.png'
       default:
-        return '/img/cofee-cup.png'
+        return '/img/coffee-cup.png'
     }
   }
 

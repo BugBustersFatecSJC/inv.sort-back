@@ -39,7 +39,7 @@ const ProductTable = () => {
               <ProductRow
                 key={index}
                 product={product}
-                color={index % 2 === 0 ? "bg-[#F5A66D]" : "bg-[#EA9457]"}
+                bgColor={index % 2 === 0 ? "bg-[#F5A66D]" : "bg-[#EA9457]"}
               />
             ))}
           </tbody>
