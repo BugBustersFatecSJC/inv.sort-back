@@ -53,6 +53,7 @@
       
 :root {
   --main-color: #DDA059;
+  --main-border: linear-gradient(0deg, rgba(180,81,5,1) 50%, rgba(107,55,16,1) 50%);
   --secondary-color: #3E1A00;
   --tertiary-color: #F8B971;
   --quarternary-color: #B45105;
@@ -72,7 +73,10 @@
   padding: 0;
  
 }
-
+.border-main {
+  background: rgb(180,81,5);
+background: linear-gradient(0deg, rgba(180,81,5,1) 50%, rgba(107,55,16,1) 50%);
+}
 body {
   font-family: 'Montserrat', sans-serif;
   margin: 0;
