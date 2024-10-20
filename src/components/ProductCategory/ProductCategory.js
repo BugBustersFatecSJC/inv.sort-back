@@ -39,20 +39,27 @@ function ProductCategory(props) {
      */
     const [flash, setFlash] = useState(null)
 
+    const showFlashMessage = (message, type) => {
+      setFlash(null)
+      setTimeout(() => {
+          setFlash({ message, type })
+      }, 0)
+    }
+
     const flashSuccess = () => {
-      setFlash({ message: 'Item adicionado com sucesso!', type: 'success' });
+      showFlashMessage('Item adicionado com sucesso!','success');
     }
 
     const flashError = () => {
-      setFlash({ message: 'Um erro aconteceu', type: 'error' });
+      showFlashMessage('Um erro aconteceu','error');
     };
 
     const flashInfo = () => {
-      setFlash({ message: 'Item atualizado', type: 'info' });
+      showFlashMessage('Item atualizado', 'info');
     }
 
     const flashDelete = () => {
-      setFlash({ message: 'Item deletado', type: 'success' });
+      showFlashMessage('Item deletado', 'success');
     }
     
     /**
@@ -87,6 +94,54 @@ function ProductCategory(props) {
     }
 
     /**
+     * Retorna todos os setores
+    */
+   
+    const [sectors, setSector] = useState([])
+      
+    const fetchSector = async () => {
+      try {
+        await api
+        .get('/sector')
+        .then(response => setSector(response.data))
+      } catch(err) {
+        console.log(err)
+      }
+    }
+
+ /**
+     * Retorna todos os setores
+    */
+   
+ const [batch, setBatch] = useState([])
+      
+ const fetchBatch = async () => {
+   try {
+     await api
+     .get('/batch')
+     .then(response => setBatch(response.data))
+   } catch(err) {
+     console.log(err)
+   }
+ }
+
+    /**
+     * Retorna todos os locais
+    */
+   
+   const [local, setLocals] = useState([])
+   
+   const fetchLocals = async () => {
+     try {
+       await api
+       .get('/local')
+       .then(response => setLocals(response.data))
+      } catch(err) {
+        console.log(err)
+      }
+    }
+
+    /**
      * Hook de useEffect para ativar as funções quando o componente é renderizado
      */
     useEffect(() => {
@@ -95,6 +150,10 @@ function ProductCategory(props) {
         await fetchUnits()
         await fetchSuppliers()
         await fetchProducts()
+        await fetchSector()
+        await fetchLocals()
+        await fetchBatch()
+
       }
 
       fetchData()
@@ -124,6 +183,15 @@ function ProductCategory(props) {
     const [productUnitId, setProductUnitId] = useState('')
     const [productSupplierId, setProductSupplierId] = useState('')
     const [isPerishable, setIsPerishable] = useState(false)
+    const [productBrand, setProductBrand] = useState('');
+    const [productModel, setProductModel] = useState('');
+    const [productCostValue, setProductCostValue] = useState(0);
+    const [productSellValue, setProductSellValue] = useState(0);
+    const [productLocalId, setProductLocalId] = useState('');
+    const [productSectorId, setProductSectorId] = useState('');
+    const [productBatchId, setProductBatchId] = useState('');
+    const [expirationDate, setExpirationDate] = useState('');
+    
 
     const handleSubmit = async(e) => {
       e.preventDefault()
@@ -135,6 +203,13 @@ function ProductCategory(props) {
           supplier_id: productSupplierId,
           is_perishable: isPerishable,
           unit_id: productUnitId,
+          prod_model: productModel,
+          prod_brand: productBrand,
+          prod_cost_value: productCostValue,
+          prod_sell_valleu: productSellValue,
+          local_id: productLocalId,
+          sector_id: productSectorId,
+          batch_id: productBatchId
       }
 
       try {
@@ -147,6 +222,13 @@ function ProductCategory(props) {
           setProductUnitId('')
           setProductSupplierId('')
           setIsPerishable(false)
+          setProductBatchId('')
+          setProductSellValue('')
+          setProductCostValue('')
+          setProductSectorId('')
+          setProductLocalId('')
+          setProductBrand('')
+          setProductModel('')
           closeModal()
           flashSuccess()
       } catch (err) {
@@ -244,6 +326,7 @@ function ProductCategory(props) {
     setShowCategoryProducts(!showCategoryProducts)
   }
 
+
   /**
    * Edição da categoria
    */
@@ -295,7 +378,15 @@ function ProductCategory(props) {
     <div className='w-full alt-color-2-bg rounded border-[15px] border-[#6B3710] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] mt-4'>
         <div className='border-l-[6px] border-r-[6px] border-[#D87B26] p-[1rem] h-[200px] overflow-y-auto flex flex-wrap relative'>
           <div className={`transition-opacity duration-200 absolute inset-0 alt-color-6-bg z-10 flex flex-col items-center justify-center ${!showCategoryProducts ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-            <div className='w-[6rem] h-[6rem] rounded-full alt-color-4-bg border-4 border-[#D87B26] shadow-[inset_-2px_3px_2px_4px_rgba(0,0,0,0.2)]'></div>
+          <figure className='w-[6rem] h-[6rem] rounded-full alt-color-4-bg border-4 border-[#D87B26] shadow-[inset_-2px_3px_2px_4px_rgba(0,0,0,0.2)]'>
+            {props.categoryImage ? (
+              <img
+                src={`http://localhost:3001${props.categoryImage}`}
+                alt={props.categoryName}
+                className='w-full h-full object-cover rounded-full'
+              />
+            ) : null}
+          </figure>
             <p className='my-2 font-pixel text-xl'>{ props.categoryName }</p>
             <div className='flex justify-evenly w-[10%]'>
               <p className='cursor-pointer' onClick={handleClickShow}>
@@ -355,6 +446,8 @@ function ProductCategory(props) {
             </button>
         </div>
 
+            
+
         {/* Modal de produto */}
         {isModalOpen && (
           <div className="modal modal-open text-slate-400">
@@ -402,12 +495,95 @@ function ProductCategory(props) {
                 </select>
               </div>
 
-              <div className="form-control mb-4">
-                <label className="cursor-pointer label">
-                  <span className="label-text text-white">É perecível</span>
-                  <input type="checkbox" className="toggle toggle-primary" checked={isPerishable} onChange={(e) => setIsPerishable(e.target.checked)} />
-                </label>
-              </div>
+         {/* Local */}
+        <div className="form-control mb-4">
+          <label className="label">
+            <span className="label-text text-white">Local</span>
+          </label>
+          <select
+            value={productLocalId}
+            onChange={(e) => setProductLocalId(parseInt(e.target.value))}
+            className="select select-bordered"
+          >
+            <option disabled selected value="">
+              Selecionar setor
+            </option>
+            {local.map((local) => (
+              <option key={local.local_id} value={local.local_id}>
+                {local.local_name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Setor */}
+        <div className="form-control mb-4">
+          <label className="label">
+            <span className="label-text text-white">Setor</span>
+          </label>
+          <select
+            value={productSectorId}
+            onChange={(e) => setProductSectorId(parseInt(e.target.value))}
+            className="select select-bordered"
+          >
+            <option disabled selected value="">
+              Selecionar setor
+            </option>
+            {sectors.map((sector) => (
+              <option key={sector.sector_id} value={sector.sector_id}>
+                {sector.sector_name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* lotes */}
+<div className="form-control mb-4">
+  <label className="label">
+    <span className="label-text text-white">Lotes</span>
+  </label>
+  <select
+    value={productBatchId || ""}
+    onChange={(e) => setProductBatchId(parseInt(e.target.value))}
+    className="select select-bordered"
+  >
+    <option disabled value="">
+      Selecionar lote
+    </option>
+    {batch.map((batch) => (
+      <option key={batch.batch_id} value={batch.batch_id}>
+      {batch.batch_id} 
+      </option>
+    ))}
+  </select>
+</div>
+
+        {/* É Perecível */}
+        <div className="form-control mb-4">
+          <label className="cursor-pointer label">
+            <span className="label-text text-white">É perecível</span>
+            <input
+              type="checkbox"
+              className="toggle toggle-primary"
+              checked={isPerishable}
+              onChange={(e) => setIsPerishable(e.target.checked)}
+            />
+          </label>
+        </div>
+
+        {/* Data de Validade */}
+        <div className="form-control mb-4">
+          <label className="label">
+            <span className="label-text text-white">Data de Validade</span>
+          </label>
+          <input
+            type="date"
+            className="input input-bordered placeholder:text-slate-300"
+            name="expiration_date"
+            value={expirationDate}
+            onChange={(e) => setExpirationDate(e.target.value)}
+            disabled={!isPerishable}          />
+        </div>
 
               <div className="modal-action">
                 <label htmlFor="product-modal" className="btn" onClick={closeModal}>Cancelar</label>
@@ -482,13 +658,13 @@ function ProductCategory(props) {
 
       {/* Componente flash message, verifica se o estado flash é true e então renderiza a flash message */}
       {flash && (
-        <FlashMessage
-          message={flash.message}
-          type={flash.type}
-          duration={3000}
-        />
+          <FlashMessage
+              message={flash.message}
+              type={flash.type}
+              duration={3000}
+              onClose={() => setFlash(null)}
+          />
       )}
-
     </div>
     )
 }
