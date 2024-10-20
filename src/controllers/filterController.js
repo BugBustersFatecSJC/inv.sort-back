@@ -44,7 +44,7 @@ const filterMonth = async (req, res) => {
           SELECT 
           SUM(quantity) as vendas
           FROM StockMovement
-          WHERE movement_type = 'venda' AND category_id = ${category} AND MONTH(movement_date) = ${currentMonth} AND YEAR(movement_date) = ${currentYear};
+          WHERE movement_type = 'venda' AND category_id = ${category}  and product_id = ${product} AND MONTH(movement_date) = ${currentMonth} AND YEAR(movement_date) = ${currentYear};
         `;
         const totalDifference = results[0]?.vendas ?? 0;
         result.push({ name: `${currentMonth}-${currentYear}`, value: totalDifference });
@@ -53,10 +53,10 @@ const filterMonth = async (req, res) => {
           SELECT 
           SUM(quantity) as vendas
           FROM db.StockMovement
-          WHERE movement_type = 'venda' AND category_id = ${category} and product_id = ${product} AND MONTH(movement_date) = ${currentMonth} AND YEAR(movement_date) = ${currentYear};
+          WHERE movement_type = 'venda' AND category_id = ${category} AND MONTH(movement_date) = ${currentMonth} AND YEAR(movement_date) = ${currentYear};
         `;
-        
-        const totalDifference = results[0]?.vendas ?? 0;
+          
+        const totalDifference = results[0]?.vendas ?? 0;  
         result.push({ name: `${currentMonth}-${currentYear}`, value: totalDifference });
       }
       
