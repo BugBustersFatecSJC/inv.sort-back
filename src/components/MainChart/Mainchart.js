@@ -3,7 +3,6 @@ import { BarChart, Bar, ResponsiveContainer, LabelList, XAxis } from 'recharts';
 import api from '../../services/api';
 import FilterButton from '../../components/FilterButtons/Filterbutton'
 import DropdownButtons from '../DropdownButtons/DropdownButtons'
-
 const Mainchart = () => {
   const [selectedValue, setSelectedValue] = useState('/mensal'); // Default value
   const [data, setData] = useState([]);
@@ -60,7 +59,7 @@ const Mainchart = () => {
 
   return (
     <>
-      <div className='flex w-[60%] justify-between'>
+      <div className='flex w-[60%] justify-between '>
         <FilterButton selectedValue={selectedValue} setSelectedValue={setSelectedValue} />
         <DropdownButtons 
           options={categories} 
@@ -73,6 +72,7 @@ const Mainchart = () => {
           label="Selecione um Produto" 
           disabled={products.length === 0}
         />
+    
       </div>
       <ResponsiveContainer className="m-auto px-4" barGap="20" >
         <BarChart

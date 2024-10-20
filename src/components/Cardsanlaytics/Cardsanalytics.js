@@ -15,6 +15,7 @@ const Cardsanalytics = () => {
 
         fetchCards()
     }, [])
+    console.log("cards", cards);
     return (
         <  ><div className='px- mt-2 w-[100%] h-[40px] flex justify-between text-center align-center'>
         <span className="flex flex-col ">
