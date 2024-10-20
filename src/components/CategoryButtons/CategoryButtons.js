@@ -32,6 +32,10 @@ function CategoryButtons() {
       navigate('/suppliers')
   }
 
+  const navigateBuyAndSell = () => {
+      navigate('/buyandsell')
+  }
+  
   const navigateRegisterUser = () => {
       navigate('/cadastra-usuario')
   }
@@ -69,6 +73,10 @@ function CategoryButtons() {
       <a onClick={navigateSectors} className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black cursor-pointer hvr-grow">
        Setores
       </a>
+
+      <a onClick={navigateBuyAndSell} className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black cursor-pointer hvr-grow">
+       Fluxo de Estoque
+       </a>
 
       <a onClick={navigateSectors} className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black cursor-pointer hvr-grow">
        Movimentações

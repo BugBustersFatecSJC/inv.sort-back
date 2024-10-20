@@ -16,6 +16,7 @@ import Batch from './pages/Batch/Batch'
 import Sector from './pages/Sector/Sector'
 import Supplier from './pages/Supplier/Supplier'
 import UserProfile from './pages/UserProfile/UserProfile'
+import BuyAndSell from './pages/BuyAndSell/BuyAndSell'
 import UserRegister from './pages/UserRegister/UserRegister'
 
 /* ProtectedRoute redireciona o usuario para a pagina de login, caso o mesmo não esteja logado
@@ -49,7 +50,9 @@ function App() {
           <Route path="/sectors" element={<ProtectedRoute element={Sector} />} />
           <Route path="/suppliers" element={<ProtectedRoute element={Supplier} />} />
           <Route path="/profile" element={<ProtectedRoute element={UserProfile} />} />
+          <Route path="/buyandsell" element={<ProtectedRoute element={BuyAndSell}/>}/>
           <Route path="/cadastra-usuario" element={<ProtectedRoute element={UserRegister} />} />
+
         </Routes>
       </Router>
     </div>
