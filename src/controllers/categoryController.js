@@ -2,20 +2,24 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 const createCategory = async (req, res) => {
-    const { category_name } = req.body;
+    const { category_name } = req.body
+    const categoryImage = req.file ? `/uploads/${req.file.filename}` : null
 
     try {
         console.log(req.headers)
-        const catName = await prisma.category.create({
+
+        const category = await prisma.category.create({
             data: {
-                category_name
+                category_name,
+                category_image: categoryImage
             },
-        });
-        res.status(201).json(catName);
+        })
+        res.status(201).json(category)
     } catch (error) {
-        res.status(400).json({error: "Erro ao criar categoria"});
+        console.error(error)
+        res.status(400).json({ error: "Erro ao criar categoria" })
     }
-};
+}
 
 const getAllCategories = async (req, res) => {
     try {
@@ -66,20 +70,24 @@ const filterCategories = async (req, res) => {
 }
 const updateCategory = async (req, res) => {
     try {
-        const id = parseInt(req.params.category_id);
-        const { category_name } = req.body;
-        const categoryUpdate = await prisma.category.update({
+        const id = parseInt(req.params.category_id)
+        const { category_name } = req.body
+        const categoryImage = req.file ? `/uploads/${req.file.filename}` : null
+
+        const updatedCategory = await prisma.category.update({
             where: { category_id: id },
             data: {
-                category_name
+                category_name,
+                category_image: categoryImage || undefined
             },
-        });
-        res.status(200).json(categoryUpdate);
-    }
-    catch (error) {
-        res.status(400).json({error: "Erro ao atualizar a categoria"});
+        })
+        res.status(200).json(updatedCategory);
+    } catch (error) {
+        console.error(error)
+        res.status(400).json({ error: "Erro ao atualizar a categoria" })
     }
 }
+
 const deleteCategory = async (req, res) => {
     try {
         const id = parseInt(req.params.category_id)
