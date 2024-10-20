@@ -5,7 +5,11 @@ function CategoryButtons() {
   const navigate = useNavigate()
 
   const navigateUserpage = () => {
-      navigate('/userpage')
+    const user = localStorage.getItem("user")
+    const jsonUser = JSON.parse(user)
+    if (jsonUser.role === "admin" || jsonUser.role === "gerente") {  
+      navigate('/userpage') }
+    else {alert("Você não tem permissão para fazer isso")}   
   }
 
   const navigateProducts = () => {
@@ -13,7 +17,7 @@ function CategoryButtons() {
   }
 
   const navigateAnalytics = () => {
-      navigate('/analytics')
+      // navigate('/analytics')
   }
 
   const navigateMovements = () => {
