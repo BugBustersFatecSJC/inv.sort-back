@@ -46,7 +46,8 @@ const filterMonth = async (req, res) => {
           FROM StockMovement
           WHERE movement_type = 'venda' AND category_id = ${category} AND MONTH(movement_date) = ${currentMonth} AND YEAR(movement_date) = ${currentYear};
         `;
-        
+        const totalDifference = results[0]?.vendas ?? 0;
+        result.push({ name: `${currentMonth}-${currentYear}`, value: totalDifference });
       } else {
         results = await prisma.$queryRaw`
           SELECT 
@@ -55,12 +56,12 @@ const filterMonth = async (req, res) => {
           WHERE movement_type = 'venda' AND category_id = ${category} and product_id = ${product} AND MONTH(movement_date) = ${currentMonth} AND YEAR(movement_date) = ${currentYear};
         `;
         
-      
+        const totalDifference = results[0]?.vendas ?? 0;
+        result.push({ name: `${currentMonth}-${currentYear}`, value: totalDifference });
       }
       
       
-      const totalDifference = results[0]?.vendas ?? 0;
-      result.push({ name: `${currentMonth}-${currentYear}`, value: totalDifference });
+  
     }
 
 
