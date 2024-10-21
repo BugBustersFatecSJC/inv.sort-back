@@ -22,7 +22,7 @@ function Analytics(props) {
 
         <div className='flex flex-col w-full items-end justify-start p-4'>
         <UserProfileIcon/>
-y
+
         </div>
         
       

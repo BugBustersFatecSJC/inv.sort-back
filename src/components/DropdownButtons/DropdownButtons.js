@@ -1,8 +1,9 @@
 import React from 'react'
 
-function DropdownButtons({ options = [], label, onChange, disabled = false }) {
+function DropdownButtons({ options = [],type, label, onChange, disabled = false }) {
+
   return (
-    <div>
+    <div className=' ml-4'>
       <select
         className="w-36 poppins-semibold border-4 rounded border-[#B45105] bg-[#FFC376]"
         name="dropdown"
@@ -10,10 +11,10 @@ function DropdownButtons({ options = [], label, onChange, disabled = false }) {
         onChange={onChange}
         disabled={disabled}
       >
-        <option value="">{label}</option>
+        <option value="null">{label}</option>
         {options.map((option) => (
-          <option key={option.category_id || option.product_id} value={option.category_id || option.product_id}>
-            {option.category_name || option.product_name}
+          <option key={option[`${type}_id`]} value={option[`${type}_id`]}>
+            {option[`${type}_name`]}
           </option>
         ))}
       </select>

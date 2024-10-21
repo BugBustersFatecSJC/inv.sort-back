@@ -32,8 +32,10 @@ const Mainchart = () => {
     if (selectedCategory) {
       const fetchProductsByCategory = async () => {
         try {
-          const response = await api.get(`/products/category/${selectedCategory}`)
-          setProducts(response.data)
+          const response = await api.get(`/products/category/${selectedCategory}`);
+          setProducts(response.data);
+          console.log(response.data);
+          
         } catch (err) {
           console.error("Error fetching products by category:", err)
         }
@@ -63,18 +65,29 @@ const Mainchart = () => {
         <FilterButton selectedValue={selectedValue} setSelectedValue={setSelectedValue} />
         <DropdownButtons 
           options={categories} 
+          type={"category"}
           label="Selecione uma Categoria" 
-          onChange={(e) => setSelectedCategory(e.target.value)}
+          onChange={(e) => {
+            setSelectedCategory(e.target.value);
+            console.log(e.target.value);
+            
+          }}
         />
 
         <DropdownButtons 
           options={products} 
           label="Selecione um Produto" 
+          type={"product"}
           disabled={products.length === 0}
+          onChange={(e) => {
+            setSelectedProduct(e.target.value)
+            console.log(e.target.value);
+            
+          }}
         />
     
       </div>
-      <ResponsiveContainer className="m-auto px-4" width={800} height={270} barGap="30" >
+      <ResponsiveContainer className="mx-auto " width={650} height={270} barGap="30" >
         <BarChart
           className="m-auto px-2"
           data={data}
