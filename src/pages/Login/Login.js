@@ -51,7 +51,7 @@ function Login() {
         <Field name="email" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
         <Field name="password" type="password" placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)} />
         <div className='font-pixel flex justify-between w-full secondary-color'>
-          <a href='#'>
+          <a href='/cadastro'>
             Esqueceu sua senha?
           </a>
           <p href="#">
