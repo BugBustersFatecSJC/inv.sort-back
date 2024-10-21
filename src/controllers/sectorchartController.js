@@ -9,7 +9,8 @@ const sectorYear = async (req, res) => {
   let mes = data.getMonth() + 1;
   let ano = data.getFullYear();
   const result = [];
-  const total = await prisma.$queryRaw`SELECT  SUM(quantity) AS total_difference FROM StockMovement WHERE movement_type = 'venda' AND YEAR(movement_date) = ${ano};`; 
+  const total = await prisma.$queryRaw`SELECT  SUM(quantity) AS total_difference FROM StockMovement WHERE movement_type = 'venda' AND YEAR(movement_date) = ${ano} and quantity is not null and category_id is not null ;`; 
+
 
     console.log("total", total);
     const results = await prisma.$queryRaw`
@@ -88,4 +89,6 @@ const filterTrimester = async (req, res) => {
 
 
 module.exports = {
-    sectorYear}
+    sectorYear    
+}
+
