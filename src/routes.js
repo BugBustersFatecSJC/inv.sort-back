@@ -29,7 +29,7 @@ router.get('/users', userController.getAllUsers);
 router.post('/login', userController.loginUser);
 
 //Rotas de Produtos
-router.post('/products', productController.createProduct, auditLogMiddleware);
+router.post('/products', upload.single('product_img'), productController.createProduct, auditLogMiddleware);
 router.get('/products', productController.getAllProducts);
 router.get('/products/:product_id', productController.getProductsbyId);
 router.put('/products/:product_id',auditLogMiddleware, productController.updateProduct);
