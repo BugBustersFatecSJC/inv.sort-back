@@ -17,7 +17,7 @@ function CategoryButtons() {
   }
 
   const navigateAnalytics = () => {
-      // navigate('/analytics')
+       navigate('/analytics')
   }
 
   const navigateMovements = () => {
