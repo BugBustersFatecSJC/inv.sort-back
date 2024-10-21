@@ -4,12 +4,14 @@ const prisma = new PrismaClient();
 // Cria um novo lote
 const createBatch = async (req, res) => {
     const { product_id, quantity, expiration_date, manufacture_date, batch_value_total } = req.body;
+    const quantityInt = Number(quantity)
+
 
     try {
         const createBat = await prisma.batch.create({
             data: {
                 product_id,
-                quantity,
+                quantity:quantityInt,
                 expiration_date,
                 manufacture_date,
                 batch_value_total
@@ -17,6 +19,7 @@ const createBatch = async (req, res) => {
         });
         res.status(201).json(createBat);
     } catch (error) {
+        console.log(error)
         res.status(400).json({ error: "Erro ao criar lote" });
     }
 };
