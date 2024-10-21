@@ -9,12 +9,12 @@ app.use(cors());
 
 app.use(express.json());
 
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: true,
-    saveUninitialized: false,
-    cookie: { secure: false }
-}));
+// app.use(session({
+//     secret: process.env.SESSION_SECRET,
+//     resave: true,
+//     saveUninitialized: false,
+//     cookie: { secure: false }
+// }));
 
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')))
 
