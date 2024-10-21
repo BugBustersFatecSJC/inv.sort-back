@@ -191,51 +191,56 @@ function ProductCategory(props) {
     const [productSectorId, setProductSectorId] = useState('');
    // const [productBatchId, setProductBatchId] = useState('');
     const [expirationDate, setExpirationDate] = useState('');
-    
+    const [productImage, setProductImage] = useState(null)
 
     const handleSubmit = async(e) => {
       e.preventDefault()
 
-      const ProductData = {
-          product_name: productName,
-          description: productDescription,
-          category_id: props.categoryKey,
-          supplier_id: productSupplierId,
-          is_perishable: isPerishable,
-          unit_id: productUnitId,
-          prod_model: productModel,
-          prod_brand: productBrand,
-          prod_cost_value: productCostValue,
-          prod_sell_valleu: productSellValue,
-          local_id: productLocalId,
-          sector_id: productSectorId,
-         // batch_id: productBatchId
+      const formData = new FormData();
+      formData.append('product_name', productName);
+      formData.append('description', productDescription);
+      formData.append('category_id', props.categoryKey);
+      formData.append('supplier_id', productSupplierId);
+      formData.append('is_perishable', isPerishable);
+      formData.append('unit_id', productUnitId);
+      formData.append('prod_model', productModel);
+      formData.append('prod_brand', productBrand);
+      formData.append('prod_cost_value', productCostValue);
+      formData.append('prod_sell_value', productSellValue);
+      formData.append('local_id', productLocalId);
+      formData.append('sector_id', productSectorId);
+      console.log(formData.data)
+      if (productImage) {
+          formData.append('product_img', productImage);
       }
-
+  
       try {
-          await api
-          .post("/products", ProductData)
-          .then(response => props.onProductAdded(response.data))          
-
+          await api.post("/products", formData, {
+              headers: {
+                  'Content-Type': 'multipart/form-data'
+              }
+          })
+          .then(response => props.onProductAdded(response.data))
+  
           setProductName('')
           setProductDescription('')
           setProductUnitId('')
           setProductSupplierId('')
           setIsPerishable(false)
-          //setProductBatchId('') 
           setProductSellValue('')
           setProductCostValue('')
           setProductSectorId('')
           setProductLocalId('')
           setProductBrand('')
           setProductModel('')
+          setProductImage(null)
           closeModal()
           flashSuccess()
       } catch (err) {
           console.log(err)
           flashError()
       }
-  }
+    }
 
   /**
    * Deleta o produto
@@ -450,6 +455,9 @@ function ProductCategory(props) {
                     onClick={() => handleDelete(product.product_id)}
                   ></i>
                 )}
+                  {product.product_img && (
+                    <img src={`http://localhost:3001${product.product_img}`} alt="" className='h-full w-full' />
+                  )}
                 </div>
               </Tooltip>
               )
@@ -637,6 +645,18 @@ function ProductCategory(props) {
             value={expirationDate}
             onChange={(e) => setExpirationDate(e.target.value)}
             disabled={!isPerishable}
+          />
+        </div>
+
+        <div className="form-control mb-4">
+          <label className="label">
+            <span className="label-text text-white">Imagem</span>
+          </label>
+          <input
+            type="file"
+            className="input input-bordered placeholder:text-slate-300"
+            name="product_img"
+            onChange={(e) => setProductImage(e.target.files[0])}
           />
         </div>
 
