@@ -90,12 +90,18 @@ function LocalPage() {
         <Loading />
       ) : (
         <>
-          <button onClick={() => setShowLocalModal(true)}>Adicionar Novo Local</button>
+      <div className="product-table w-full bg-[#FFC376] border-4 border-[#85450D]">
+      <div className='border-4 border-[#B45105] p-3'>
+        <h2 className="text-center font-pixel text-2x1 mb-4 px-4 py-2">
+        
+          <button onClick={() => setShowLocalModal(true)} className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Adicionar Novo Local</button> </h2>
+          
           {locals.map((local) => (
             <div key={local.local_id} className="local-item">
+              <div className=' font-pixel flex space-x-6 border-4 border-[#B45105] p-3'> 
               <h3>Local: {local.local_name}</h3>
               <p>Endereço: {local.local_address}</p>
-              <button onClick={() => openEditLocalModal(local)}>Editar Local</button>
+              <button onClick={() => openEditLocalModal(local)} className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Editar Local</button>
 
               <h4>Setores:</h4>
               <ul>
@@ -104,15 +110,18 @@ function LocalPage() {
                   .map((sector) => (
                     <li key={sector.sector_id}>
                       {sector.sector_name}
-                      <button onClick={() => openEditSectorModal(sector)}>Editar</button>
-                      <button onClick={() => deleteSector(sector.sector_id)}>Excluir</button>
+                      <button onClick={() => openEditSectorModal(sector)} className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Editar</button>
+                      <button onClick={() => deleteSector(sector.sector_id)} className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Excluir</button>
                     </li>
                   ))}
-              </ul>
-
-              <button onClick={() => openSectorModal(local.local_id)}>Adicionar Setor</button>
+              </ul> 
+              <button onClick={() => openSectorModal(local.local_id)}className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Adicionar Setor</button>
+              
+              </div>
             </div>
           ))}
+          </div>
+          </div>
         </>
       )}
 
