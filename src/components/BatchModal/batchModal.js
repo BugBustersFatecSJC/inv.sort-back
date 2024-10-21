@@ -3,8 +3,10 @@ import api from '../../services/api';
 import FlashMessage from '../../components/FlashMessage/FlashMessage';
 import Modal from '../Modal/Modal';
 
-function Batch(props) {
+function BatchModal(props) {
   const [products, setProducts] = useState([]);
+  const [flash, setFlash] = useState(null);
+
   const fetchProducts = async () => {
     try {
       const response = await api.get('/products');
@@ -18,56 +20,31 @@ function Batch(props) {
     }
   };
 
-  const [batches, setBatches] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  const fetchBatch = async () => {
-    try {
-      const response = await api.get('/batch');
-      setBatches(response.data);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     fetchProducts();
-    fetchBatch();
   }, []);
 
-  const [flash, setFlash] = useState(null);
+  const [productId, setProductID] = useState(props.batch ? props.batch.product_id : '');
+  const [quantity, setBatchQuantity] = useState(props.batch ? props.batch.quantity : '');
+  const [expiration_date, setExpirationDate] = useState(props.batch ? props.batch.expiration_date : '');
+  const [manufacture_date, setManufactureDate] = useState(props.batch ? props.batch.manufacture_date : '');
+  const [batch_value_total, setTotalValue] = useState(props.batch ? props.batch.batch_value_total : '');
 
-  const showFlashMessage = (message, type) => {
-    setFlash(null);
-    setTimeout(() => {
-      setFlash({ message, type });
-    }, 0);
-  };
-
-  const flashSuccess = () => {
-    showFlashMessage('Item adicionado com sucesso!', 'success');
-  };
-
-  const flashError = () => {
-    showFlashMessage('Um erro aconteceu', 'error');
-  };
-
-  const flashDelete = () => {
-    showFlashMessage('Item deletado', 'success');
-  };
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-
-  const [productId, setProductID] = useState('');
-  const [productName, setProductName] = useState('');
-  const [quantity, setBatchQuantity] = useState('');
-  const [expiration_date, setExpirationDate] = useState('');
-  const [manufacture_date, setManufactureDate] = useState('');
-  const [batch_value_total, setTotalValue] = useState('');
+  useEffect(() => {
+    if (props.batch) {
+      setProductID(props.batch.product_id);
+      setBatchQuantity(props.batch.quantity);
+      setExpirationDate(props.batch.expiration_date);
+      setManufactureDate(props.batch.manufacture_date);
+      setTotalValue(props.batch.batch_value_total);
+    } else {
+      setProductID('');
+      setBatchQuantity('');
+      setExpirationDate('');
+      setManufactureDate('');
+      setTotalValue('');
+    }
+  }, [props.batch]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -76,7 +53,6 @@ function Batch(props) {
 
     const BatchData = {
       product_id: productId,
-      product_name: productName,
       quantity: quantity,
       expiration_date: expirationDateISO,
       manufacture_date: manufactureDateISO,
@@ -84,152 +60,116 @@ function Batch(props) {
     };
 
     try {
-      await api.post('/batch', BatchData).then(response => props.onBatchAdded(response.data));
-
-      setProductID('');
-      setProductName('');
-      setBatchQuantity('');
-      setExpirationDate('');
-      setManufactureDate('');
-      setTotalValue('');
+      if (props.batch) {
+        // Atualiza o lote existente
+        await api.put(`/batch/${props.batch.batch_id}`, BatchData);
+        props.onBatchUpdated(props.batch.batch_id, BatchData);
+      } else {
+        // Adiciona um novo lote
+        await api.post('/batch', BatchData).then(response => props.onBatchAdded(response.data));
+      }
       flashSuccess();
-      closeModal();
+      props.onClose();
     } catch (err) {
       console.log(err);
       flashError();
     }
   };
 
-  const handleDelete = async (batch_id) => {
-    try {
-      await api.delete(`/batch/${batch_id}`).then((response) => { console.log(response); });
-      props.onBatchDeleted(batch_id);
-      flashDelete();
-    } catch (err) {
-      console.log(err);
-      flashError();
-    }
+  const flashSuccess = () => {
+    setFlash({ message: 'Lote salvo com sucesso!', type: 'success' });
+    setTimeout(() => setFlash(null), 3000);
+  };
+
+  const flashError = () => {
+    setFlash({ message: 'Erro ao salvar o lote.', type: 'error' });
+    setTimeout(() => setFlash(null), 3000);
   };
 
   return (
-    <>
-      <button className="btn btn-primary" onClick={openModal}>
-        Adicionar novo lote
-      </button>
-
-      {isModalOpen && (
-        <div className="modal modal-open text-slate-400">
-          <div className="modal-box">
-            <h3 className="font-bold text-lg text-white">Adicionar novo lote</h3>
-
-            <form onSubmit={handleSubmit}>
-              <div className="form-control mb-4">
-                <label className="label">
-                  <span className="label-text text-white">Quantidade</span>
-                </label>
-                <input
-                  type="number"
-                  name="quantity"
-                  placeholder="Digite a quantidade"
-                  className="input input-bordered placeholder:text-slate-300"
-                  value={quantity}
-                  onChange={(e) => setBatchQuantity(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="form-control mb-4">
-                <label className="label">
-                  <span className="label-text text-white">Produto</span>
-                </label>
-                <select
-                  value={productId}
-                  onChange={(e) => setProductID(parseInt(e.target.value))}
-                  className="select select-bordered"
-                >
-                  <option disabled value="">Selecionar produto</option>
-                  {products.length > 0 ? (
-                    products.map((products) => (
-                      <option key={products.product_id} value={products.product_id}>
-                        {products.product_name}
-                      </option>
-                    ))
-                  ) : (
-                    <option disabled value="">Nenhum produto encontrado</option>
-                  )}
-                </select>
-              </div>
-
-              <div className="form-control mb-4">
-                <label className="label">
-                  <span className="label-text text-white">Data de Fabricação</span>
-                </label>
-                <input
-                  type="date"
-                  name="manufacture_date"
-                  className="input input-bordered"
-                  value={manufacture_date}
-                  onChange={(e) => setManufactureDate(e.target.value)}
-                />
-              </div>
-
-              <div className="form-control mb-4">
-                <label className="label">
-                  <span className="label-text text-white">Data de Validade</span>
-                </label>
-                <input
-                  type="date"
-                  name="expiration_date"
-                  className="input input-bordered"
-                  value={expiration_date}
-                  onChange={(e) => setExpirationDate(e.target.value)}
-                />
-              </div>
-
-              <div className="form-control mb-4">
-                <label className="label">
-                  <span className="label-text text-white">Valor Total do Lote</span>
-                </label>
-                <input
-                  type="number"
-                  step="0.01"
-                  name="batch_value_total"
-                  placeholder="Digite o valor total"
-                  className="input input-bordered placeholder:text-slate-300"
-                  value={batch_value_total}
-                  onChange={(e) => setTotalValue(e.target.value)}
-                />
-              </div>
-
-              <div className="modal-action">
-                <button type="button" className="btn" onClick={closeModal}>
-                  Cancelar
-                </button>
-                <button type="submit" className="btn btn-primary">
-                  Salvar
-                </button>
-              </div>
-            </form>
-
-            {/* Exibir lotes em quadradinhos */}
-            <h3 className="font-bold text-lg text-white mt-6">Lotes Adicionados</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-              {batches.map((batch) => (
-                <div key={batch.batch_id} className="bg-slate-700 rounded-lg p-4">
-                  <h4 className="font-bold text-white">{batch.product_name}</h4>
-                  <p className="text-slate-300">Quantidade: {batch.quantity}</p>
-                  <p className="text-slate-300">Data de Fabricação: {new Date(batch.manufacture_date).toLocaleDateString()}</p>
-                  <p className="text-slate-300">Data de Validade: {new Date(batch.expiration_date).toLocaleDateString()}</p>
-                  <p className="text-slate-300">Valor Total: R$ {batch.batch_value_total.toFixed(2)}</p>
-                  <button className="btn btn-red mt-2" onClick={() => handleDelete(batch.batch_id)}>Deletar</button>
-                </div>
-              ))}
-            </div>
+    <div className="modal modal-open">
+      <div className="modal-box">
+        <h3 className="font-bold text-lg">{props.batch ? 'Editar Lote' : 'Adicionar Novo Lote'}</h3>
+        <form onSubmit={handleSubmit}>
+          <div className="form-control mb-4">
+            <label className="label">
+              <span className="label-text">Quantidade</span>
+            </label>
+            <input
+              type="number"
+              value={quantity}
+              onChange={(e) => setBatchQuantity(e.target.value)}
+              className="input input-bordered"
+              required
+            />
           </div>
-        </div>
-      )}
-    </>
+          <div className="form-control mb-4">
+            <label className="label">
+              <span className="label-text">Produto</span>
+            </label>
+            <select
+              value={productId}
+              onChange={(e) => setProductID(e.target.value)}
+              className="select select-bordered"
+              required
+            >
+              <option value="">Selecione um produto</option>
+              {products.map((product) => (
+                <option key={product.id} value={product.id}>
+                  {product.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-control mb-4">
+            <label className="label">
+              <span className="label-text">Data de Validade</span>
+            </label>
+            <input
+              type="date"
+              value={expiration_date}
+              onChange={(e) => setExpirationDate(e.target.value)}
+              className="input input-bordered"
+            />
+          </div>
+          <div className="form-control mb-4">
+            <label className="label">
+              <span className="label-text">Data de Fabricação</span>
+            </label>
+            <input
+              type="date"
+              value={manufacture_date}
+              onChange={(e) => setManufactureDate(e.target.value)}
+              className="input input-bordered"
+            />
+          </div>
+          <div className="form-control mb-4">
+            <label className="label">
+              <span className="label-text">Valor Total do Lote</span>
+            </label>
+            <input
+              type="number"
+              value={batch_value_total}
+              onChange={(e) => setTotalValue(e.target.value)}
+              className="input input-bordered"
+              required
+            />
+          </div>
+          {flash && (
+            <FlashMessage message={flash.message} type={flash.type} />
+          )}
+          <div className="modal-action">
+            <button type="submit" className="btn">
+              {props.batch ? 'Atualizar Lote' : 'Adicionar Lote'}
+            </button>
+            <button onClick={props.onClose} className="btn">
+              Fechar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 }
 
-export default Batch;
+export default BatchModal;

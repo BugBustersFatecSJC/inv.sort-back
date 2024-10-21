@@ -8,10 +8,10 @@ function BatchPage() {
   const [loading, setLoading] = useState(true);
   const [batches, setBatches] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [editingBatch, setEditingBatch] = useState(null); // Novo estado para o lote em edição
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false); // Para confirmação de exclusão
+  const [batchToDelete, setBatchToDelete] = useState(null); // Lote a ser deletado
 
-  /**
-   * Função para buscar os lotes da API
-   */
   const fetchBatches = async () => {
     try {
       const response = await api.get('/batch');
@@ -28,43 +28,44 @@ function BatchPage() {
     fetchBatches();
   }, []);
 
-  /**
-   * Função para adicionar um novo lote dinamicamente
-   */
   const addBatch = (newBatch) => {
     setBatches((prevBatches) => [...prevBatches, newBatch]);
   };
 
-  /**
-   * Função para remover um lote dinamicamente
-   */
   const removeBatch = async (batchId) => {
     try {
       await api.delete(`/batch/${batchId}`);
       setBatches((prevBatches) =>
         prevBatches.filter((batch) => batch.batch_id !== batchId)
       );
+      setShowDeleteConfirm(false); // Fechar modal de confirmação
     } catch (err) {
       console.error(err);
     }
   };
 
-  /**
-   * Função para atualizar um lote dinamicamente
-   */
   const updateBatch = (batchId, updatedBatch) => {
     setBatches((prevBatches) =>
       prevBatches.map((batch) =>
         batch.batch_id === batchId ? { ...batch, ...updatedBatch } : batch
       )
     );
+    setEditingBatch(null); // Resetar lote em edição
   };
 
-  /**
-   * Função para abrir/fechar o modal
-   */
   const toggleModal = () => {
+    setEditingBatch(null); // Resetar lote em edição ao abrir modal
     setShowModal(!showModal);
+  };
+
+  const handleEditClick = (batch) => {
+    setEditingBatch(batch); // Definir lote a ser editado
+    toggleModal(); // Abrir modal
+  };
+
+  const confirmDeleteBatch = (batch) => {
+    setBatchToDelete(batch);
+    setShowDeleteConfirm(true);
   };
 
   return (
@@ -97,22 +98,38 @@ function BatchPage() {
                   ? batch.batch_value_total.toFixed(2)
                   : 'N/A'}
               </p>
-              <button
-                onClick={() =>
-                  updateBatch(batch.batch_id, { quantity: batch.quantity + 10 })
-                }
-              >
-                Atualizar
-              </button>
-              <button onClick={() => removeBatch(batch.batch_id)}>
-                Excluir
-              </button>
+              <button onClick={() => handleEditClick(batch)}>Editar</button>
+              <button onClick={() => confirmDeleteBatch(batch)}>Excluir</button>
             </div>
           ))}
+
+          {showModal && (
+            <BatchModal
+              onBatchAdded={addBatch}
+              onBatchUpdated={updateBatch}
+              batch={editingBatch} // Passar lote a ser editado
+              onClose={toggleModal}
+            />
+          )}
+
+          {showDeleteConfirm && (
+            <div className="modal modal-open">
+              <div className="modal-box">
+                <h3 className="font-bold text-lg">Confirmar Exclusão</h3>
+                <p>Tem certeza que deseja excluir o lote {batchToDelete.batch_id}?</p>
+                <div className="modal-action">
+                  <button onClick={() => removeBatch(batchToDelete.batch_id)} className="btn">
+                    Sim
+                  </button>
+                  <button onClick={() => setShowDeleteConfirm(false)} className="btn">
+                    Não
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </>
       )}
-
-      {showModal && <BatchModal onBatchAdded={addBatch} onClose={toggleModal} />}
     </MainPage>
   );
 }
