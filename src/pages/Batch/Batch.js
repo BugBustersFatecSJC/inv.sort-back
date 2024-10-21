@@ -3,6 +3,7 @@ import api from '../../services/api';
 import MainPage from '../MainPage/MainPage';
 import BatchModal from '../../components/BatchModal/batchModal';
 import Loading from '../../components/Loading/Loading';
+import './Batch.css'
 
 function BatchPage() {
   const [loading, setLoading] = useState(true);
@@ -70,14 +71,17 @@ function BatchPage() {
 
   return (
     <MainPage title="Gestão de Lotes">
+      
       {loading ? (
         <Loading />
       ) : (
         <>
-          <button onClick={toggleModal}>Adicionar Novo Lote</button>
+        <div className="product-table w-full bg-[#FFC376] border-4 border-[#85450D]">
+        <div className='border-4 border-[#B45105] p-6'>
+        <h2 className="text-center font-pixel text-2xl mb-4 px-4 py-2"><button onClick={toggleModal}>Adicionar Novo Lote</button></h2>
+        <p className="text-center font-pixel text-2xl mb-4 px-4 py-2"/>
           {batches.map((batch) => (
-            <div key={batch.batch_id} className="batch-item">
-              <h3>Lote {batch.batch_id}</h3>
+            <div key={batch.batch_id} className="batch-item flex vt323-regular justify-between px-2 w-full min-h-6 bg-[rgb(245,148,87)]">  <h3>Lote {batch.batch_id}</h3>
               <p>ID do Produto: {batch.product_id}</p>
               <p>Quantidade: {batch.quantity}</p>
               <p>
@@ -102,6 +106,8 @@ function BatchPage() {
               <button onClick={() => confirmDeleteBatch(batch)}>Excluir</button>
             </div>
           ))}
+          </div>
+          </div>
 
           {showModal && (
             <BatchModal
@@ -130,7 +136,9 @@ function BatchPage() {
           )}
         </>
       )}
+      
     </MainPage>
+    
   );
 }
 

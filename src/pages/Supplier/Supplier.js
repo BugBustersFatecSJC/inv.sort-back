@@ -65,16 +65,24 @@ function SupplierPage() {
         <Loading />
       ) : (
         <>
-          <button onClick={() => toggleModal()}>Adicionar Novo Fornecedor</button>
+      <div className="product-table w-full bg-[#FFC376] border-4 border-[#85450D]">
+      <div className='border-4 border-[#B45105] p-3'>
+        <h2 className="text-center font-pixel text-2x1 mb-4 px-4 py-2">
+          <button onClick={() => toggleModal()}>Adicionar Novo Fornecedor</button> </h2>
           {suppliers.map((supplier) => (
-            <div key={supplier.supplier_id} className="supplier-item">
-              <h3>{supplier.supplier_name}</h3>
-              <p>Informações de Contato: {supplier.contact_info}</p>
-              <p>Endereço: {supplier.address}</p>
-              <button onClick={() => toggleModal(supplier)}>Editar</button>
-              <button onClick={() => removeSupplier(supplier.supplier_id)}>Excluir</button>
+            <div key={supplier.supplier_id} className="supplier-item flex vt323-regular justify-between px-2 bg-[rgb(245,148,87)]">
+              <h3 className="text-center font-pixel text-2xl mb-4 px-4 py-2">{supplier.supplier_name}</h3>
+              <p className="text-center font-pixel text-2xl mb-4 px-4 py-2">Informações de Contato: {supplier.contact_info}</p>
+              <p className="text-center font-pixel text-2xl mb-4 px-4 py-2">Endereço: {supplier.address}</p>
+              <h3 className = " flex space-x-4">
+              <button onClick={() => toggleModal(supplier)} className=" flex space-x-3 bg-[#362010] font-pixel border-4 border-black text-[#F4BD76]">Editar</button> 
+              <button onClick={() => removeSupplier(supplier.supplier_id)} className=" flex space-x-3 bg-[#362010] font-pixel border-4 border-black text-[#F4BD76]">Excluir</button> </h3>
+              
             </div>
           ))}
+             </div>
+      </div>
+    
         </>
       )}
 
