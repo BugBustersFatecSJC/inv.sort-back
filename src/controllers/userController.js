@@ -80,6 +80,11 @@ const loginUser = async (req, res) => {
             return res.status(401).json({ error: "E-mail ou senha inválidos." });
         }
 
+        req.session.userId = user.user_id; // Salva o usuário na sessão
+        console.log("User ID saved in session:", req.session.userId);
+
+        console.log("Session object after login:", req.session);
+
         // Retorne o usuário, sem a senha
         const { password: _, ...userWithoutPassword } = user; // Remove a senha da resposta
         return res.status(200).json(userWithoutPassword);

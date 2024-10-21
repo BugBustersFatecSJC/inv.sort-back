@@ -12,14 +12,16 @@ const filterController = require('./controllers/filterController');
 const localController = require('./controllers/localController'); 
 const sectorController = require('./controllers/sectorController'); 
 const batchController = require('./controllers/batchController');
+const filterController = require('./controllers/filterController')
+const auditLogMiddleware = require('./controllers/auditController');
 const sectorchartController = require('./controllers/sectorchartController')
-
 
 //Inicio das Rotas
 
+
 // Rotas para login e filtros
 router.get('/check-login', userController.checkFirstLogin);
-//router.get('/sectormensal', sectorchartController.SectorMonth);
+router.get('/sectoranual', sectorchartController.sectorYear);
 router.get('/mensal', filterController.filterMonth);
 router.get('/trimestral', filterController.filterTrimester);
 
@@ -28,13 +30,13 @@ router.post('/users', upload.single('user_img'), userController.createUser);
 router.get('/users', userController.getAllUsers);
 router.post('/login', userController.loginUser);
 
-// Rotas de Produtos
-router.post('/products', productController.createProduct);
+//Rotas de Produtos
+router.post('/products', productController.createProduct, auditLogMiddleware);
 router.get('/products', productController.getAllProducts);
 router.get('/products/:product_id', productController.getProductsbyId);
+router.put('/products/:product_id',auditLogMiddleware, productController.updateProduct);
+router.delete('/products/:product_id',auditLogMiddleware, productController.deleteProduct);
 router.get('/products/category/:category_id', productController.getProductsByCategory);
-router.put('/products/:product_id', productController.updateProduct);
-router.delete('/products/:product_id', productController.deleteProduct);
 
 // Rotas de Localizações (Locais)
 router.post('/local', localController.createLocal);
@@ -59,6 +61,7 @@ router.post('/category', categoryController.createCategory);
 // Rotas de Categorias
 router.post('/category', upload.single('category_image'), categoryController.createCategory);
 router.get('/category', categoryController.getAllCategories);
+router.get('/category/filter', categoryController.filterCategories);
 router.put('/category/:category_id', upload.single('category_image'), categoryController.updateCategory);
 router.delete('/category/:category_id', categoryController.deleteCategory);
 
