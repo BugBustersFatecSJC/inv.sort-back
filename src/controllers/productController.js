@@ -76,7 +76,7 @@ const createProduct = async (req, res, next) => {
             }
         });
       
-        req.body.product_id = createProd.product_id;
+        req.body.product_id = newProduct.product_id;
         next();
         res.status(201).json(newProduct);
     } catch (error) {
