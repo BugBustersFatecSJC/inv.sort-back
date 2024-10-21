@@ -63,10 +63,31 @@ const deleteCategory = async (req, res) => {
         res.status(400).json({error: "Erro ao deletar a categoria"})
     }
 }
+const filterProducts = async (req, res) => {
+    const { product_name, unit_id, supplier_id } = req.query;
+    
+    const filters = {};
+    if (product_name) filters.product_name = { contains: product_name, mode: 'insensitive' };
+    if (unit) filters.unit_type = { contains: unit, mode: 'insensitive' }; // Verificar este campo
+    if (unit_id) filters.unit_id = parseInt(unit_id);
+    if (supplier_id) filters.supplier_id = parseInt(supplier_id);
+  
+    try {
+      const filteredProducts = await prisma.product.findMany({
+        where: filters,
+        include: { unit: true, supplier: true } // Confirme que 'unit' e 'supplier' estão configurados
+      });
+      res.status(200).json(filteredProducts);
+    } catch (error) {
+      console.error(error); // Adicione logs para o erro
+      res.status(500).json({ error: "Erro ao filtrar produtos" });
+    }
+  };
 
 module.exports = {
     createCategory,
     getAllCategories,
     updateCategory,
-    deleteCategory
+    deleteCategory,
+    filterProducts
 };

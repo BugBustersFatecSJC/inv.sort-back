@@ -118,40 +118,25 @@ const getProductsByCategory = async (req, res) => {
 }
 
 const filterProducts = async (req, res) => {
+    const { product_id, supplier_id, is_perishable } = req.query;
+    console.log("Query Recebida:", req.query); // Loga parâmetros de consulta recebidos
+    
+    let filters = {};
+    if (product_id) filters.product_id = parseInt(product_id);
+    if (supplier_id) filters.supplier_id = parseInt(supplier_id);
+    if (is_perishable !== undefined) filters.is_perishable = is_perishable.toLowerCase() === 'true';
+  
     try {
-        const { product_name, unit, unit_id, supplier_id } = req.query;
-
-        const filters = {};
-        if (product_name) {
-            filters.product_name = { contains: product_name, mode: 'insensitive' };
-        }
-        if (unit_id) {
-            filters.unit_id = parseInt(unit_id);
-        }
-        if (supplier_id) {
-            filters.supplier_id = parseInt(supplier_id);
-        }
-        if (unit) {
-            filters.unit = {
-                unit_type: { contains: unit, mode: 'insensitive' }
-            };
-        }
-
-        const filteredProducts = await prisma.product.findMany({
-            where: filters,
-            include: {
-                unit: true,
-                supplier: true,
-                // other relations if needed
-            }
-        });
-
-        res.status(200).json(filteredProducts);
-
+      const filteredProducts = await prisma.product.findMany({
+        where: filters
+      });
+      console.log("Produtos Filtrados:", filteredProducts); // Confirmação dos produtos filtrados
+      res.status(200).json(filteredProducts);
     } catch (error) {
-        res.status(500).json({ error: "Erro ao filtrar produtos" });
+      console.error("Erro ao filtrar produtos:", error);
+      res.status(500).json({ error: "Erro ao filtrar produtos" });
     }
-};
+  };
 
 
 module.exports = {

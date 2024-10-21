@@ -26,8 +26,7 @@ router.post('/login', userController.loginUser);
 router.post('/products', productController.createProduct);
 router.get('/products', productController.getAllProducts);
 
-// Ajustamento que diferencia parâmetros de base
-router.get('/products/search', productController.filterProducts);
+router.get('/products/filter', productController.filterProducts);
 
 router.get('/products/:product_id', productController.getProductsbyId);
 router.get('/products/category/:category_id', productController.getProductsByCategory);
