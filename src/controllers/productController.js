@@ -52,21 +52,30 @@ const createProduct = async (req, res, next) => {
         prod_cost_value, 
         prod_sell_value 
     } = req.body;
-  
+
+    const productImage = req.file ? `/uploads/${req.file.filename}` : null
+    
+    const categoryIdInt = Number(category_id)
+    const supplierIdInt = Number(supplier_id)
+    const unitIdInt = Number(unit_id)
+    const isPerishableBool = Boolean(is_perishable)
+    const costNumber = Number(prod_cost_value)
+    const sellNumber = Number(prod_sell_value)
     try {
         const newProduct = await prisma.product.create({
             data: {
                 product_name,
                 description,
                 product_img,
-                category_id,
+                category_id: categoryIdInt,
                 prod_brand,
                 prod_model,
-                supplier_id,
-                unit_id,
-                is_perishable,
-                prod_cost_value,
-                prod_sell_value
+                supplier_id: supplierIdInt,
+                unit_id: unitIdInt,
+                is_perishable: isPerishableBool,
+                prod_cost_value: costNumber,
+                prod_sell_value: sellNumber,
+                product_img: productImage
             },
             include: {
                 category: true,   
