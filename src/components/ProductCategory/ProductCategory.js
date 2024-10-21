@@ -8,6 +8,7 @@ import 'react-tippy/dist/tippy.css'
 import { Tooltip } from 'react-tippy'
 import FlashMessage from '../../components/FlashMessage/FlashMessage'
 
+
 /******************************************************************************
  * Componente que exibe o container da categoria com os produtos dentro       *
  *****************************************************************************/
@@ -21,19 +22,18 @@ function ProductCategory(props) {
   /**
    * Criação dos quadrados dos produtos no inventário
    */
-    const [squares, setSquares] = useState([])
+  const [products, setProducts] = useState([]) // Aqui, em vez de `squares`, use `products`
 
-    const fetchProducts = async () => {
-      try {
-        const response = await api.get('/products')
-        setSquares(Array(response.data.length).fill({}))
-      } catch(err) {
-        console.log(err)
-      } finally {
-        setLoading(false)
-      }
+  const fetchProducts = async () => {
+    try {
+      const response = await api.get('/products')
+      setProducts(response.data) // Armazena os produtos diretamente no estado
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setLoading(false)
     }
-
+  }
     /**
      * Renderização da flash message
      */
@@ -94,6 +94,54 @@ function ProductCategory(props) {
     }
 
     /**
+     * Retorna todos os setores
+    */
+   
+    const [sectors, setSector] = useState([])
+      
+    const fetchSector = async () => {
+      try {
+        await api
+        .get('/sector')
+        .then(response => setSector(response.data))
+      } catch(err) {
+        console.log(err)
+      }
+    }
+
+ /**
+     * Retorna todos os setores
+    */
+   
+ const [batch, setBatch] = useState([])
+      
+ const fetchBatch = async () => {
+   try {
+     await api
+     .get('/batch')
+     .then(response => setBatch(response.data))
+   } catch(err) {
+     console.log(err)
+   }
+ }
+
+    /**
+     * Retorna todos os locais
+    */
+   
+   const [local, setLocals] = useState([])
+   
+   const fetchLocals = async () => {
+     try {
+       await api
+       .get('/local')
+       .then(response => setLocals(response.data))
+      } catch(err) {
+        console.log(err)
+      }
+    }
+
+    /**
      * Hook de useEffect para ativar as funções quando o componente é renderizado
      */
     useEffect(() => {
@@ -102,6 +150,10 @@ function ProductCategory(props) {
         await fetchUnits()
         await fetchSuppliers()
         await fetchProducts()
+        await fetchSector()
+        await fetchLocals()
+        await fetchBatch()
+
       }
 
       fetchData()
@@ -131,6 +183,15 @@ function ProductCategory(props) {
     const [productUnitId, setProductUnitId] = useState('')
     const [productSupplierId, setProductSupplierId] = useState('')
     const [isPerishable, setIsPerishable] = useState(false)
+    const [productBrand, setProductBrand] = useState('');
+    const [productModel, setProductModel] = useState('');
+    const [productCostValue, setProductCostValue] = useState(0);
+    const [productSellValue, setProductSellValue] = useState(0);
+    const [productLocalId, setProductLocalId] = useState('');
+    const [productSectorId, setProductSectorId] = useState('');
+   // const [productBatchId, setProductBatchId] = useState('');
+    const [expirationDate, setExpirationDate] = useState('');
+    
 
     const handleSubmit = async(e) => {
       e.preventDefault()
@@ -142,6 +203,13 @@ function ProductCategory(props) {
           supplier_id: productSupplierId,
           is_perishable: isPerishable,
           unit_id: productUnitId,
+          prod_model: productModel,
+          prod_brand: productBrand,
+          prod_cost_value: productCostValue,
+          prod_sell_valleu: productSellValue,
+          local_id: productLocalId,
+          sector_id: productSectorId,
+         // batch_id: productBatchId
       }
 
       try {
@@ -154,6 +222,13 @@ function ProductCategory(props) {
           setProductUnitId('')
           setProductSupplierId('')
           setIsPerishable(false)
+          //setProductBatchId('') 
+          setProductSellValue('')
+          setProductCostValue('')
+          setProductSectorId('')
+          setProductLocalId('')
+          setProductBrand('')
+          setProductModel('')
           closeModal()
           flashSuccess()
       } catch (err) {
@@ -191,6 +266,8 @@ function ProductCategory(props) {
     setProductUnitId(product.unit_id)
     setProductSupplierId(product.supplier_id)
     setIsPerishable(product.is_perishable)
+    setProductCostValue(product.prod_cost_value); 
+    setProductSellValue(product.prod_sell_value); 
 
     setIsProdEditModalOpen(true)
   }
@@ -210,12 +287,16 @@ function ProductCategory(props) {
       supplier_id: productSupplierId,
       is_perishable: isPerishable,
       unit_id: productUnitId,
+      prod_cost_value: productCostValue,
+      prod_sell_value: productSellValue
     }
 
+    
     try {
       await api
         .put(`/products/${currentProduct.product_id}`, updatedProductData)
         .then(response => console.log(response))
+        
 
         /******************************************************************************
          * ATEÇÃO                                                                     *
@@ -237,6 +318,7 @@ function ProductCategory(props) {
     }
   }
 
+  
   /**
    * Hover de cada produto
    */
@@ -250,6 +332,7 @@ function ProductCategory(props) {
   const handleClickShow = () => {
     setShowCategoryProducts(!showCategoryProducts)
   }
+
 
   /**
    * Edição da categoria
@@ -370,130 +453,360 @@ function ProductCategory(props) {
             </button>
         </div>
 
+            
+
         {/* Modal de produto */}
         {isModalOpen && (
-          <div className="modal modal-open text-slate-400">
-          <div className="modal-box">
-            <h3 className="font-bold text-lg text-white">Adicionar novo produto</h3>
+  <div className="modal modal-open text-slate-400">
+    <div className="modal-box">
+      <h3 className="font-bold text-lg text-white">Adicionar novo produto</h3>
 
-            <form onSubmit={handleSubmit}>
-              <div className="form-control mb-4">
-                <label className="label">
-                  <span className="label-text text-white">Nome do produto</span>
-                </label>
-                <input type="text" placeholder="Digite o nome do produto" className="input input-bordered placeholder:text-slate-300" required name='product_name' value={productName} onChange={(e) => setProductName(e.target.value)} />
-              </div>
+      <form onSubmit={handleSubmit}>
+        <div className="form-control mb-4">
+          <label className="label">
+            <span className="label-text text-white">Nome do produto</span>
+          </label>
+          <input
+            type="text"
+            placeholder="Digite o nome do produto"
+            className="input input-bordered placeholder:text-slate-300"
+            required
+            name='product_name'
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
+          />
+        </div>
 
-              <div className="form-control mb-4">
-                <label className="label">
-                  <span className="label-text text-white">Descrição (Opcional)</span>
-                </label>
-                <textarea placeholder="Digite a descrição do produto" className="textarea textarea-bordered" name='description' value={productDescription} onChange={(e) => setProductDescription(e.target.value)}></textarea>
-              </div>
+        <div className="form-control mb-4">
+          <label className="label">
+            <span className="label-text text-white">Descrição (Opcional)</span>
+          </label>
+          <textarea
+            placeholder="Digite a descrição do produto"
+            className="textarea textarea-bordered"
+            name='description'
+            value={productDescription}
+            onChange={(e) => setProductDescription(e.target.value)}
+          ></textarea>
+        </div>
 
-              <input type="hidden" value={props.categoryKey} />
+        <input type="hidden" value={props.categoryKey} />
 
-              <div className="form-control mb-4">
-                <label className="label">
-                  <span className="label-text text-white">Unidade</span>
-                </label>
-                <select value={productUnitId} onChange={(e) => setProductUnitId(parseInt(e.target.value))} className="select select-bordered">
-                  <option disabled selected value="">Selecionar unidade</option>
-                  {units.map((unit) => (
-                    <option key={unit.unit_id} value={unit.unit_id}>{unit.unit_type}</option>
-                  ))}
-                </select>
-              </div>
+        <div className="form-control mb-4">
+          <label className="label">
+            <span className="label-text text-white">Unidade</span>
+          </label>
+          <select
+            value={productUnitId}
+            onChange={(e) => setProductUnitId(parseInt(e.target.value))}
+            className="select select-bordered"
+          >
+            <option disabled value="">Selecionar unidade</option>
+            {units.map((unit) => (
+              <option key={unit.unit_id} value={unit.unit_id}>{unit.unit_type}</option>
+            ))}
+          </select>
+        </div>
 
-              <div className="form-control mb-4">
-                <label className="label">
-                  <span className="label-text text-white">Fornecedor</span>
-                </label>
-                <select value={productSupplierId} onChange={(e) => setProductSupplierId(parseInt(e.target.value))} className="select select-bordered">
-                  <option disabled selected value="">Selecionar fornecedor</option>
-                  {suppliers.map((supplier) => (
-                    <option key={supplier.supplier_id} value={supplier.supplier_id}>{supplier.supplier_name}</option>
-                  ))}
-                </select>
-              </div>
+        <div className="form-control mb-4">
+          <label className="label">
+            <span className="label-text text-white">Fornecedor</span>
+          </label>
+          <select
+            value={productSupplierId}
+            onChange={(e) => setProductSupplierId(parseInt(e.target.value))}
+            className="select select-bordered"
+          >
+            <option disabled value="">Selecionar fornecedor</option>
+            {suppliers.map((supplier) => (
+              <option key={supplier.supplier_id} value={supplier.supplier_id}>{supplier.supplier_name}</option>
+            ))}
+          </select>
+        </div>
 
-              <div className="form-control mb-4">
-                <label className="cursor-pointer label">
-                  <span className="label-text text-white">É perecível</span>
-                  <input type="checkbox" className="toggle toggle-primary" checked={isPerishable} onChange={(e) => setIsPerishable(e.target.checked)} />
-                </label>
-              </div>
+        <div className="form-control mb-4">
+          <label className="label">
+            <span className="label-text text-white">Preço de Custo</span>
+          </label>
+          <input
+            type="number"
+            placeholder="Digite o preço de custo"
+            className="input input-bordered placeholder:text-slate-300"
+            required
+            name='cost_price'
+            value={productCostValue}
+            onChange={(e) => setProductCostValue(parseFloat(e.target.value) || 0)} 
+          />
+        </div>
 
-              <div className="modal-action">
-                <label htmlFor="product-modal" className="btn" onClick={closeModal}>Cancelar</label>
-                <button type="submit" className="btn btn-primary">Salvar</button>
-              </div>
-            </form>
-          </div>
-          </div>
-      )}
+        <div className="form-control mb-4">
+          <label className="label">
+            <span className="label-text text-white">Preço de Venda</span>
+          </label>
+          <input
+            type="number"
+            placeholder="Digite o preço de venda"
+            className="input input-bordered placeholder:text-slate-300"
+            required
+            name='sell_price'
+            value={productSellValue}
+            onChange={(e) => setProductSellValue(parseFloat(e.target.value) || 0)} 
+          />
+        </div>
 
-      {/* Modal para editar a categoria do produto */}
-      {isCategoryModalOpen && (
-        <Modal closeModal={closeCategoryModal} handleSubmit={handleCategoryUpdate} title="Atualizar categoria" modalName="category-modal">
-              <div className="form-control mb-4">
-                <label className="label">
-                  <span className="label-text text-white">Nome da categoria</span>
-                </label>
-                <input type="text" placeholder="Digite o novo nome da categoria" className="input input-bordered placeholder:text-slate-300" required name='category_name' value={categoryName} onChange={(e) => setCategoryName(e.target.value)} />
-              </div>
-        </Modal>
-      )}
+        <div className="form-control mb-4">
+          <label className="label">
+            <span className="label-text text-white">Local</span>
+          </label>
+          <select
+            value={productLocalId}
+            onChange={(e) => setProductLocalId(parseInt(e.target.value))}
+            className="select select-bordered"
+          >
+            <option disabled value="">Selecionar local</option>
+            {local.map((local) => (
+              <option key={local.local_id} value={local.local_id}>{local.local_name}</option>
+            ))}
+          </select>
+        </div>
 
-      {/* Modal para editar produto */}
-      {isProdEditModalOpen && (
-        <Modal closeModal={closeProdEditModal} title="Editar Produto" handleSubmit={handleProdUpdate}>
-          <div className="form-control mb-4">
-            <label className="label">
-              <span className="label-text text-white">Nome do produto</span>
-            </label>
-            <input type="text" className="input input-bordered" value={productName} onChange={(e) => setProductName(e.target.value)} />
-          </div>
+        <div className="form-control mb-4">
+          <label className="label">
+            <span className="label-text text-white">Setor</span>
+          </label>
+          <select
+            value={productSectorId}
+            onChange={(e) => setProductSectorId(parseInt(e.target.value))}
+            className="select select-bordered"
+          >
+            <option disabled value="">Selecionar setor</option>
+            {sectors.map((sector) => (
+              <option key={sector.sector_id} value={sector.sector_id}>{sector.sector_name}</option>
+            ))}
+          </select>
+        </div>
+{/* 
+        <div className="form-control mb-4">
+          <label className="label">
+            <span className="label-text text-white">Lotes</span>
+          </label>
+          <select
+            value={productBatchId || ""}
+            onChange={(e) => setProductBatchId(parseInt(e.target.value))}
+            className="select select-bordered"
+          >
+            <option disabled value="">Selecionar lote</option>
+            {batch.map((batch) => (
+              <option key={batch.batch_id} value={batch.batch_id}>{batch.batch_id}</option>
+              
+            ))}
+          </select>
+        </div> */}
 
-          <div className="form-control mb-4">
-            <label className="label">
-              <span className="label-text text-white">Descrição</span>
-            </label>
-            <textarea className="textarea textarea-bordered" value={productDescription} onChange={(e) => setProductDescription(e.target.value)}></textarea>
-          </div>
+        <div className="form-control mb-4">
+          <label className="cursor-pointer label">
+            <span className="label-text text-white">É perecível</span>
+            <input
+              type="checkbox"
+              className="toggle toggle-primary"
+              checked={isPerishable}
+              onChange={(e) => setIsPerishable(e.target.checked)}
+            />
+          </label>
+        </div>
 
-          <div className="form-control mb-4">
-            <label className="label">
-              <span className="label-text text-white">Unidade</span>
-            </label>
-            <select value={productUnitId} onChange={(e) => setProductUnitId(parseInt(e.target.value))} className="select select-bordered">
-              <option disabled value="">Selecionar unidade</option>
-              {units.map((unit) => (
-                <option key={unit.unit_id} value={unit.unit_id}>{unit.unit_type}</option>
-              ))}
-            </select>
-          </div>
+        <div className="form-control mb-4">
+          <label className="label">
+            <span className="label-text text-white">Data de Validade</span>
+          </label>
+          <input
+            type="date"
+            className="input input-bordered placeholder:text-slate-300"
+            name="expiration_date"
+            value={expirationDate}
+            onChange={(e) => setExpirationDate(e.target.value)}
+            disabled={!isPerishable}
+          />
+        </div>
 
-          <div className="form-control mb-4">
-            <label className="label">
-              <span className="label-text text-white">Fornecedor</span>
-            </label>
-            <select value={productSupplierId} onChange={(e) => setProductSupplierId(parseInt(e.target.value))} className="select select-bordered">
-              <option disabled value="">Selecionar fornecedor</option>
-              {suppliers.map((supplier) => (
-                <option key={supplier.supplier_id} value={supplier.supplier_id}>{supplier.supplier_name}</option>
-              ))}
-            </select>
-          </div>
+        <div className="modal-action">
+          <label htmlFor="product-modal" className="btn" onClick={closeModal}>Cancelar</label>
+          <button type="submit" className="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
 
-          <div className="form-control mb-4">
-            <label className="cursor-pointer label">
-              <span className="label-text text-white">É perecível</span>
-              <input type="checkbox" className="toggle toggle-primary" checked={isPerishable} onChange={(e) => setIsPerishable(e.target.checked)} />
-            </label>
-          </div>
-        </Modal>
-      )}
+
+ {/* Modal para editar produto */}
+{isProdEditModalOpen && (
+  <Modal closeModal={closeProdEditModal} title="Editar Produto" handleSubmit={handleProdUpdate}>
+    <div className="form-control mb-4">
+      <label className="label">
+        <span className="label-text text-white">Nome do produto</span>
+      </label>
+      <input 
+        type="text" 
+        placeholder="Digite o nome do produto" 
+        className="input input-bordered placeholder:text-slate-300" 
+        required 
+        name='product_name' 
+        value={productName} 
+        onChange={(e) => setProductName(e.target.value)} 
+      />
+    </div>
+
+    <div className="form-control mb-4">
+      <label className="label">
+        <span className="label-text text-white">Descrição (Opcional)</span>
+      </label>
+      <textarea 
+        placeholder="Digite a descrição do produto" 
+        className="textarea textarea-bordered" 
+        name='description' 
+        value={productDescription} 
+        onChange={(e) => setProductDescription(e.target.value)}
+      />
+    </div>
+
+    <div className="form-control mb-4">
+      <label className="label">
+        <span className="label-text text-white">Unidade</span>
+      </label>
+      <select 
+        value={productUnitId} 
+        onChange={(e) => setProductUnitId(parseInt(e.target.value))} 
+        className="select select-bordered"
+      >
+        <option disabled value="">Selecionar unidade</option>
+        {units.map((unit) => (
+          <option key={unit.unit_id} value={unit.unit_id}>{unit.unit_type}</option>
+        ))}
+      </select>
+    </div>
+
+    <div className="form-control mb-4">
+      <label className="label">
+        <span className="label-text text-white">Fornecedor</span>
+      </label>
+      <select 
+        value={productSupplierId} 
+        onChange={(e) => setProductSupplierId(parseInt(e.target.value))} 
+        className="select select-bordered"
+      >
+        <option disabled value="">Selecionar fornecedor</option>
+        {suppliers.map((supplier) => (
+          <option key={supplier.supplier_id} value={supplier.supplier_id}>{supplier.supplier_name}</option>
+        ))}
+      </select>
+    </div>
+
+    <div className="form-control mb-4">
+      <label className="label">
+        <span className="label-text text-white">Preço de Custo</span>
+      </label>
+      <input 
+        type="number" 
+        placeholder="Digite o preço de custo" 
+        className="input input-bordered placeholder:text-slate-300" 
+        required 
+        name='cost_price' 
+        value={productCostValue} 
+        onChange={(e) => setProductCostValue(parseFloat(e.target.value) || 0)} 
+      />
+    </div>
+
+    <div className="form-control mb-4">
+      <label className="label">
+        <span className="label-text text-white">Preço de Venda</span>
+      </label>
+      <input 
+        type="number" 
+        placeholder="Digite o preço de venda" 
+        className="input input-bordered placeholder:text-slate-300" 
+        required 
+        name='sell_price' 
+        value={productSellValue} 
+        onChange={(e) => setProductSellValue(parseFloat(e.target.value) || 0)} 
+      />
+    </div>
+
+    <div className="form-control mb-4">
+      <label className="label">
+        <span className="label-text text-white">Local</span>
+      </label>
+      <select 
+        value={productLocalId} 
+        onChange={(e) => setProductLocalId(parseInt(e.target.value))} 
+        className="select select-bordered"
+      >
+        <option disabled value="">Selecionar local</option>
+        {local.map((local) => (
+          <option key={local.local_id} value={local.local_id}>{local.local_name}</option>
+        ))}
+      </select>
+    </div>
+
+    <div className="form-control mb-4">
+      <label className="label">
+        <span className="label-text text-white">Setor</span>
+      </label>
+      <select 
+        value={productSectorId} 
+        onChange={(e) => setProductSectorId(parseInt(e.target.value))} 
+        className="select select-bordered"
+      >
+        <option disabled value="">Selecionar setor</option>
+        {sectors.map((sector) => (
+          <option key={sector.sector_id} value={sector.sector_id}>{sector.sector_name}</option>
+        ))}
+      </select>
+    </div>
+
+    {/* <div className="form-control mb-4">
+      <label className="label">
+        <span className="label-text text-white">Lotes</span>
+      </label>
+      <select 
+        value={productBatchId || ""} 
+        onChange={(e) => setProductBatchId(parseInt(e.target.value))} 
+        className="select select-bordered"
+      >
+        <option disabled value="">Selecionar lote</option>
+        {batch.map((batch) => (
+          <option key={batch.batch_id} value={batch.batch_id}>{batch.batch_id}</option>
+        ))}
+      </select>
+    </div> */}
+
+    <div className="form-control mb-4">
+      <label className="cursor-pointer label">
+        <span className="label-text text-white">É perecível</span>
+        <input 
+          type="checkbox" 
+          className="toggle toggle-primary" 
+          checked={isPerishable} 
+          onChange={(e) => setIsPerishable(e.target.checked)} 
+        />
+      </label>
+    </div>
+
+    <div className="form-control mb-4">
+      <label className="label">
+        <span className="label-text text-white">Data de Validade</span>
+      </label>
+      <input 
+        type="date" 
+        className="input input-bordered placeholder:text-slate-300" 
+        name="expiration_date" 
+        value={expirationDate} 
+        onChange={(e) => setExpirationDate(e.target.value)} 
+        disabled={!isPerishable} 
+      />
+    </div>
+  </Modal>
+)}
 
       {/* Componente flash message, verifica se o estado flash é true e então renderiza a flash message */}
       {flash && (
