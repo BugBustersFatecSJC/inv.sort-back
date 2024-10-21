@@ -166,6 +166,10 @@ function ProductCategory(props) {
    * Deleta o produto
    */
   const handleDelete = async (product_id) => {
+    const user = localStorage.getItem("user")
+    const jsonUser = JSON.parse(user)
+    if (jsonUser.role === "admin"){
+    
     try {
       await api
         .delete(`/products/${product_id}`)
@@ -176,6 +180,8 @@ function ProductCategory(props) {
       console.log(err)
       flashError()
     }
+  }
+  else {alert ("Você não tem permissão para fazer isso")}
   }
 
   /**
@@ -283,6 +289,9 @@ function ProductCategory(props) {
    * Deleta a categoria
    */
   const handleCategoryDelete = async (category_id) => {
+    const user = localStorage.getItem("user")
+    const jsonUser = JSON.parse(user)
+    if (jsonUser.role === "admin"){
     try {
       await api
         .delete(`/category/${category_id}`)
@@ -295,6 +304,8 @@ function ProductCategory(props) {
       console.log(err)
       flashError()
     }
+    }
+    else {alert("Você não tem permissão para fazer isso")}
   }
 
     return (
