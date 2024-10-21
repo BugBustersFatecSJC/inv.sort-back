@@ -1,6 +1,6 @@
 import "./UserDetails.css";
 
-const UserDetails = ({ user , bool }) => {
+const UserDetails = ({ user , bool , onClick }) => {
   
     
   
@@ -27,7 +27,7 @@ const UserDetails = ({ user , bool }) => {
         </>
       )}
       <div>
-      {bool === 'true' ? <button  id="Voltar" className="vt323-regular bg-[rgb(62,25,0)] w-28 text-[rgb(244,189,118)] border-4 border-black rounded px-4 py-2 mt-4">Voltar</button> : null}
+      {bool === 'true' ? <button onClick={onClick}  id="Voltar" className="appearence-none shadow-none bg-[#B45105] rounded px-2 h-full text-[24px] mt-4 mx-auto text-[#3E1900] poppins-semibold">Voltar</button> : null}
       </div>
     </div>
   );

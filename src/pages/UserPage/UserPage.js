@@ -52,7 +52,7 @@ const [user, setUser] = useState(null);
         <div className="flex border-4 border-[rgb(107,55,16)] h-5/6 w-1/2 bg-[rgb(255,195,118)]">
           <section className="border-4 border-[rgb(180,81,5)] h-full w-full shadow-inner p-4">
             <div className='flex justify-between'>
-            <SearchBar onSearch={handleSearch} /> <button onClick={fetchUsers} className='appearence-none shadow-none bg-[#B45105] rounded px-2 h-full my-auto text-[#3E1900] poppins-semibold'>Refresh</button>
+            <SearchBar onSearch={handleSearch} />
         
             </div>
             {error && <p className="text-red-500 mt-4">{error}</p>}
