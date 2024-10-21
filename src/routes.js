@@ -17,7 +17,6 @@ const sectorchartController = require('./controllers/sectorchartController')
 
 //Inicio das Rotas
 
-
 // Rotas para login e filtros
 router.get('/check-login', userController.checkFirstLogin);
 router.get('/sectoranual', sectorchartController.sectorYear);
@@ -55,8 +54,6 @@ router.get('/batch', batchController.getAllBatches);
 router.put('/batch/:batch_id', batchController.updateBatch);
 router.delete('/batch/:batch_id', batchController.deleteBatch);
 
-// Rotas de Categorias
-router.post('/category', categoryController.createCategory);
 // Rotas de Categorias
 router.post('/category', upload.single('category_image'), categoryController.createCategory);
 router.get('/category', categoryController.getAllCategories);
