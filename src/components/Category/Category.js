@@ -109,9 +109,10 @@ function Category(props) {
             {/* Componente flash message, verifica se o estado flash é true e então renderiza a flash message */}
             {flash && (
                 <FlashMessage
-                message={flash.message}
-                type={flash.type}
-                duration={3000}
+                    message={flash.message}
+                    type={flash.type}
+                    duration={3000}
+                    onClose={() => setFlash(null)}
                 />
             )}
         </>
