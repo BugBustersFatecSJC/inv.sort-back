@@ -12,6 +12,8 @@ const filterMonth = async (req, res) => {
 
   const category =  req.query.category;
   const product = req.query.product;
+  console.log(!category,!product);
+  
   console.log('category', category);
   console.log('product', product);
 
@@ -39,12 +41,12 @@ const filterMonth = async (req, res) => {
           FROM StockMovement
           WHERE movement_type = 'venda' AND MONTH(movement_date) = ${currentMonth} AND YEAR(movement_date) = ${currentYear};
         `;
-      } else if (!product) {
+      } else if (product==='null'|| product.lenght === 0) {
         results = await prisma.$queryRaw`
           SELECT 
           SUM(quantity) as vendas
           FROM StockMovement
-          WHERE movement_type = 'venda' AND category_id = ${category}  and product_id = ${product} AND MONTH(movement_date) = ${currentMonth} AND YEAR(movement_date) = ${currentYear};
+          WHERE movement_type = 'venda' AND category_id = ${category}   AND MONTH(movement_date) = ${currentMonth} AND YEAR(movement_date) = ${currentYear};
         `;
         const totalDifference = results[0]?.vendas ?? 0;
         result.push({ name: `${currentMonth}/${currentYear-2000}`, value: totalDifference });
@@ -53,7 +55,7 @@ const filterMonth = async (req, res) => {
           SELECT 
           SUM(quantity) as vendas
           FROM db.StockMovement
-          WHERE movement_type = 'venda' AND category_id = ${category} AND MONTH(movement_date) = ${currentMonth} AND YEAR(movement_date) = ${currentYear};
+          WHERE movement_type = 'venda' AND category_id = ${category} and product_id = ${product} AND MONTH(movement_date) = ${currentMonth} AND YEAR(movement_date) = ${currentYear};
         `;
           
         const totalDifference = results[0]?.vendas ?? 0;  
@@ -90,53 +92,44 @@ const filterTrimester = async (req, res) => {
   console.log('2', product);
   const data = new Date();
   const dia = data.getDate();
-  let mes = data.getMonth() + 1;
+
   let ano = data.getFullYear();
   const result = [];
 
   try {
-    for (let i = 0; i < 12; i += 3) {
-      let currentMonth = mes - i;
+    for (let i = 1; i <= 4; i++) {
       let currentYear = ano;
+      let results = [];
 
-      if (currentMonth < 1) {
-        currentMonth += 12;
-        currentYear -= 1;
-      }
-      const currentQuarter = Math.ceil(currentMonth / 3);
-      
-      if (!product && !category) {
+      if (product === 'null' && category === 'null') {
+        // No product and no category provided
         results = [];
-      } else if (!product) {
-       
-       results = await prisma.$queryRaw`
-      SELECT 
-        SUM(quantity) AS vendas
-      FROM StockMovement
-      WHERE movement_type = 'venda' AND QUARTER(movement_date) = ${currentQuarter} AND YEAR(movement_date) = ${currentYear} AND category_id = ${category};
-    `;
-      console.log('oi',results);
-
-      const totalDifference = results[0]?.vendas ?? 0;
-      result.push({ name: `${currentMonth}-${currentYear}`, value: totalDifference })
-      } else {
+      } else if (product === 'null') {
+        // Only category provided
         results = await prisma.$queryRaw`
           SELECT 
-          SUM(quantity) as vendas
+            SUM(quantity) AS vendas
           FROM db.StockMovement
-           WHERE movement_type = 'venda' AND category_id = ${category} AND MONTH(movement_date) = ${currentMonth} AND YEAR(movement_date) = ${currentYear} AND product_id = ${product} and category_id = ${category};
+          WHERE movement_type = 'venda' AND QUARTER(movement_date) = ${i} AND YEAR(movement_date) = ${currentYear} AND category_id = ${parseInt(category)};
+        `;
+        console.log('oi', results);
+      } else {
+        // Both product and category provided
+        results = await prisma.$queryRaw`
+          SELECT 
+            SUM(quantity) AS vendas
+          FROM StockMovement
+          WHERE movement_type = 'venda' AND QUARTER(movement_date) = ${i} AND YEAR(movement_date) = ${currentYear} AND category_id = ${category} AND product_id = ${product};
         `;
         
-        console.log('oi',results);
-      const totalDifference = results[0]?.vendas ?? 0;
-      result.push({ name: `${currentMonth}-${currentYear}`, value: totalDifference })
       }
+
       
-      
+      const totalDifference = results[0]?.vendas ?? 0;
+      result.push({ name: `${i}° Tri/${currentYear - 2000}`, value: totalDifference });
     }
 
-    
-    return res.status(200).json(result.reverse());
+    return res.status(200).json(result);
   } catch (error) {
     console.error('Error executing query:', error);
     return res.status(400).json({ error: 'Erro ao buscar os dados' });
