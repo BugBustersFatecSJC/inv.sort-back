@@ -5,38 +5,12 @@ import UserDetails from '../../components/UserDetails/UserDetails';
 import MainPage from '../../pages/MainPage/MainPage'
 
 
-
-
 const UserPage = () => {
   const [users, setUsers] = useState([]);
-  const [user, setUser] = useState(null);
+const [user, setUser] = useState(null);
   const [error, setError] = useState('');
 
-  const fetchUsers =() =>{
-    api.get('/users') // Alterar para a URL correta do back-end
-    .then(response => {
-      console.log('log',response.data);
-      return response.data;
-       // Definir os usuários vindos do back-end
-    })
-    .catch(() => {
-      setError('Erro ao buscar usuários');
-    });
-  }
-  useEffect(() => {
-    api.get('/users') // Alterar para a URL correta do back-end
-    .then(response => {
-      
-      
-      setUsers(response.data);
-       // Definir os usuários vindos do back-end
-    })
-    .catch(() => {
-      setError('Erro ao buscar usuários');
-    });
-  }, []);
-
-
+  
   const handleSearch = (query) => {
     const foundUser = users.find(u => u.username.toLowerCase() === query.toLowerCase());
     if (query === '') {
@@ -48,13 +22,29 @@ const UserPage = () => {
       setError('');
     } else {
       setUser(null);
-      setUsers(fetchUsers)
+      fetchUsers();
       setError('Usuário não encontrado!');
     }
   };
 
 
-  fetchUsers();
+  const fetchUsers = () => {
+    api.get('/users') 
+      .then(response => {
+        setUsers(response.data);
+        setUser(null)
+      })
+      .catch(() => {
+        setError('Erro ao buscar usuários');
+      });
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+ 
+
   return (
     <MainPage title="Gerencie usuários">
       
@@ -62,10 +52,11 @@ const UserPage = () => {
         <div className="flex border-4 border-[rgb(107,55,16)] h-5/6 w-1/2 bg-[rgb(255,195,118)]">
           <section className="border-4 border-[rgb(180,81,5)] h-full w-full shadow-inner p-4">
             <div className='flex justify-between'>
-            <SearchBar onSearch={handleSearch} /> <button  className='appearence-none shadow-none bg-[#B45105] rounded px-2 h-full my-auto text-[#3E1900] poppins-semibold'>Refresh</button>
+            <SearchBar onSearch={handleSearch} /> <button onClick={fetchUsers} className='appearence-none shadow-none bg-[#B45105] rounded px-2 h-full my-auto text-[#3E1900] poppins-semibold'>Refresh</button>
+        
             </div>
             {error && <p className="text-red-500 mt-4">{error}</p>}
-            <UserDetails user={user} bool={'true'} />
+            <UserDetails user={user} bool={'true'} onClick={fetchUsers}/>
             
             {users.map(user => (
         <UserDetails user={user}/>
