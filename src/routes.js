@@ -12,7 +12,6 @@ const filterController = require('./controllers/filterController');
 const localController = require('./controllers/localController'); 
 const sectorController = require('./controllers/sectorController'); 
 const batchController = require('./controllers/batchController');
-const filterController = require('./controllers/filterController')
 const auditLogMiddleware = require('./controllers/auditController');
 const sectorchartController = require('./controllers/sectorchartController')
 
