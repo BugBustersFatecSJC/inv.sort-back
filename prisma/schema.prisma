@@ -130,9 +130,12 @@ model AuditLog {
   local_id          Int?
   sector_id         Int?
   supplier_id       Int?
+  supplier_name     String?
   batch_id          Int?
   category_id       Int?
+  category_name     String?
   product_id        Int?
+  product_name      String?
   action            Action
   table_name        String
   primary_key_value String
