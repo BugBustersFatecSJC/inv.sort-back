@@ -380,9 +380,9 @@ function ProductCategory(props) {
           console.log(response);
         });
 
+        flashDelete();
         props.onCategoryDeleted(category_id);
 
-        flashDelete();
       } catch (err) {
         console.log(err);
         flashError();
@@ -411,6 +411,16 @@ function ProductCategory(props) {
                 className="w-full h-full object-cover rounded-full"
               />
             ) : null}
+            {newCategoryImageUrl ? (
+              <img
+                src={`http://localhost:3001${newCategoryImageUrl}`}
+                alt="Imagem da categoria"
+                className="w-full h-full rounded-full"
+                onLoad={() => {setIsLoadingImage(false)}}
+                onError={() => setIsLoadingImage(false)}
+              />
+              ) : null
+            }
           </figure>
           <p className="my-2 font-pixel text-xl">{props.categoryName}</p>
           <div className="flex justify-evenly w-[10%]">
@@ -469,19 +479,8 @@ function ProductCategory(props) {
                     onClick={() => handleDelete(product.product_id)}
                   ></i>
                 )}
-                {isLoadingImage ? (
-                  <Loading/>
-                ) : (
-                <img
-                  src={newCategoryImageUrl}
-                  alt="Imagem da categoria"
-                  onLoad={() => {
-                    setTimeout(() => {
-                      setIsLoadingImage(false)
-                    }, 1000)
-                  }}
-                  onError={() => setIsLoadingImage(false)}
-                />
+                {product.product_img && (
+                  <img src={`http://localhost:3001${product.product_img}`} alt="" className='h-full w-full' />
                 )}
               </div>
             </Tooltip>
@@ -499,21 +498,20 @@ function ProductCategory(props) {
 
       {/* Modal de produto */}
       {isModalOpen && (
-        <div className="modal modal-open text-slate-400">
-          <div className="modal-box">
-            <h3 className="font-bold text-lg text-white">
-              Adicionar novo produto
-            </h3>
-
-            <form onSubmit={handleSubmit}>
+          <Modal
+            title="Criar produto"
+            handleSubmit={handleSubmit}
+            modalName="cria-produto"
+            closeModal={closeModal}
+          >
               <div className="form-control mb-4">
                 <label className="label">
-                  <span className="label-text text-white">Nome do produto</span>
+                  <span className="label-text alt-color-5">Nome do produto</span>
                 </label>
                 <input
                   type="text"
                   placeholder="Digite o nome do produto"
-                  className="input input-bordered placeholder:text-slate-300"
+                  className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
                   required
                   name="product_name"
                   value={productName}
@@ -523,13 +521,13 @@ function ProductCategory(props) {
 
               <div className="form-control mb-4">
                 <label className="label">
-                  <span className="label-text text-white">
+                  <span className="label-text alt-color-5">
                     Descrição (Opcional)
                   </span>
                 </label>
                 <textarea
                   placeholder="Digite a descrição do produto"
-                  className="textarea textarea-bordered"
+                  className="textarea p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
                   name="description"
                   value={productDescription}
                   onChange={(e) => setProductDescription(e.target.value)}
@@ -540,12 +538,12 @@ function ProductCategory(props) {
 
               <div className="form-control mb-4">
                 <label className="label">
-                  <span className="label-text text-white">Unidade</span>
+                  <span className="label-text alt-color-5">Unidade</span>
                 </label>
                 <select
                   value={productUnitId}
                   onChange={(e) => setProductUnitId(parseInt(e.target.value))}
-                  className="select select-bordered"
+                  className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
                 >
                   <option disabled value="">
                     Selecionar unidade
@@ -560,14 +558,14 @@ function ProductCategory(props) {
 
               <div className="form-control mb-4">
                 <label className="label">
-                  <span className="label-text text-white">Fornecedor</span>
+                  <span className="label-text alt-color-5">Fornecedor</span>
                 </label>
                 <select
                   value={productSupplierId}
                   onChange={(e) =>
                     setProductSupplierId(parseInt(e.target.value))
                   }
-                  className="select select-bordered"
+                  className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
                 >
                   <option disabled value="">
                     Selecionar fornecedor
@@ -585,12 +583,12 @@ function ProductCategory(props) {
 
               <div className="form-control mb-4">
                 <label className="label">
-                  <span className="label-text text-white">Preço de Custo</span>
+                  <span className="label-text alt-color-5">Preço de Custo</span>
                 </label>
                 <input
                   type="number"
                   placeholder="Digite o preço de custo"
-                  className="input input-bordered placeholder:text-slate-300"
+                  className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
                   required
                   name="cost_price"
                   value={productCostValue}
@@ -602,12 +600,12 @@ function ProductCategory(props) {
 
               <div className="form-control mb-4">
                 <label className="label">
-                  <span className="label-text text-white">Preço de Venda</span>
+                  <span className="label-text alt-color-5">Preço de Venda</span>
                 </label>
                 <input
                   type="number"
                   placeholder="Digite o preço de venda"
-                  className="input input-bordered placeholder:text-slate-300"
+                  className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
                   required
                   name="sell_price"
                   value={productSellValue}
@@ -619,12 +617,12 @@ function ProductCategory(props) {
 
               <div className="form-control mb-4">
                 <label className="label">
-                  <span className="label-text text-white">Local</span>
+                  <span className="label-text alt-color-5">Local</span>
                 </label>
                 <select
                   value={productLocalId}
                   onChange={(e) => setProductLocalId(parseInt(e.target.value))}
-                  className="select select-bordered"
+                  className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
                 >
                   <option disabled value="">
                     Selecionar local
@@ -639,12 +637,12 @@ function ProductCategory(props) {
 
               <div className="form-control mb-4">
                 <label className="label">
-                  <span className="label-text text-white">Setor</span>
+                  <span className="label-text alt-color-5">Setor</span>
                 </label>
                 <select
                   value={productSectorId}
                   onChange={(e) => setProductSectorId(parseInt(e.target.value))}
-                  className="select select-bordered"
+                  className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
                 >
                   <option disabled value="">
                     Selecionar setor
@@ -664,7 +662,7 @@ function ProductCategory(props) {
           <select
             value={productBatchId || ""}
             onChange={(e) => setProductBatchId(parseInt(e.target.value))}
-            className="select select-bordered"
+            className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
           >
             <option disabled value="">Selecionar lote</option>
             {batch.map((batch) => (
@@ -676,7 +674,7 @@ function ProductCategory(props) {
 
               <div className="form-control mb-4">
                 <label className="cursor-pointer label">
-                  <span className="label-text text-white">É perecível</span>
+                  <span className="label-text alt-color-5">É perecível</span>
                   <input
                     type="checkbox"
                     className="toggle toggle-primary"
@@ -688,13 +686,13 @@ function ProductCategory(props) {
 
               <div className="form-control mb-4">
                 <label className="label">
-                  <span className="label-text text-white">
+                  <span className="label-text alt-color-5">
                     Data de Validade
                   </span>
                 </label>
                 <input
                   type="date"
-                  className="input input-bordered placeholder:text-slate-300"
+                  className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
                   name="expiration_date"
                   value={expirationDate}
                   onChange={(e) => setExpirationDate(e.target.value)}
@@ -704,31 +702,16 @@ function ProductCategory(props) {
 
               <div className="form-control mb-4">
                 <label className="label">
-                  <span className="label-text text-white">Imagem</span>
+                  <span className="label-text alt-color-5">Imagem</span>
                 </label>
                 <input
                   type="file"
-                  className="input input-bordered placeholder:text-slate-300"
+                  className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
                   name="product_img"
                   onChange={(e) => setProductImage(e.target.files[0])}
                 />
               </div>
-
-              <div className="modal-action">
-                <label
-                  htmlFor="product-modal"
-                  className="btn"
-                  onClick={closeModal}
-                >
-                  Cancelar
-                </label>
-                <button type="submit" className="btn btn-primary">
-                  Salvar
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+            </Modal>
       )}
 
       {/* Modal para editar produto */}
@@ -740,12 +723,12 @@ function ProductCategory(props) {
         >
           <div className="form-control mb-4">
             <label className="label">
-              <span className="label-text text-white">Nome do produto</span>
+              <span className="label-text alt-color-5">Nome do produto</span>
             </label>
             <input
               type="text"
               placeholder="Digite o nome do produto"
-              className="input input-bordered placeholder:text-slate-300"
+              className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
               required
               name="product_name"
               value={productName}
@@ -755,13 +738,13 @@ function ProductCategory(props) {
 
           <div className="form-control mb-4">
             <label className="label">
-              <span className="label-text text-white">
+              <span className="label-text alt-color-5">
                 Descrição (Opcional)
               </span>
             </label>
             <textarea
               placeholder="Digite a descrição do produto"
-              className="textarea textarea-bordered"
+              className="textarea p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
               name="description"
               value={productDescription}
               onChange={(e) => setProductDescription(e.target.value)}
@@ -770,12 +753,12 @@ function ProductCategory(props) {
 
           <div className="form-control mb-4">
             <label className="label">
-              <span className="label-text text-white">Unidade</span>
+              <span className="label-text alt-color-5">Unidade</span>
             </label>
             <select
               value={productUnitId}
               onChange={(e) => setProductUnitId(parseInt(e.target.value))}
-              className="select select-bordered"
+              className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
             >
               <option disabled value="">
                 Selecionar unidade
@@ -790,12 +773,12 @@ function ProductCategory(props) {
 
           <div className="form-control mb-4">
             <label className="label">
-              <span className="label-text text-white">Fornecedor</span>
+              <span className="label-text alt-color-5">Fornecedor</span>
             </label>
             <select
               value={productSupplierId}
               onChange={(e) => setProductSupplierId(parseInt(e.target.value))}
-              className="select select-bordered"
+              className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
             >
               <option disabled value="">
                 Selecionar fornecedor
@@ -810,12 +793,12 @@ function ProductCategory(props) {
 
           <div className="form-control mb-4">
             <label className="label">
-              <span className="label-text text-white">Preço de Custo</span>
+              <span className="label-text alt-color-5">Preço de Custo</span>
             </label>
             <input
               type="number"
               placeholder="Digite o preço de custo"
-              className="input input-bordered placeholder:text-slate-300"
+              className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
               required
               name="cost_price"
               value={productCostValue}
@@ -827,12 +810,12 @@ function ProductCategory(props) {
 
           <div className="form-control mb-4">
             <label className="label">
-              <span className="label-text text-white">Preço de Venda</span>
+              <span className="label-text alt-color-5">Preço de Venda</span>
             </label>
             <input
               type="number"
               placeholder="Digite o preço de venda"
-              className="input input-bordered placeholder:text-slate-300"
+              className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
               required
               name="sell_price"
               value={productSellValue}
@@ -844,12 +827,12 @@ function ProductCategory(props) {
 
           <div className="form-control mb-4">
             <label className="label">
-              <span className="label-text text-white">Local</span>
+              <span className="label-text alt-color-5">Local</span>
             </label>
             <select
               value={productLocalId}
               onChange={(e) => setProductLocalId(parseInt(e.target.value))}
-              className="select select-bordered"
+              className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
             >
               <option disabled value="">
                 Selecionar local
@@ -864,12 +847,12 @@ function ProductCategory(props) {
 
           <div className="form-control mb-4">
             <label className="label">
-              <span className="label-text text-white">Setor</span>
+              <span className="label-text alt-color-5">Setor</span>
             </label>
             <select
               value={productSectorId}
               onChange={(e) => setProductSectorId(parseInt(e.target.value))}
-              className="select select-bordered"
+              className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
             >
               <option disabled value="">
                 Selecionar setor
@@ -889,7 +872,7 @@ function ProductCategory(props) {
       <select 
         value={productBatchId || ""} 
         onChange={(e) => setProductBatchId(parseInt(e.target.value))} 
-        className="select select-bordered"
+        className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
       >
         <option disabled value="">Selecionar lote</option>
         {batch.map((batch) => (
@@ -900,7 +883,7 @@ function ProductCategory(props) {
 
           <div className="form-control mb-4">
             <label className="cursor-pointer label">
-              <span className="label-text text-white">É perecível</span>
+              <span className="label-text alt-color-5">É perecível</span>
               <input
                 type="checkbox"
                 className="toggle toggle-primary"
@@ -912,11 +895,11 @@ function ProductCategory(props) {
 
           <div className="form-control mb-4">
             <label className="label">
-              <span className="label-text text-white">Data de Validade</span>
+              <span className="label-text alt-color-5">Data de Validade</span>
             </label>
             <input
               type="date"
-              className="input input-bordered placeholder:text-slate-300"
+              className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
               name="expiration_date"
               value={expirationDate}
               onChange={(e) => setExpirationDate(e.target.value)}
@@ -935,12 +918,12 @@ function ProductCategory(props) {
         >
           <div className="form-control mb-4">
             <label className="label">
-              <span className="label-text text-white">Nome da categoria</span>
+              <span className="label-text alt-color-5">Nome da categoria</span>
             </label>
             <input
               type="text"
               placeholder="Digite o nome da categoria"
-              className="input input-bordered placeholder:text-slate-300"
+              className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
               required
               value={categoryName}
               onChange={(e) => setCategoryName(e.target.value)}
@@ -950,13 +933,13 @@ function ProductCategory(props) {
 
           <div className="form-control mb-4">
             <label className="label">
-              <span className="label-text text-white">
+              <span className="label-text alt-color-5">
                 Selecione uma imagem
               </span>
             </label>
             <input
               type="file"
-              className="input input-bordered placeholder:text-slate-300"
+              className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
               name="category-image"
               onChange={(e) => setCategoryImage(e.target.files[0])}
             />

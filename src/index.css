@@ -181,6 +181,11 @@ code {
 .alt-color-4 {
   color: var(--alt-color-4);
 }
+
+.alt-color-5 {
+  color: var(--alt-color-5);
+}
+
 .recharts-responsive-container {
   height: 100%!important;
  
