@@ -1,96 +1,25 @@
 import React from 'react'
 import MainPage from '../MainPage/MainPage';
 import SearchBar from '../../components/SearchBar/SearchBar'
-
+import ProductRow from '../../components/ProductRow/ProductRow2';
+import ProductTable from '../../components/ProductTable/ProductTable2';
 // Pagina para registrar compra e venda de estoque
 function BuyAndSell() {
   return (
     <MainPage title="Fluxo de Estoque">
     <div className="flex border-4 border-[rgb(107,55,16)] bg-[rgb(255,195,118)] ">
       {/* Conteúdo */}
-      <section className="border-4 border-[rgb(180,81,5)] h-full w-full shadow-sm shadow-inner">
+      <section className="border-0 border-[rgb(180,81,5)] h-full w-full shadow-sm shadow-inner">
         {/* Barra de pesquisa */}
-          <SearchBar />
-        {/* Tabela */}
-        <div className="m-4 pr-1 max-h-60 align-middle content-center self-center overflow-auto">
-          <div className="flex vt323-regular justify-between mx-2">
-            <p>Id</p>
-            <p>Nome</p>
-            <p>Categoria</p>
-            <p>Un. de medida</p>
-            <p>Preço</p>
-            <p>Quantidade</p>
-            <p>Estoque</p>
-            <p>Estoque Mínimo</p>
-          </div>
+         
+         <ProductTable/> 
 
-          <div className="flex vt323-regular justify-between px-2 w-full min-h-6 bg-[rgb(245,148,87)]">
-            <p>0</p>
-            <p>Banana</p>
-            <p>Alimentos</p>
-            <p>Kg</p>
-            <p>1,90</p>
-            <p>500</p>
-            <p>1000</p>
-            <p>700</p>
-          </div>
-          <div className="flex vt323-regular justify-between px-2 w-full min-h-6 bg-[rgb(245,166,109)]">
-            <p>1</p>
-            <p>Martelo</p>
-            <p>Utensílios</p>
-            <p>Kg</p>
-            <p>10,90</p>
-            <p>100</p>
-            <p>500</p>
-            <p>700</p>
-          </div>
-          {/* Linhas vazias */}
-          <div className="w-full min-h-6 bg-[rgb(245,148,87)]"></div>
-          <div className="w-full min-h-6 bg-[rgb(245,166,109)]"></div>
-          <div className="w-full min-h-6 bg-[rgb(245,148,87)]"></div>
-          <div className="w-full min-h-6 bg-[rgb(245,166,109)]"></div>
-          <div className="w-full min-h-6 bg-[rgb(245,148,87)]"></div>
-          <div className="w-full min-h-6 bg-[rgb(245,166,109)]"></div>
-          {/* Repita o padrão conforme necessário */}
-        </div>
-
-        <div className="m-4">
-          {/* Metade 1 */}
-          <div className="flex justify-between">
-            <div className="vt323-regular flex w-[45%] flex-col">
-              {/* Descrição do Produto */}
-              <div>
-                <label htmlFor="descProd">Descrição do Produto :</label>
-                <textarea
-                  className="resize-none w-[100%] px-2 break-words border-[rgb(245,148,87)] border-8 h-16 bg-[rgb(245,148,87)]"
-                  type="text"
-                  name="descProd"
-                ></textarea>
-              </div>
-              <div className="mt-2 pr-1 max-h-64 w-[100%] overflow-auto">
-                {/* Título da Tabela */}
-                <div className="flex vt323-regular px-2 justify-between">
-                  <p>N° do Lote</p>
-                  <p>Data da Compra</p>
-                  <p>Validade</p>
-                </div>
-
-                <div className="flex vt323-regular justify-between px-2 w-full min-h-6 bg-[rgb(245,148,87)]">
-                  <p>0</p>
-                  <p>01/04/2024</p>
-                  <p>12/10/2024</p>
-                </div>
-                <div className="flex vt323-regular justify-between px-2 w-full min-h-6 bg-[rgb(245,166,109)]">
-                  <p>1</p>
-                  <p>13/01/2022</p>
-                  <p>22/07/2024</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Metade 2 */}
+        
+          
+            {/* Metade 2 */}{/* 
             <div className="w-[50%]">
               <h1 className="vt323-regular pb-1">Fornecedor</h1>
+
               <div className="vt323-regular flex w-[100%] flex-col">
                 <label htmlFor="nomeForn">Nome</label>
                 <textarea
@@ -155,29 +84,18 @@ function BuyAndSell() {
                       className="resize-none w-[40px] ml-2 px-2 break-words border-[rgb(245,148,87)] h-6 bg-[rgb(245,148,87)]"
                       type="text"
                       name="contatoForn"
+                     
                     />
                   </div>
-                </div>
-              </div>
-
-              {/* Botões */}
-              <div className="flex justify-between m-4">
-                <button
-                  id="Compra"
-                  className="my-3 mx-1 vt323-regular bg-[#36571C] h-8 w-28 text-[rgb(244,189,118)] rounded border-4 border-black center"
-                >
-                  Compra
-                </button>
-                <button
-                  id="Venda"
-                  className="my-3 mx-1 vt323-regular bg-[#AF0909] h-8 w-28 text-[rgb(244,189,118)] rounded border-4 border-black center"
-                >
-                  Venda
-                </button>
-              </div>
-            </div>
+                
+                 
+  
+              
+            </div> 
+            
           </div>
-        </div>
+          
+        </div> */}
       </section>
     </div>
     </MainPage>
