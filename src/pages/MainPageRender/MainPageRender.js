@@ -81,10 +81,12 @@ function MainPageRender() {
   /**
    * Função para dinamicamente atualizar a categoria
    */
-  const updateCategory = (categoryId, newCategoryName) => {
+  const updateCategory = (categoryId, newCategoryName, newCategoryImage) => {
     setCategories((prevCategories) =>
       prevCategories.map((category) =>
-        category.category_id === categoryId ? { ...category, category_name: newCategoryName } : category
+        category.category_id === categoryId
+          ? { ...category, category_name: newCategoryName, category_image: newCategoryImage }
+          : category
       )
     )
   }
