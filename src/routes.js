@@ -29,7 +29,7 @@ router.get('/products/:product_id', productController.getProductsbyId);
 router.get('/products/category/:category_id', productController.getProductsByCategory);
 router.put('/products/:product_id', productController.updateProduct);
 router.delete('/products/:product_id', productController.deleteProduct);
-
+//oioi
 //Rotas de Categorias
 router.post('/category', categoryController.createCategory);
 router.get('/category', categoryController.getAllCategories);
