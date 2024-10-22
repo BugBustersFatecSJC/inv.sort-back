@@ -8,12 +8,12 @@ const categoryController = require('./controllers/categoryController')
 const unitController = require('./controllers/unitController')
 const supplierController = require('./controllers/supplierController')
 const filterController = require('./controllers/filterController')
-const sectorchartController = require('./controllers/sectorchartController')
+//const sectorchartController = require('./controllers/sectorchartController')
 
 //Inicio das Rotas
 
-router.get('/check-login', userController.checkFirstLogin);
-router.get('/sectormensal', sectorchartController.SectorMonth);
+router.get('/check-first-login', userController.checkFirstLogin);
+//router.get('/sectormensal', sectorchartController.SectorMonth);
 router.get('/mensal', filterController.filterMonth);
 router.get('/trimestral', filterController.filterTrimester);
 
