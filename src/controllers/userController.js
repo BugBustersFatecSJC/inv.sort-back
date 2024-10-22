@@ -95,6 +95,7 @@ const loginUser = async (req, res) => {
 };
 
 const checkFirstLogin = async (req, res) => {
+    console.log("Received request at /check-first-login");
     try {
         const users = await prisma.user.findMany();
         console.log("Quantidade de usuários encontrados:", users.length);

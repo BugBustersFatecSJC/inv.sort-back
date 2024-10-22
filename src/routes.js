@@ -5,10 +5,10 @@ const upload = require('./middlewares/uploadImageMiddleware')
 // Importar controllers aqui
 const userController = require('./controllers/userController');
 const productController = require('./controllers/productController');
-const categoryController = require('./controllers/categoryController');
-const unitController = require('./controllers/unitController');
-const supplierController = require('./controllers/supplierController');
-const filterController = require('./controllers/filterController');
+const categoryController = require('./controllers/categoryController')
+const unitController = require('./controllers/unitController')
+const supplierController = require('./controllers/supplierController')
+const filterController = require('./controllers/filterController')
 const localController = require('./controllers/localController'); 
 const sectorController = require('./controllers/sectorController'); 
 const batchController = require('./controllers/batchController');
@@ -22,6 +22,8 @@ router.get('/check-login', userController.checkFirstLogin);
 router.get('/sectoranual', sectorchartController.sectorYear);
 router.get('/mensal', filterController.filterMonth);
 router.get('/trimestral', filterController.filterTrimester);
+router.get('/check-first-login', userController.checkFirstLogin);
+//router.get('/sectormensal', sectorchartController.SectorMonth);
 
 // Rotas de Usuários
 router.post('/users', upload.single('user_img'), userController.createUser);
