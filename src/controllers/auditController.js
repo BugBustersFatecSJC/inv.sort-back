@@ -51,12 +51,12 @@ const auditLogMiddleware = async (req, res, next) => {
 
                     // Buscar nomes da categoria e fornecedor, se não for DELETE
                     const category = product.category_id ? await prisma.category.findUnique({
-                        where: { category_id: product.category_id },
+                        where: { category_id: Number(product.category_id) },  // Converte para Int
                         select: { category_name: true }
-                    }) : null;
+                      }) : null;                      
 
                     const supplier = product.supplier_id ? await prisma.supplier.findUnique({
-                        where: { supplier_id: product.supplier_id },
+                        where: { supplier_id: Number(product.supplier_id) },
                         select: { supplier_name: true }
                     }) : null;
 
@@ -76,8 +76,8 @@ const auditLogMiddleware = async (req, res, next) => {
                             },
                             // No caso de DELETE, não tentar conectar o produto, pois ele foi removido
                             product: action !== 'DELETE' && product.product_id ? { connect: { product_id: product.product_id } } : undefined,
-                            category: product.category_id ? { connect: { category_id: product.category_id } } : undefined,
-                            supplier: product.supplier_id ? { connect: { supplier_id: product.supplier_id } } : undefined,
+                            category: product.category_id ? { connect: { category_id: Number(product.category_id) } } : undefined,
+                            supplier: product.supplier_id ? { connect: { supplier_id: Number(product.supplier_id) } } : undefined,
                         }
                     });
                 }
