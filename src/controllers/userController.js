@@ -4,7 +4,8 @@ const { hashSync, compareSync } = require('bcrypt');
 
 // Registra dados do usuário
 const createUser = async (req, res) => {
-    const { username, email, password, role, status } = req.body;
+    const { username, email, password, role, status } = req.body
+    const userImage = req.file ? `/uploads/${req.file.filename}` : null
 
     try {
 
@@ -31,6 +32,7 @@ const createUser = async (req, res) => {
                 password: hashedPassword,
                 role: role,
                 status: status,
+                user_img: userImage
             },
         });
 
@@ -39,7 +41,7 @@ const createUser = async (req, res) => {
         return res.status(201).json(userWithoutPassword);
     } catch (error) {
         console.log(error)
-        return res.status(500).json({ error: "Erro ao criar usuário." });
+        return res.status(500).json({ error: `Erro ao criar usuário. ${error}` });
     }
 };
 
@@ -77,6 +79,11 @@ const loginUser = async (req, res) => {
         if (!isPasswordValid) {
             return res.status(401).json({ error: "E-mail ou senha inválidos." });
         }
+
+        req.session.userId = user.user_id; // Salva o usuário na sessão
+        console.log("User ID saved in session:", req.session.userId);
+
+        console.log("Session object after login:", req.session);
 
         // Retorne o usuário, sem a senha
         const { password: _, ...userWithoutPassword } = user; // Remove a senha da resposta
