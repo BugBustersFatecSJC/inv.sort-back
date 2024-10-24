@@ -76,34 +76,50 @@ const deleteBatch = async (req, res) => {
 
 const sellBatch = async (req, res) => {
     const batchId = parseInt(req.params.batch_id); // ID do lote
-    const x = parseInt(req.body.quantity); // Valor a ser subtraído (enviado no corpo da requisição)
+    const x = parseInt(req.body.quantity); // Valor a ser subtraído
+    let alertaEstoque = false; // Declarar a variável
+
     try {
-      // Encontramos o lote (Batch) com base no batch_id
-      const batch = await prisma.Batch.findUnique({
-        where: { batch_id: batchId },
-      });
-      // Verificamos se o lote existe
-      if (!batch) {
-        return res.status(404).json({ error: `Lote com ID ${batchId} não encontrado.` });
-      }
-      // Calculamos o novo valor de quantity
-      const newQuantity = batch.quantity - x;
-      // Verificamos se a quantidade resultante seria negativa
-      if (newQuantity < 0) {
-        return res.status(400).json({ error: "Quantidade não pode ser negativa." });
-      }
-      // Atualizamos o lote no banco de dados com a nova quantidade
-      const updatedBatch = await prisma.batch.update({
-        where: { batch_id: batchId },
-        data: { quantity: newQuantity },
-      });
-      // Enviamos o lote atualizado como resposta
-      return res.status(200).json(updatedBatch);
+        // Encontramos o lote (Batch) com base no batch_id
+        const batch = await prisma.batch.findUnique({
+            where: { batch_id: batchId },
+            select: {
+                quantity: true,
+                estoqueminimo: true,
+            },
+        });
+        
+        // Verificamos se o lote existe
+        if (!batch) {
+            return res.status(404).json({ error: `Lote com ID ${batchId} não encontrado.` });
+        }
+        const newQuantity = batch.quantity - x;
+        
+    
+        if (batch.estoqueminimo !== null && newQuantity < batch.estoqueminimo) {
+            alertaEstoque = true; // Aciona o alerta de estoque
+        }
+        
+        if (newQuantity < 0) {
+            return res.status(400).json({ error: "Quantidade não pode ser negativa." });
+        }
+        
+        // Atualizamos o lote no banco de dados com a nova quantidade
+        
+        const updatedBatch = await prisma.batch.update({
+            where: { batch_id: batchId },
+            data: { quantity: newQuantity },
+        });
+        
+        // Enviamos o lote atualizado como resposta
+        return res.status(200).json({ updatedBatch, alertaEstoque });
+        
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: "Erro ao subtrair a quantidade do lote." });
+        console.error(error);
+        return res.status(500).json({ error: "Erro ao subtrair a quantidade do lote." });
     }
-  };
+};
+
 
 
 module.exports = {
