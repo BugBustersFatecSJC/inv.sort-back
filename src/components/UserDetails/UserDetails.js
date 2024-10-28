@@ -27,7 +27,7 @@ const UserDetails = ({ user , bool , onClick }) => {
         </>
       )}
       <div>
-      {bool === 'true' ? <button onClick={onClick}  id="Voltar" className="appearence-none shadow-none bg-[#B45105] rounded px-2 h-full text-[24px] mt-4 mx-auto text-[#3E1900] poppins-semibold">Voltar</button> : null}
+      {bool === 'true' ? <button onClick={onClick}  id="Voltar" className="appearence-none shadow-none bg-[#B45105] rounded px-2 h-full text-[24px] my mx-auto text-[#3E1900] poppins-semibold">Voltar</button> : null}
       </div>
     </div>
   );

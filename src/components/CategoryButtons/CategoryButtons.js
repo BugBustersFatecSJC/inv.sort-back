@@ -1,8 +1,9 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 function CategoryButtons() {
-  const navigate = useNavigate()
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const navigateUserpage = () => {
     const user = localStorage.getItem("user")
@@ -13,6 +14,7 @@ function CategoryButtons() {
   }
 
   const navigateProducts = () => {
+
       navigate('/products')
   }
 
@@ -43,51 +45,46 @@ function CategoryButtons() {
   const navigateRegisterUser = () => {
       navigate('/cadastra-usuario')
   }
-
+  
   return (
     <div className='flex flex-col w-full'>
-      <a onClick={navigateRegisterUser} className="text-center mb-3  w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel mb-1 text-xl main-color border-3 border-black cursor-pointer cursor-pointer hvr-grow">
-        Usuários
-      </a>
+    
+    <a id='/products' onClick={navigateProducts} className="poppins-semibold  cursor-pointer hvr-grow categorybutton">
+    Produtos
+    </a>
+    <a id='/analytics' onClick={navigateAnalytics} className="poppins-semibold cursor-pointer hvr-grow categorybutton">
+    Análise
+    </a>
+      <a id='/userpage' onClick={navigateUserpage} className="poppins-semibold cursor-pointer hvr-grow categorybutton">
+    Usuários
+    </a>
 
-      <a onClick={navigateUserpage} className="text-center mb-3  w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel mb-1 text-xl main-color border-3 border-black cursor-pointer cursor-pointer hvr-grow">
-        Gerenciar
-      </a>
+    <a id='/gerenciar' onClick={navigateUserpage} className="poppins-semibold cursor-pointer hvr-grow categorybutton">
+      Gerenciar
+    </a>
+    <a id='/batches' onClick={navigateBatches} className="poppins-semibold cursor-pointer hvr-grow categorybutton">
+      Lotes
+    </a>
 
-      <a onClick={navigateProducts} className="text-center mb-3  w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel mb-1 text-xl main-color border-3 border-black cursor-pointer hvr-grow">
-        Produtos
-      </a>
-      
-      <a onClick={navigateAnalytics} className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black cursor-pointer hvr-grow">
-       Análise
-      </a>      
+    <a id='/suppliers' onClick={navigateSuppliers} className="poppins-semibold cursor-pointer hvr-grow categorybutton">
+      Fornecedores
+    </a>
 
-      
+    <a id='/sectors' onClick={navigateSectors} className="poppins-semibold cursor-pointer hvr-grow categorybutton">
+      Setores
+    </a>
 
-      <a onClick={navigateBatches} className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black cursor-pointer hvr-grow">
-       Lotes
-      </a>
+    <a onClick={navigateSectors} className="poppins-semibold cursor-pointer hvr-grow categorybutton">
+      Movimentações
+    </a>
 
-      <a onClick={navigateSuppliers} className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black cursor-pointer hvr-grow">
-       Fornecedores
-      </a>
+    <a id='/historic' onClick={navigateMovements} className="poppins-semibold cursor-pointer hvr-grow categorybutton">
+      Histórico
+    </a>
 
-      <a onClick={navigateSectors} className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black cursor-pointer hvr-grow">
-       Setores
-      </a>
-
-      
-
-      <a onClick={navigateSectors} className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black cursor-pointer hvr-grow">
-       Movimentações
-      </a>
-
-      <a onClick={navigateMovements} className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black cursor-pointer hvr-grow">
-       Histórico
-      </a>
-      <a onClick={navigateBuyAndSell} className="text-center mb-3 w-full p-1 alt-color-5-bg text-black shadow-lg font-pixel text-xl main-color border-3 border-black cursor-pointer hvr-grow">
-       Fluxo de Estoque
-       </a>
+    <a id='/buyandsell' onClick={navigateBuyAndSell} className="poppins-semibold cursor-pointer hvr-grow categorybutton">
+      Compra e Venda
+    </a>
     </div>
   );
 }

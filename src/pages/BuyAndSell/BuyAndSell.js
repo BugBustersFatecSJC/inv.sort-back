@@ -6,8 +6,8 @@ import ProductTable from '../../components/ProductTable/ProductTable2';
 // Pagina para registrar compra e venda de estoque
 function BuyAndSell() {
   return (
-    <MainPage title="Fluxo de Estoque">
-    <div className="flex border-4 border-[rgb(107,55,16)] bg-[rgb(255,195,118)] ">
+    <MainPage title="Compra e Venda">
+    <div className="flex  bg-[rgb(255,195,118)] ">
       {/* Conteúdo */}
       <section className="border-0 border-[rgb(180,81,5)] h-full w-full shadow-sm shadow-inner">
         {/* Barra de pesquisa */}

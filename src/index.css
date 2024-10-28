@@ -52,7 +52,7 @@
           border-radius: 1px;}
       
 :root {
-  --main-color: #DDA059;
+  --main-color: rgb(255,195,118);
   --main-border: linear-gradient(0deg, rgba(180,81,5,1) 50%, rgba(107,55,16,1) 50%);
   --secondary-color: #3E1A00;
   --tertiary-color: #F8B971;
@@ -197,4 +197,32 @@ code {
 .recharts-retangle {
   margin: 10px!important;
   padding: 10px !important; ;
+}
+.categorybutton {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+  padding: 4px 4px;
+  border-radius: 12px;
+  width: 12rem;
+  height: 3rem;
+  align-self: center;
+  align-items: center;
+  color: rgb(255,195,118);
+  background-color: rgba(0, 0, 0, 0.068);
+  
+  
+}
+.categorybutton:hover {
+  background-color: var(--main-color);
+  color: var(--secondary-color);
+  border: 12px solid var(--main-color);
+  transition: 0.2s;
+}
+.ativo{
+  width: max-content;
+  height: 3rem;
+  margin-right: 12px;
+  background-color: var(--main-color);
+
 }
