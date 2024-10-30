@@ -52,7 +52,7 @@
           border-radius: 1px;}
       
 :root {
-  --main-color: #DDA059;
+  --main-color: rgb(255,195,118);
   --main-border: linear-gradient(0deg, rgba(180,81,5,1) 50%, rgba(107,55,16,1) 50%);
   --secondary-color: #3E1A00;
   --tertiary-color: #F8B971;
@@ -65,12 +65,17 @@
   --alt-color-5: #3E1900;
   --alt-color-6: #f8b55e;
   --main-black-color: #121212; 
+
 }
 
-
+body{
+  scroll-behavior: smooth;
+  
+}
 * {
   margin: 0;
   padding: 0;
+ 
  
 }
 .border-main {
@@ -187,14 +192,58 @@ code {
 }
 
 .recharts-responsive-container {
-  height: 100%!important;
- 
-  
   display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100%; 
   
   
 }
 .recharts-retangle {
   margin: 10px!important;
   padding: 10px !important; ;
+}
+
+.ps-menu-button {
+
+  color: var(--secondary-color);
+  margin-bottom: 20px;
+  width: 100%!important;
+  max-width: 16rem!important;
+   
+ }
+
+
+.ps-sidebar-container{
+  background-color: var(--alt-color)!important;
+ width: 100%!important;
+ max-width: 16rem!important;
+}
+.ps-sidebar-root{
+  margin: 0!important;
+  padding: 0!important;
+  border: 0!important;
+  outline: 0!important;
+ 
+}
+.ps-menu-root{
+  max-width: 16rem!important;
+}
+.ps-menu-button:hover {
+  
+  
+  transition: 0.2s;
+}
+.ps-menu-label-css
+.ps-menu-button:hover #carrinho{
+  display: none;
+  
+}
+
+.ativo{
+  width: max-content;
+  height: 3rem;
+  margin-right: 12px;
+  background-color: var(--main-color);
+
 }
