@@ -65,12 +65,17 @@
   --alt-color-5: #3E1900;
   --alt-color-6: #f8b55e;
   --main-black-color: #121212; 
+
 }
 
-
+body{
+  scroll-behavior: smooth;
+  
+}
 * {
   margin: 0;
   padding: 0;
+ 
  
 }
 .border-main {
@@ -187,10 +192,10 @@ code {
 }
 
 .recharts-responsive-container {
-  height: 100%!important;
- 
-  
   display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100%; 
   
   
 }
@@ -198,43 +203,35 @@ code {
   margin: 10px!important;
   padding: 10px !important; ;
 }
+
 .ps-menu-button {
-  display: flex;
-  justify-content: center;
+
+  color: var(--secondary-color);
+  margin-bottom: 20px;
   width: 100%!important;
-  margin: 1rem 0;
-  padding: 4px 4px;
-  border-radius: 12px;
-  width: 10rem;
-  height: 3rem;
-  align-self: center;
-  align-items: center;
-  color: var(  --secondary-color) ;
-  
-  
-  
-}
-.MenuItem{
-  width: 100%;
+  max-width: 16rem!important;
+   
+ }
+
+
+.ps-sidebar-container{
+  background-color: var(--alt-color)!important;
+ width: 100%!important;
+ max-width: 16rem!important;
 }
 .ps-sidebar-root{
-  background-color: var(--alt-color)!important;
   margin: 0!important;
   padding: 0!important;
   border: 0!important;
   outline: 0!important;
+ 
+}
+.ps-menu-root{
+  max-width: 16rem!important;
 }
 .ps-menu-button:hover {
-
- 
-  text-align: center;
-  align-items: center;
-  display: flex;
-  justify-content: center;
-
-  text-align: center;
-
- width: 100%;
+  
+  
   transition: 0.2s;
 }
 .ps-menu-label-css
