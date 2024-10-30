@@ -217,7 +217,7 @@ code {
 .MenuItem{
   width: 100%;
 }
-.ps-sidebar-container{
+.ps-sidebar-root{
   background-color: var(--alt-color)!important;
   margin: 0!important;
   padding: 0!important;
