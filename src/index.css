@@ -210,7 +210,7 @@ code {
   align-self: center;
   align-items: center;
   color: var(  --secondary-color) ;
-  background-color: ;
+  
   
   
 }
@@ -219,16 +219,21 @@ code {
 }
 .ps-sidebar-container{
   background-color: var(--alt-color)!important;
+  margin: 0!important;
+  padding: 0!important;
+  border: 0!important;
+  outline: 0!important;
 }
 .ps-menu-button:hover {
 
-  color: var(--secondary-color)!important;
+ 
   text-align: center;
   align-items: center;
   display: flex;
   justify-content: center;
-  z-index: 5;
+
   text-align: center;
+
  width: 100%;
   transition: 0.2s;
 }

@@ -19,8 +19,8 @@ function Sidebari(props) {
   }, []);
   
   return (
-    <div className={` flex ${windowWidth > 570 ? 'max-w-[14rem]' : 'max-w-[8rem]'} bg-clip-border alt-color-bg  py-4`}>
-      <div className='mb-8 justify-center self-center flex-col flex-wrap max-w-[14rem] w-full h-full mr-4 align-center text-center py-4 px-2'>
+    <div className={` flex ${windowWidth > 570 ? 'max-w-[14rem]' : 'max-w-[8rem]'} bg-clip-border alt-color-bg  `}>
+      <div className='mb-8 justify-center self-center flex-col flex-wrap max-w-[14rem] w-full h-full  align-center text-center py-4 px-2'>
         <div className='text-center align-middle flex justify-center'>
           <img src="img/logo_invsort.svg" className="w-[50%] sm:w-[20%] auto sb-button z-10"  onClick={() => setCollapsed(!collapsed)} alt=""/>
         </div>
@@ -38,9 +38,13 @@ function Sidebari(props) {
               return {
                 color: 'rgb(255,195,118)',
                 [`&.active`]: {
-                  backgroundColor: 'black',
+                  backgroundColor: '#B45105',
                   color: '#b6c8d9',
                 },
+                [`&:hover`]: {
+                  backgroundColor: '#3E1900'
+                  
+                }
                 
               }
               
