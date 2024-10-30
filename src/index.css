@@ -198,27 +198,46 @@ code {
   margin: 10px!important;
   padding: 10px !important; ;
 }
-.categorybutton {
+.ps-menu-button {
   display: flex;
   justify-content: center;
+  width: 100%!important;
   margin: 1rem 0;
   padding: 4px 4px;
   border-radius: 12px;
-  width: 12rem;
+  width: 10rem;
   height: 3rem;
   align-self: center;
   align-items: center;
-  color: rgb(255,195,118);
-  background-color: rgba(0, 0, 0, 0.068);
+  color: var(  --secondary-color) ;
+  background-color: ;
   
   
 }
-.categorybutton:hover {
-  background-color: var(--main-color);
-  color: var(--secondary-color);
-  border: 12px solid var(--main-color);
+.MenuItem{
+  width: 100%;
+}
+.ps-sidebar-container{
+  background-color: var(--alt-color)!important;
+}
+.ps-menu-button:hover {
+
+  color: var(--secondary-color)!important;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  z-index: 5;
+  text-align: center;
+ width: 100%;
   transition: 0.2s;
 }
+.ps-menu-label-css
+.ps-menu-button:hover #carrinho{
+  display: none;
+  
+}
+
 .ativo{
   width: max-content;
   height: 3rem;
