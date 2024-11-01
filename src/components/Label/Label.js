@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Label = ({ data, colors }) => {
+const Label2 = ({ data, colors }) => {
     return (
         <>
             {data.map((entry, index) => (
@@ -14,4 +14,4 @@ const Label = ({ data, colors }) => {
     );
 }
 
-export default Label;
+export default Label2;

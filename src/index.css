@@ -199,6 +199,7 @@ code {
   
   
 }
+
 .recharts-retangle {
   margin: 10px!important;
   padding: 10px !important; ;
@@ -207,10 +208,10 @@ code {
 .ps-menu-button {
 
   color: var(--secondary-color);
-  margin-bottom: 20px;
+  padding-left: 14px!important;
   width: 100%!important;
   max-width: 16rem!important;
-   
+  
  }
 
 

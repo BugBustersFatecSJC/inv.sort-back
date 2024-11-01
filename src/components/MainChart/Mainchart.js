@@ -7,9 +7,7 @@ const Mainchart = () => {
   const [selectedValue, setSelectedValue] = useState('/mensal'); // Default value
   const [data, setData] = useState([]);
 
-  /**
-   * Obtém as categorias e os produtos para exibí-los no dropdown
-   */
+  
   const [categories, setCategories] = useState([])
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [products, setProducts] = useState([])
@@ -60,13 +58,13 @@ const Mainchart = () => {
   }, [selectedValue,selectedCategory,selectedProduct]); // Fetch data whenever selectedValue changes
 
   return (
-    <>
-      <div className='flex w-[60%] justify-between '>
+    <ResponsiveContainer className="mx-auto my-4  flex flex-col w-full h-full"  height={350}  >
+      <div className='flex justify-start h-full w-full mt-2 '>
         <FilterButton selectedValue={selectedValue} setSelectedValue={setSelectedValue} />
         <DropdownButtons 
           options={categories} 
           type={"category"}
-          label="Selecione uma Categoria" 
+          label="Categoria..." 
           onChange={(e) => {
             setSelectedCategory(e.target.value);
             console.log(e.target.value);
@@ -76,7 +74,7 @@ const Mainchart = () => {
 
         <DropdownButtons 
           options={products} 
-          label="Selecione um Produto" 
+          label="Produto..." 
           type={"product"}
           disabled={products.length === 0}
           onChange={(e) => {
@@ -87,22 +85,21 @@ const Mainchart = () => {
         />
     
       </div>
-      <ResponsiveContainer className="mx-auto " width={650} height={270} barGap="30" >
+      
         <BarChart
           className="m-auto px-2"
           data={data}
-          margin={{ top: 155, right: 85, left: 85, bottom: 0 }}
-          width={600}
-          barGap='20' // Adjust the gap between bars
-          barCategoryGap="40%" // Adjust the category gap between bars
+          margin={{ top: 145, right:20 , left: 0, bottom: 10 }}
+          width={900}
+  
         >
-          <XAxis dataKey="name" width={20} interval={0} dy={5} className="poppins-semibold" position="top" style={{ textAnchor: 'middle', fontSize: '55%', fill: '#3e1900' }} />
+          <XAxis dataKey="name" angle={15} width={30} interval={0} dx={5} dy={5} className="poppins-semibold" position="top" style={{ textAnchor: 'middle', fontSize: '55%', fill: '#3e1900' }} />
           <Bar barSize={55} barGap={5} dataKey="value" fill="#3e1900">
-            <LabelList dataKey="value"  className="poppins-semibold" position="top" style={{ margin: 'auto', textAnchor: 'middle', fontSize: '80%', fill: '#3e1900' }} />
+            <LabelList dataKey="value"  className="poppins-semibold"  position="top" style={{ margin: 'auto', textAnchor: 'middle', fontSize: '80%', fill: '#3e1900' }} />
           </Bar>
         </BarChart>
       </ResponsiveContainer>
-    </>
+    
   );
 };
 

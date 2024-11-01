@@ -1,11 +1,24 @@
 import React from 'react'
+import { useState, useEffect } from 'react'
+
+
 
 function DropdownButtons({ options = [],type, label, onChange, disabled = false }) {
-
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+  
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  })
   return (
     <div className=' ml-4'>
       <select
-        className="w-36 poppins-semibold border-4 rounded border-[#B45105] bg-[#FFC376]"
+        className={`${windowWidth <750?'w-[6rem]': 'w-[100px]'} poppins-semibold border-4 rounded border-[#B45105] bg-[#FFC376]`}
         name="dropdown"
         id="filtrodrop"
         onChange={onChange}
