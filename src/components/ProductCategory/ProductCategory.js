@@ -394,7 +394,7 @@ function ProductCategory(props) {
     return (
       // Container da categoria
     <div className='w-full  rounded bg-[#5F2E09]  shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] mt-4'>
-        <div className=' p-4 mx-4 h-[100px] overflow-y-auto flex flex-wrap relative'>
+        <div className=' p-4 mx-12 h-[100px] overflow-y-auto flex flex-wrap relative'>
           <div className={` p-4 transition-opacity duration-200 max-h-[100px] absolute inset-0 bg-[#5F2E09]  z-30 flex justify-between  items-center justify-center ${!showCategoryProducts ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
           <figure className='w-[5rem] h-[5rem] rounded-full alt-color-4-bg border-4 border-[#D87B26] shadow-[inset_-2px_3px_2px_4px_rgba(0,0,0,0.2)]'>
             {props.categoryImage ? (
@@ -468,7 +468,7 @@ function ProductCategory(props) {
 
         {/* Modal de produto */}
         {isModalOpen && (
-  <div className="modal modal-open text-slate-400">
+  <div className="modal modal-open text-slate-400 ">
     <div className="modal-box">
       <h3 className="font-bold text-lg text-white">Adicionar novo produto</h3>
 

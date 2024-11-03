@@ -23,7 +23,7 @@ function Analytics(props) {
       window.removeEventListener('resize', handleResize);
     };
   })
-  console.log(loadingIcon,loading);
+
   
   
   return (
@@ -51,6 +51,7 @@ function Analytics(props) {
           <Sectorchart />
         </div>
       </div>
+      <Sectorchart />
             </div>
       </div>
     

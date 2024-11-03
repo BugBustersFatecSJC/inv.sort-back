@@ -83,7 +83,7 @@ function Sidebari(props) {
   <Watermark  className="bottom-0"/>
         
 </Sidebar>
-{windowWidth > 450 ? <Sidebar id='collapse' width='12rem' className='' collapsedWidth='4rem ' collapsed={!collapsed}>
+{windowWidth > 450 ? <Sidebar id='collapse' width='14rem' className='' collapsedWidth='4rem ' collapsed={!collapsed}>
 <Menu 
         menuItemStyles={{
           button: ({ level, active, disabled }) => {
