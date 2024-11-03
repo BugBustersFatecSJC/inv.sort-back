@@ -44,6 +44,8 @@ const createProduct = async (req, res, next) => {
         description, 
         product_img, 
         category_id, 
+        product_stock,
+        product_stock_min,
         prod_brand, 
         prod_model, 
         supplier_id, 
@@ -64,6 +66,8 @@ const createProduct = async (req, res, next) => {
     try {
         const newProduct = await prisma.product.create({
             data: {
+                product_stock,    
+                product_stock_min,
                 product_name,
                 description,
                 product_img,
@@ -107,6 +111,8 @@ const updateProduct = async (req, res) => {
                 product_name,
                 description,
                 category_id,
+                product_stock,    
+                product_stock_min,
                 supplier_id,
                 is_perishable,
                 unit_id,
@@ -116,6 +122,8 @@ const updateProduct = async (req, res) => {
                 product_id: true, // Garantindo que o product_id seja retornado
                 product_name: true,
                 description: true,
+                product_stock: true,    
+                product_stock_min: true,
                 category_id: true,
                 supplier_id: true,
                 is_perishable: true,

@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 // Cria um novo lote
 const createBatch = async (req, res) => {
-    const { product_id, quantity, expiration_date, manufacture_date, batch_value_total } = req.body;
+    const { product_id, quantity, quantity_max, expiration_date, manufacture_date, batch_value_total } = req.body;
     const quantityInt = Number(quantity)
 
 
@@ -12,6 +12,7 @@ const createBatch = async (req, res) => {
             data: {
                 product_id,
                 quantity:quantityInt,
+                quantity_max,
                 expiration_date,
                 manufacture_date,
                 batch_value_total
@@ -41,7 +42,7 @@ const getAllBatches = async (req, res) => {
 // Atualiza um lote existente
 const updateBatch = async (req, res) => {
     const id = parseInt(req.params.batch_id); // Obtém o ID do lote a ser atualizado
-    const { product_id, quantity, expiration_date, manufacture_date, batch_value_total } = req.body;
+    const { product_id, quantity, quantity_max, expiration_date, manufacture_date, batch_value_total } = req.body;
 
     try {
         const updateBat = await prisma.batch.update({
@@ -49,6 +50,7 @@ const updateBatch = async (req, res) => {
             data: {
                 product_id,
                 quantity,
+                quantity_max,
                 expiration_date,
                 manufacture_date,
                 batch_value_total
