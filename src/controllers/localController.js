@@ -7,6 +7,14 @@ const createLocal = async (req, res) => {
     console.log('Dados recebidos para criar local:', { local_name, local_address });
 
     try {
+        const existingLocal = await prisma.local.findUnique({
+            where: { local_name }
+        });
+
+        if (existingLocal) {
+            return res.status(400).json({ error: "Local com este nome já existe." });
+        }
+
         const createLoc = await prisma.local.create({
             data: {
                 local_name,
@@ -15,6 +23,7 @@ const createLocal = async (req, res) => {
         });
         res.status(201).json(createLoc);
     } catch (error) {
+        console.log(error);
         res.status(400).json({ error: "Erro ao criar local" });
     }
 };
@@ -54,6 +63,7 @@ const deleteLocal = async (req, res) => {
         });
         res.status(200).json(deleteLoc);
     } catch (error) {
+        console.log(error);
         res.status(400).json({ error: "Erro ao deletar o local" });
     }
 };
