@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState , useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from './InitialSignUp.module.css'
 import MainLogo from "../../components/MainLogo/MainLogo"
