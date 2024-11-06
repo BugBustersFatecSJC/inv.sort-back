@@ -58,10 +58,10 @@ const Mainchart = () => {
   }, [selectedValue,selectedCategory,selectedProduct]); // Fetch data whenever selectedValue changes
 
   return (
-    <ResponsiveContainer className="mx-auto my-4  flex flex-col w-full h-full"  height={350}  >
-      <div className='flex justify-start h-full w-full mt-2 '>
+    <ResponsiveContainer className="x-auto  flex flex-col w-full h-full"  height={350}  >
+      <div className='flex justify-start w-full mx-1 h-auto '>
         <FilterButton selectedValue={selectedValue} setSelectedValue={setSelectedValue} />
-        <DropdownButtons 
+        <span className='flex h-auto  '><DropdownButtons 
           options={categories} 
           type={"category"}
           label="Categoria..." 
@@ -70,6 +70,8 @@ const Mainchart = () => {
             console.log(e.target.value);
             
           }}
+          
+          
         />
 
         <DropdownButtons 
@@ -83,13 +85,13 @@ const Mainchart = () => {
             
           }}
         />
-    
+    </span>
       </div>
       
         <BarChart
           className="m-auto px-2"
           data={data}
-          margin={{ top: 145, right:20 , left: 0, bottom: 10 }}
+          margin={{ top: 145, right: 5 , left: 5, bottom: 10 }}
           width={900}
   
         >

@@ -9,7 +9,7 @@ const FilterButton = ({ selectedValue, setSelectedValue }) => {
 
   return (
     <select
-      className="w-24 poppins-semibold border-4 rounded border-[#B45105] bg-[#FFC376]"
+      className="w-21 poppins-semibold border-4 rounded border-[#B45105] bg-[#FFC376]"
       onChange={handleChange}
       name="visualização"
       id="filtrodrop"
