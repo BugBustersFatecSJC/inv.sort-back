@@ -2,6 +2,7 @@ import { useState } from 'react'
 import api from '../../services/api'
 import FlashMessage from '../../components/FlashMessage/FlashMessage'
 import Modal from '../Modal/Modal'
+import ShortModal from '../ShortModal/ShortModal'
 
 /**
  * Container para adicionar uma nova categoria
@@ -79,7 +80,7 @@ function Category(props) {
             </div>
 
             {isModalOpen && (
-                <Modal
+                <ShortModal
                     title="Criar categoria"
                     handleSubmit={handleSubmit}
                     modalName="cria-categoria"
@@ -98,7 +99,7 @@ function Category(props) {
                         </label>
                         <input type="file" className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5" onChange={(e) => setCategoryImage(e.target.files[0])} name='category-image' />
                     </div>
-                </Modal>
+                </ShortModal>
             )}
 
             {/* Componente flash message, verifica se o estado flash é true e então renderiza a flash message */}

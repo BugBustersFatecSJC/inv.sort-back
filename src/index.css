@@ -5,6 +5,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 .poppins-regular {
   font-family: "Poppins", sans-serif;
   font-weight: 400;
@@ -246,4 +247,8 @@ code {
   margin-right: 12px;
   background-color: var(--main-color);
 
+}
+
+.placeholder-color::placeholder {
+  color: var(--alt-color-5) !important;
 }
