@@ -34,4 +34,4 @@ const UserDetails = ({ user, onEdit, onDelete }) => {
   );
 };
 
-export default UserDetails;
+export default UserDetails; //oi
