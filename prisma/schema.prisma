@@ -78,7 +78,7 @@ model Product {
 
 model Local {
   local_id      Int        @id @default(autoincrement())
-  local_name    String?
+  local_name    String?    @unique
   local_address String?
   created_at    DateTime   @default(now())
   auditLogs     AuditLog[]
@@ -88,7 +88,7 @@ model Local {
 model Sector {
   sector_id   Int        @id @default(autoincrement())
   local_id    Int
-  sector_name String
+  sector_name String     @unique
   created_at  DateTime   @default(now())
   auditLogs   AuditLog[]
   Local       Local      @relation(fields: [local_id], references: [local_id])
