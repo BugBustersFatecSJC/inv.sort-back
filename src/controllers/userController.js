@@ -4,7 +4,8 @@ const { hashSync, compareSync } = require('bcrypt');
 
 // Registra dados do usuário
 const createUser = async (req, res) => {
-    const { username, email, password, role, status } = req.body;
+    const { username, email, password, role, status } = req.body
+    const userImage = req.file ? `/uploads/${req.file.filename}` : null
 
     try {
 
@@ -31,6 +32,7 @@ const createUser = async (req, res) => {
                 password: hashedPassword,
                 role: role,
                 status: status,
+                user_img: userImage
             },
         });
 
@@ -39,7 +41,7 @@ const createUser = async (req, res) => {
         return res.status(201).json(userWithoutPassword);
     } catch (error) {
         console.log(error)
-        return res.status(500).json({ error: "Erro ao criar usuário." });
+        return res.status(500).json({ error: `Erro ao criar usuário. ${error}` });
     }
 };
 
@@ -77,7 +79,6 @@ const loginUser = async (req, res) => {
         if (!isPasswordValid) {
             return res.status(401).json({ error: "E-mail ou senha inválidos." });
         }
-
         // Retorne o usuário, sem a senha
         const { password: _, ...userWithoutPassword } = user; // Remove a senha da resposta
         return res.status(200).json(userWithoutPassword);
@@ -87,10 +88,30 @@ const loginUser = async (req, res) => {
     }
 };
 
+const checkFirstLogin = async (req, res) => {
+    console.log("Received request at /check-first-login");
+    try {
+        const users = await prisma.user.findMany();
+        console.log("Quantidade de usuários encontrados:", users.length);
+
+        // Fornece uma informação clara sobre a situação dos usuários
+        if (users.length === 0) {
+            return res.json({ needsRegistration: true }); // Indica ao front-end que o registro é necessário
+        }
+
+        return res.json({ needsRegistration: false }); // Indica ao front-end que pode fazer login
+    } catch (error) {
+        console.error("Erro ao verificar usuários:", error);
+        return res.status(500).json({ error: "Erro ao verificar usuários." });
+    }
+};
+
+
 
 module.exports = {
     createUser,
     getAllUsers,
     loginUser, // Adicione esta linha
+    checkFirstLogin,
 };
 

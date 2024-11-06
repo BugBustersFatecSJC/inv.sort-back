@@ -2,19 +2,24 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 const createCategory = async (req, res) => {
-    const { category_name } = req.body;
+    const { category_name } = req.body
+    const categoryImage = req.file ? `/uploads/${req.file.filename}` : null
 
     try {
-        const catName = await prisma.category.create({
+        console.log(req.headers)
+
+        const category = await prisma.category.create({
             data: {
-                category_name
+                category_name: category_name,
+                category_image: categoryImage
             },
-        });
-        res.status(201).json(catName);
+        })
+        res.status(201).json(category)
     } catch (error) {
-        res.status(400).json({error: "Erro ao criar categoria"});
+        console.error(error)
+        res.status(400).json({ error: "Erro ao criar categoria" })
     }
-};
+}
 
 const getAllCategories = async (req, res) => {
     try {
@@ -25,22 +30,65 @@ const getAllCategories = async (req, res) => {
     }
 }
 
-const updateCategory = async (req, res) => {
+const filterCategories = async (req, res) => {
+    const { quantity, localId, createdDate, orderByQuantity } = req.query;
+
     try {
-        const id = parseInt(req.params.category_id);
-        const { category_name } = req.body;
-        const categoryUpdate = await prisma.category.update({
-            where: { category_id: id },
-            data: {
-                category_name
-            },
+        const filters = {};
+
+        if (localId) {
+            filters.local_id = parseInt(localId);
+        }
+
+        if (createdDate) {
+            filters.created_at = new Date(createdDate);
+        }
+
+        const filteredCategories = await prisma.category.findMany({
+            where: filters,
+            include: {
+                products: true
+            }
         });
-        res.status(200).json(categoryUpdate);
-    }
-    catch (error) {
-        res.status(400).json({error: "Erro ao atualizar a categoria"});
+
+        let categoriesWithProductCount = filteredCategories.filter(category => {
+            const productCount = category.products.length;
+            return quantity ? productCount >= parseInt(quantity) : true;
+        });
+
+        if (orderByQuantity === 'asc' || orderByQuantity === 'desc') {
+            categoriesWithProductCount = categoriesWithProductCount.sort((a, b) => {
+                return orderByQuantity === 'asc' ? a.products.length - b.products.length : b.products.length - a.products.length;
+            });
+        }
+
+        return res.status(200).json(categoriesWithProductCount);
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({ error: "Erro ao filtrar categorias." });
     }
 }
+
+const updateCategory = async (req, res) => {
+    try {
+        const id = parseInt(req.params.category_id)
+        const { category_name } = req.body
+        const categoryImage = req.file ? `/uploads/${req.file.filename}` : null
+
+        const updatedCategory = await prisma.category.update({
+            where: { category_id: id },
+            data: {
+                category_name,
+                category_image: categoryImage
+            },
+        })
+        res.status(200).json(updatedCategory);
+    } catch (error) {
+        console.error(error)
+        res.status(400).json({ error: "Erro ao atualizar a categoria" })
+    }
+}
+
 const deleteCategory = async (req, res) => {
     try {
         const id = parseInt(req.params.category_id)
@@ -58,5 +106,6 @@ module.exports = {
     createCategory,
     getAllCategories,
     updateCategory,
-    deleteCategory
+    deleteCategory,
+    filterCategories
 };

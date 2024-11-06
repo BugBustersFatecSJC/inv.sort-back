@@ -7,12 +7,14 @@ const getAllProducts = async (req, res) => {
             include: {
                 category: true,
                 supplier: true,
-                unit: true
+                productUnit: true
             }
         });
         res.json(prod);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ error: "Erro ao buscar produtos. "});
+    
     }
 }
 
@@ -26,7 +28,7 @@ const getProductsbyId = async (req, res) => {
             include: {
                 category: true,
                 supplier: true,
-                unit: true
+                productUnit: true
             }
         })
         res.status(201).json(findProduct)
@@ -36,53 +38,126 @@ const getProductsbyId = async (req, res) => {
     }
 }
 
-const createProduct = async (req, res) => {
-    const { product_name, description, category_id, supplier_id, is_perishable, unit_id } = req.body;
+const createProduct = async (req, res, next) => {
+    const { 
+        product_name, 
+        description, 
+        product_img, 
+        category_id, 
+        product_stock,
+        product_stock_min,
+        quantity_max, 
+        prod_brand, 
+        prod_model, 
+        supplier_id, 
+        unit_id, 
+        is_perishable, 
+        prod_cost_value, 
+        prod_sell_value 
+    } = req.body;
 
+    const productImage = req.file ? `/uploads/${req.file.filename}` : null;
+    
+    const categoryIdInt = Number(category_id);
+    const supplierIdInt = Number(supplier_id);
+    const unitIdInt = Number(unit_id);
+    const isPerishableBool = Boolean(is_perishable);
+    const costNumber = Number(prod_cost_value);
+    const sellNumber = Number(prod_sell_value);
     try {
-        const createProd = await prisma.product.create({
+        const newProduct = await prisma.product.create({
             data: {
+                product_stock,    
+                product_stock_min, 
+                quantity_max, 
                 product_name,
                 description,
-                category_id,
-                supplier_id,
-                is_perishable,
-                unit_id
+                product_img,
+                category_id: categoryIdInt,
+                prod_brand,
+                prod_model,
+                supplier_id: supplierIdInt,
+                unit_id: unitIdInt,
+                is_perishable: isPerishableBool,
+                prod_cost_value: costNumber,
+                prod_sell_value: sellNumber,
+                product_img: productImage
             },
             include: {
-                category: true,
-                supplier: true,
-                unit: true
+                category: true,   
+                supplier: true,    
+                productUnit: true,        
+                batches: true,     
             }
         });
-        res.status(201).json(createProd);
+      
+        req.body.product_id = newProduct.product_id;
+        next();
+        res.status(201).json(newProduct);
     } catch (error) {
-        res.status(400).json({error: "Erro ao criar produto"});
+      console.error(error);
+      res.status(400).json({ error: "Erro ao criar produto" });       
     }
-}
+};
 
 const updateProduct = async (req, res) => {
     try {
+        console.log(req.body);
         const id = parseInt(req.params.product_id);
-        const { product_name, description, category_id, supplier_id, is_perishable, unit_id, created_at } = req.body;
-        const updateProd = await prisma.product.update({
+        const { 
+            product_name, 
+            description, 
+            category_id, 
+            supplier_id, 
+            is_perishable, 
+            unit_id, 
+            created_at,
+            product_stock,    
+            product_stock_min,
+            quantity_max 
+        } = req.body;
+
+        const intCategoryId = Number(category_id)
+        const intSupplier = Number(supplier_id)
+        const boolIsPerishable = Boolean(is_perishable)
+        const intUnit = Number(unit_id)
+        const updatedProduct = await prisma.product.update({
             where: { product_id: id },
             data: {
                 product_name,
                 description,
-                category_id,
-                supplier_id,
-                is_perishable,
-                unit_id,
+                category_id: intCategoryId,
+                product_stock,    
+                product_stock_min,
+                quantity_max,
+                supplier_id: intSupplier,
+                is_perishable: boolIsPerishable,
+                unit_id: intUnit,
                 created_at
             },
+            select: {
+                product_id: true, 
+                product_name: true,
+                description: true,
+                product_stock: true,    
+                product_stock_min: true,
+                quantity_max: true,
+                category_id: true,
+                supplier_id: true,
+                is_perishable: true,
+                unit_id: true,
+                created_at: true
+            }
         });
-        res.status(200).json(updateProd);
+
+        res.status(200).json(updatedProduct);
+        req.body.product_id = updatedProduct.product_id;
+
+    } catch (error) {
+        console.error("Erro ao atualizar produto:", error);
+        res.status(400).json({ error: "Erro ao atualizar produto" });
     }
-    catch (error) {
-        res.status(400).json({error: "Erro ao atualizar produto"});
-    }
-}
+};
 
 const deleteProduct = async (req, res) => {
     try {
@@ -97,10 +172,42 @@ const deleteProduct = async (req, res) => {
     }
 }
 
+// Método para obter todos os lotes
+const getAllBatches = async (req, res) => {
+    try {
+        const batches = await prisma.batch.findMany();
+        res.json(batches);
+    } catch (error) {
+        res.status(500).json({ error: "Erro ao buscar lotes." });
+    }
+}
+
+const getProductsByCategory = async (req, res) => {
+    const { category_id } = req.params;
+  
+    try {
+      const products = await prisma.product.findMany({
+        where: {
+          category_id: parseInt(category_id),
+        },
+        include: {
+          category: true,
+          supplier: true,
+          productUnit: true,
+        },
+      });
+      res.status(200).json(products);
+    } catch (error) {
+      res.status(500).json({ error: "Erro ao buscar produtos por categoria" });
+    }
+}
+
 module.exports = {
     getAllProducts,
     createProduct,
     updateProduct,
     deleteProduct,
-    getProductsbyId
+    getProductsbyId,  
+    getAllBatches,
+    getProductsByCategory
 };
