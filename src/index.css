@@ -1,30 +1,87 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=VT323&display=swap');
 @import url('./hover.css');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.poppins-regular {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
 
+.poppins-medium {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.poppins-semibold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+} 
+.poppins-bold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+} 
+::-webkit-scrollbar {
+  width: 10px;
+  height: 3px;}
+  ::-webkit-scrollbar-track {
+      background: #6B3710;
+      border: 4px solid transparent;
+      background-clip: content-box;
+      
+  }
+  ::-webkit-scrollbar-thumb {
+      background: #6B3710;
+      margin-top:50px;
+      margin-bottom: 50px;
+      border: 1.5px solid #F4BD76;
+      border-radius: 1px;}
+  
+  
+      ::-webkit-scrollbar-thumb:horizontal {
+          background: #6B3710;
+          margin-top:50px;
+          margin-bottom: 50px;
+          border: 0.5px solid #F4BD76;
+          border-radius: 1px;}
+      
 :root {
-  --main-color: #DDA059;
+  --main-color: rgb(255,195,118);
+  --main-border: linear-gradient(0deg, rgba(180,81,5,1) 50%, rgba(107,55,16,1) 50%);
   --secondary-color: #3E1A00;
   --tertiary-color: #F8B971;
   --quarternary-color: #B45105;
   --quinteral-color: #BF823C;
   --alt-color: #6B3710;
   --alt-color-2: #FFC376;
-  --alt-color-3 : #D87B26;
-  --alt-color-4 : #FFCB8F;
-  --alt-color-5 : #3E1900;
-  --main-black-color: #121212;
+  --alt-color-3: #D87B26;
+  --alt-color-4: #FFCB8F;
+  --alt-color-5: #3E1900;
+  --alt-color-6: #f8b55e;
+  --main-black-color: #121212; 
+
 }
 
-
+body{
+  scroll-behavior: smooth;
+  
+}
 * {
   margin: 0;
   padding: 0;
+ 
+ 
 }
-
+.border-main {
+  background: rgb(180,81,5);
+background: linear-gradient(0deg, rgba(180,81,5,1) 50%, rgba(107,55,16,1) 50%);
+}
 body {
   font-family: 'Montserrat', sans-serif;
   margin: 0;
@@ -86,11 +143,15 @@ code {
   background-color: var(--alt-color-5);
 }
 
+.alt-color-6-bg {
+  background-color: var(--alt-color-6);
+}
+
 .main-color {
   color: var(--main-color);
 }
 
-.secondary-colo {
+.secondary-color {
   color: var(--secondary-color);
 }
 
@@ -124,4 +185,65 @@ code {
 
 .alt-color-4 {
   color: var(--alt-color-4);
+}
+
+.alt-color-5 {
+  color: var(--alt-color-5);
+}
+
+.recharts-responsive-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100%; 
+  
+  
+}
+.recharts-retangle {
+  margin: 10px!important;
+  padding: 10px !important; ;
+}
+
+.ps-menu-button {
+
+  color: var(--secondary-color);
+  margin-bottom: 20px;
+  width: 100%!important;
+  max-width: 16rem!important;
+   
+ }
+
+
+.ps-sidebar-container{
+  background-color: var(--alt-color)!important;
+ width: 100%!important;
+ max-width: 16rem!important;
+}
+.ps-sidebar-root{
+  margin: 0!important;
+  padding: 0!important;
+  border: 0!important;
+  outline: 0!important;
+ 
+}
+.ps-menu-root{
+  max-width: 16rem!important;
+}
+.ps-menu-button:hover {
+  
+  
+  transition: 0.2s;
+}
+.ps-menu-label-css
+.ps-menu-button:hover #carrinho{
+  display: none;
+  
+}
+
+.ativo{
+  width: max-content;
+  height: 3rem;
+  margin-right: 12px;
+  background-color: var(--main-color);
+
 }

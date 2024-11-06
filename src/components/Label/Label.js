@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const Label2 = ({ data, colors  }) => {
     
     
@@ -24,3 +25,4 @@ const Label2 = ({ data, colors  }) => {
         ;
 
 export default Label2;
+
