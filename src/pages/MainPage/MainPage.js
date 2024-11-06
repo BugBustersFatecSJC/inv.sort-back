@@ -11,11 +11,11 @@ function MainPage(props) {
   };
   
   return (
-    <div className='flex main-color-bg  '>
+    <div className='flex main-color-bg h-[100vh]  '>
       
       <Sidebari />
 
-      <div className='w-[100%]  flex flex-col items-center'>
+      <div className='w-[100%]  flex flex-col items-center '>
       
         <div className='flex flex-col w-full items-end justify-start p-4'>
           <UserProfileIcon />
