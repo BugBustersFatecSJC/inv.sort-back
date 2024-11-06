@@ -1,51 +1,49 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
+const valorAntigo = async (req, res) => {
+  const data = new Date();
+  const ano = data.getFullYear();
+  const result = await prisma.$queryRaw`select min(year(movement_date)) as ano from db.StockMovement where movement_type = 'venda' group by year(movement_date) limit 1;`;
+  const anos =[]
+  for (let i = result[0].ano; i <= ano; i++) {
+    anos.push(i.toString());
+  }
+  if (anos) {
+    return res.status(200).json(anos.reverse());
+  }
+  return res.status(404).json({ message: 'Nenhum registro encontrado' });
+
+}
 const sectorYear = async (req, res) => {
     prisma.$connect()
-   
+
   const data = new Date();
   const dia = data.getDate();
   let mes = data.getMonth() + 1;
-  let ano = req.query.ano;
-  let anoatual = data.getFullYear();
+  let ano = req.query.ano|| data.getFullYear();
   const result = [];
-  const totalq = await prisma.$queryRaw`SELECT  SUM(quantity) as value,year(movement_date) AS ano FROM db.StockMovement WHERE movement_type = 'venda' and quantity is not null and category_id is not null group by YEAR(movement_date);`; 
-  const total ={}
-  totalq.forEach(element => 
-      total[element.ano] = element.value
-  )
-  
+  const total = await prisma.$queryRaw`SELECT  SUM(quantity) AS total_difference FROM StockMovement WHERE movement_type = 'venda' AND YEAR(movement_date) = ${ano} and quantity is not null and category_id is not null ;`; 
+
 
     console.log("total", total);
     const results = await prisma.$queryRaw`
       SELECT 
-        category_name as name,SUM(quantity) as value,year(movement_date) AS ano
+        category_name,SUM(quantity) as total_difference
       FROM StockMovement inner join Category on StockMovement.category_id = Category.category_id
-      WHERE movement_type = 'venda'  group by year(movement_date),category_name ;
+      WHERE movement_type = 'VENDA' AND  YEAR(movement_date) = ${ano} group by Category.category_name; ;
     `;
     console.log(results);
-    let top5 ={}
-    results.forEach(element => {
-      if (top5[element.ano] === undefined) {
-        top5[element.ano] = [];
-        };
-        element.value>0? top5[element.ano].push(element):null})
-    Object.keys(top5).forEach(element => {
-      let counter = 100
-      
-      
-      top5[element].forEach((el,index) => {
-        counter = counter - (el.value/total[element]*100).toFixed(0)
-        el['%'] = `${((el.value/total[element])*100).toFixed(0)}%`;
-        
-        
-      }
-      )
-      counter > 0 ?top5[element].push({'name':'Outros','value': counter,'ano':element,'%':`${counter}%`}):null
-    });
+    let top5 = results.sort((a, b) => b.total_difference - a.total_difference).slice(0, 5); 
     console.log("top5", top5);
-    
+    let counter =100;
+    top5.forEach(element => {
+      element['%'] = `${((element.total_difference / total[0].total_difference)*100).toFixed(0)}%`;
+      element.total_difference = parseFloat(((element.total_difference / total[0].total_difference)*100).toFixed(2));
+      counter = counter - element.total_difference;
+    });
+   counter > 0 ? top5.push({category_name:'Outros',total_difference:counter.toFixed(2),'%':`${counter.toFixed(0)}%`}) : null;
+    console.log("top5", top5);
    
   
   
@@ -57,6 +55,5 @@ const sectorYear = async (req, res) => {
 
 
 module.exports = {
-    sectorYear    
+    sectorYear ,valorAntigo   
 }
-
