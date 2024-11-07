@@ -9,7 +9,7 @@ const Label2 = ({ data, colors  }) => {
         <>
             {
             
-            data.map((element,index) => {
+            data.map((element,index) => (
                 
                 
                 <div key={index} className='flex m-2 flex-row  justify-center'> 
@@ -19,7 +19,7 @@ const Label2 = ({ data, colors  }) => {
                 </div>
            
         
-        })}
+        ))}
         </>
     )}
         ;
