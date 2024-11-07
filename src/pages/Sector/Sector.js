@@ -6,6 +6,7 @@ import SectorModal from '../../components/SectorModal/SectorModal';
 import EditSectorModal from '../../components/SectorModal/EditSectorModal'; // Importar o componente para editar setores
 import EditLocalModal from '../../components/SectorModal/EditLocalModal'; // Importar o componente para editar locais
 import Loading from '../../components/Loading/Loading';
+import ModalDelete from '../../components/ModalDelete/ModalDelete';
 
 function LocalPage() {
   const [loading, setLoading] = useState(true);
@@ -16,7 +17,9 @@ function LocalPage() {
   const [showEditSectorModal, setShowEditSectorModal] = useState(false);
   const [showEditLocalModal, setShowEditLocalModal] = useState(false);
   const [currentLocalId, setCurrentLocalId] = useState(null);
-  const [currentSector, setCurrentSector] = useState(null); // Setor atual para edição
+  const [currentSector, setCurrentSector] = useState(null);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false); // Setor atual para edição
+
 
   const fetchLocals = async () => {
     try {
@@ -46,6 +49,14 @@ function LocalPage() {
 
   const addLocal = (newLocal) => {
     setLocals((prevLocals) => [...prevLocals, newLocal]);
+  };
+
+  const updateLocal = (updatedLocal) => {
+    setLocals((prevLocals) =>
+      prevLocals.map((local) =>
+        local.local_id === updatedLocal.local_id ? updatedLocal : local
+      )
+    );
   };
 
   const addSector = (newSector) => {
@@ -84,6 +95,25 @@ function LocalPage() {
     setShowEditLocalModal(true);
   };
 
+  const handleLocalDelete = async (e) => {
+    e.preventDefault();
+    try {
+      await api.delete(`/local/${currentLocalId}`)
+      .then(deleteLocal(currentLocalId))
+      setOpenDeleteModal(false)
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  const openDeleteModalLocal = (local) => {
+    setCurrentLocalId(local.local_id);
+    setOpenDeleteModal(true)
+  };
+  const deleteLocal = (localId) => {
+    setLocals((prevLocals) => prevLocals.filter(local => local.local_id !== localId))
+ }
+
+
   return (
     <MainPage title="Gestão de Locais e Setores">
       {loading ? (
@@ -102,7 +132,7 @@ function LocalPage() {
               <h3>Local: {local.local_name}</h3>
               <p>Endereço: {local.local_address}</p>
               <button onClick={() => openEditLocalModal(local)} className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Editar Local</button>
-
+              <button onClick={() => openDeleteModalLocal(local)} className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Excluir Local</button>
               <h4>Setores:</h4>
               <ul>
                 {sectors
@@ -128,7 +158,9 @@ function LocalPage() {
       {showLocalModal && <LocalModal onLocalAdded={addLocal} onClose={() => setShowLocalModal(false)} />}
       {showSectorModal && <SectorModal localId={currentLocalId} onSectorAdded={addSector} onClose={() => setShowSectorModal(false)} />}
       {showEditSectorModal && <EditSectorModal sector={currentSector} onSectorUpdated={updateSector} onClose={() => setShowEditSectorModal(false)} />}
-      {showEditLocalModal && <EditLocalModal localId={currentLocalId} onClose={() => setShowEditLocalModal(false)} />}
+      {showEditLocalModal && <EditLocalModal localId={currentLocalId} onLocalUpdated={updateLocal} onClose={() => setShowEditLocalModal(false)} />}
+      {openDeleteModal && <ModalDelete title="Deseja excluir o local?" handleSubmit={handleLocalDelete} closeModal={() => setOpenDeleteModal(false)}><div className="form-control mb-4">
+          </div></ModalDelete>}
     </MainPage>
   );
 }
