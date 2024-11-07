@@ -9,6 +9,7 @@ const SectorButton = ({ selectedValue, setSelectedValue},data) => {
       name="visualização"
       id="filtrodrop"
        // Set the value of the select element
+       
     >
       {Object.keys(data).forEach((element) => {
         return (
