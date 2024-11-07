@@ -104,13 +104,47 @@ const checkFirstLogin = async (req, res) => {
         return res.status(500).json({ error: "Erro ao verificar usuários." });
     }
 };
+const updateUserRole = async (req, res) => {
+    const { user_id } = req.params;
+    const { role } = req.body;
+  
+    console.log('Tentando atualizar role para usuário ID:', user_id, 'para role:', role);
+  
+    try {
+      const updatedUser = await prisma.user.update({
+        where: { user_id: parseInt(user_id) },
+        data: { role },
+      });
+      console.log('Usuário atualizado:', updatedUser);
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      console.error('Erro ao atualizar role do usuário:', error);
+      res.status(500).json({ error: "Erro ao atualizar role do usuário." });
+    }
+};
+const deleteUser = async (req, res) => {
+    const { user_id } = req.params;
+    try {
+      await prisma.user.delete({
+        where: { user_id: parseInt(user_id) },
+      });
+      res.status(200).json({ message: "User deleted successfully." });
+    } catch (error) {
+      res.status(500).json({ error: "Error deleting user." });
+    }
+};
+  
+
+
 
 
 
 module.exports = {
     createUser,
     getAllUsers,
-    loginUser, // Adicione esta linha
+    loginUser,
     checkFirstLogin,
+    updateUserRole,
+    deleteUser
 };
 
