@@ -89,21 +89,23 @@ const loginUser = async (req, res) => {
 };
 
 const checkFirstLogin = async (req, res) => {
+    console.log("Requisição recebida: /check-login");
     try {
-        const users = await prisma.user.findMany();
-        console.log("Quantidade de usuários encontrados:", users.length);
-
-        // Fornece uma informação clara sobre a situação dos usuários
-        if (users.length === 0) {
-            return res.json({ needsRegistration: true }); // Indica ao front-end que o registro é necessário
-        }
-
-        return res.json({ needsRegistration: false }); // Indica ao front-end que pode fazer login
+      const users = await prisma.user.findMany();
+      console.log("Quantidade de usuários encontrados:", users.length);
+  
+      if (users.length === 0) {
+          console.log("Necessário fazer registro: true");
+          return res.json({ needsRegistration: true });
+      }
+  
+      console.log("Necessário fazer registro: false");
+      return res.json({ needsRegistration: false }); 
     } catch (error) {
-        console.error("Erro ao verificar usuários:", error);
-        return res.status(500).json({ error: "Erro ao verificar usuários." });
+      console.error("Erro ao verificar usuários:", error);
+      return res.status(500).json({ error: "Erro ao verificar usuários." });
     }
-};
+  };
 const updateUserRole = async (req, res) => {
     const { user_id } = req.params;
     const { role } = req.body;
