@@ -13,13 +13,17 @@ const localController = require('./controllers/localController');
 const sectorController = require('./controllers/sectorController'); 
 const batchController = require('./controllers/batchController');
 const auditLogMiddleware = require('./controllers/auditController');
-const sectorchartController = require('./controllers/sectorchartController')
+const sectorchartController = require('./controllers/sectorchartController');
+const cardsController = require('./controllers/cardsController');
+
 
 //Inicio das Rotas
-
+// Rotas de Cards
+router.get('/cards', cardsController.cardsYear);
 // Rotas para login e filtros
 router.get('/check-login', userController.checkFirstLogin);
 router.get('/sectoranual', sectorchartController.sectorYear);
+router.get('/valorantigo',sectorchartController.valorAntigo);
 router.get('/mensal', filterController.filterMonth);
 router.get('/trimestral', filterController.filterTrimester);
 router.get('/check-first-login', userController.checkFirstLogin);

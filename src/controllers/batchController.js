@@ -70,9 +70,9 @@ const deleteBatch = async (req, res) => {
         const deleteBat = await prisma.batch.delete({
             where: { batch_id: id },
         });
-        res.status(200).json(deleteBat);
+        return res.status(200).json(deleteBat);
     } catch (error) {
-        res.status(400).json({ error: "Erro ao deletar o lote" });
+        return res.status(400).json({ error: "Erro ao deletar o lote" });
     }
 };
 
