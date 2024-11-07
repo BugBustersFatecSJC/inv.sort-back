@@ -9,20 +9,21 @@ const UserPage = () => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
   const fetchUsers = () => {
     api.get('/users') 
       .then(response => {
         setUsers(response.data);
+        console.log("Usuários carregados:", response.data);
         setUser(null);
       })
       .catch(() => {
         setError('Erro ao buscar usuários');
       });
   };
+
+  useEffect(() => {
+    fetchUsers(); 
+  }, []); 
 
   const handleSearch = (query) => {
     const foundUser = users.find(u => u.username.toLowerCase() === query.toLowerCase());
@@ -34,7 +35,7 @@ const UserPage = () => {
       setError('');
     } else {
       setUser(null);
-      fetchUsers();
+      fetchUsers(); 
       setError('Usuário não encontrado!');
     }
   };
