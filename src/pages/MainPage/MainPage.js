@@ -18,7 +18,7 @@ function MainPage(props) {
   }
 
   return (
-    <div className='flex main-color-bg h-[100vh]'>
+    <div className='flex main-color-bg min-height-[100vh]'>
       <Sidebari role={role} content={<CategoryButtons />} />
 
       <div className='w-[100%] flex flex-col items-center'>

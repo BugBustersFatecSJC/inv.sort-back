@@ -47,7 +47,7 @@ function Sidebari({ role, content }) {
             alt=""
           />
         </div>
-        {content}
+        
         <div className="mt-[40px] w-full flex justify-center">
           <Sidebar 
             className='text-center m-auto' 
