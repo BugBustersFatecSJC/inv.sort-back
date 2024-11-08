@@ -27,12 +27,18 @@ Este documento fornece instruções para iniciar o backend do projeto **Inv.Sort
 - **port**: porta do banco de dados (ex.: `3306` para MySQL)
 - **database**: nome do banco de dados
 
-3. **Iniciar o Servidor com Nodemon**
+3. **Executar Migração do Banco de Dados**
+
+   Após configurar o arquivo .env, execute o seguinte comando para criar as tabelas necessárias no banco de dados:
+
+   ```bash
+   npx prisma migrate dev --name init
+4. **Iniciar o Servidor com Nodemon**
 
    Após a instalação, utilize o comando abaixo para iniciar o servidor com Nodemon, permitindo que ele reinicie automaticamente a cada alteração de código:
 
    ```bash
    npx nodemon src/server
-4. **Verificar o Funcionamento**
+5. **Verificar o Funcionamento**
 
     O backend geralmente estará disponível em http://localhost:3000 (ou outra porta, dependendo da configuração). Abra esse endereço no navegador simultaneamente ao frontend para visualizar a aplicação.
