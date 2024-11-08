@@ -12,11 +12,11 @@ function UserProfileIcon() {
   const jsonUser = JSON.parse(user)
   return (
     <div className='flex items-center'>
-      <div className='me-3'> 
-        <p className='font-pixel text-2xl'>
+      <div className='me-3 flex flex-col justify-end text-end mr-4'> 
+        <p className='poppins-medium text-xl'>
           {jsonUser.username}
         </p>
-        <p className='font-pixel text-lg'>
+        <p className='poppins-medium '>
           {jsonUser.role}
         </p>
       </div>

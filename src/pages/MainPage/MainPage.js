@@ -11,7 +11,7 @@ function MainPage(props) {
   };
   
   return (
-    <div className='flex main-color-bg h-[100vh]  '>
+    <div className='flex main-color-bg min-h-[100vh]  '>
       
       <Sidebari />
 
@@ -23,7 +23,7 @@ function MainPage(props) {
         
         <div className='w-[90%]  mx-auto flex flex-col'>
           <div className='w-full flex justify-start'>
-            <h1 className='text-4xl font-pixel'>{props.title}</h1>
+            <h1 className='text-4xl poppins-semibold'>{props.title}</h1>
           </div>
 
           <main className=''>

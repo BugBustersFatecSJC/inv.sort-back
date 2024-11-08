@@ -83,7 +83,7 @@ const Sectorchart = () => {
           dataKey="total_difference"
           stroke="#B45105"
           strokeWidth={2.5}
-          paddingAngle={6} 
+          
           
         >
          

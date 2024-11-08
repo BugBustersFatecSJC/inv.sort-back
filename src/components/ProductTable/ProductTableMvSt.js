@@ -122,50 +122,52 @@ function ProductTableMvSt() {
 
   // Renderizando a tabela
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto ">
       {/* Barra de pesquisa */}
       <SearchBar onSearch={handleSearch} />
 
-      <table className="min-w-full table-auto border-collapse bg-[#6B3710] text-white">
-        <thead>
-          <tr className="bg-[#6B3710]">
-            <th className="px-4 py-2 border">Produto</th>
-            <th className="px-4 py-2 border">Quantidade</th>
-            <th className="px-4 py-2 border">Lote</th>
-            <th className="px-4 py-2 border">Tipo de Movimentação</th>
-            <th className="px-4 py-2 border">Usuário</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentMovements.map((movement, index) => (
-            <tr
-              key={movement.movement_id}
-              className={index % 2 === 0 ? "bg-[#F5A66D]" : "bg-[#EA9457]"}
-              onClick={() => openModal(movement)}
-            >
-              <td className="border px-4 py-2">{movement.product ? movement.product.product_name : "N/A"}</td>
-              <td className="border px-4 py-2">{movement.quantity}</td>
-              <td className="border px-4 py-2">{movement.batch ? movement.batch.batch_id : "N/A"}</td>
-              <td className="border px-4 py-2">{movement.movement_type}</td>
-              <td className="border px-4 py-2">{movement.user ? movement.user.username : "N/A"}</td>
+      
+      <div className="max-h-[450px] overflow-y-auto overflow-x-scroll ">
+        <table className="w-full mx-auto mt-4 b-4 table-auto border-collapse bg-[#6B3710] text-[#6B3710]">
+          <thead>
+            <tr className="bg-[#6B3710] text-white">
+              <th className="px-4 py-2 border">Produto</th>
+              <th className="px-4 py-2 border">Quantidade</th>
+              <th className="px-4 py-2 border">Lote</th>
+              <th className="px-4 py-2 border">Tipo de Movimentação</th>
+              <th className="px-4 py-2 border">Usuário</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-
+          </thead>
+          <tbody>
+            {currentMovements.map((movement, index) => (
+              <tr
+                key={movement.movement_id}
+                className={index % 2 === 0 ? "bg-[#F5A66D]" : "bg-[#EA9457]"}
+                onClick={() => openModal(movement)}
+              >
+                <td >{movement.product ? movement.product.product_name : "N/A"}</td>
+                <td >{movement.quantity}</td>
+                <td >{movement.batch ? movement.batch.batch_id : "N/A"}</td>
+                <td >{movement.movement_type}</td>
+                <td >{movement.user ? movement.user.username : "N/A"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {/* Paginação */}
-      <div className="flex justify-center mt-4">
+      <div className="flex justify-center mt-8">
         <button
           onClick={goToPreviousPage}
-          className="bg-[#6B3710] text-white px-4 py-2 rounded-lg mr-2"
+          className="bg-[#6B3710] text-[#FFC376] poppins-medium px-4 py-2 rounded-lg mr-2"
           disabled={currentPage === 1}
         >
           Anterior
         </button>
-        <span className="text-white">{`Página ${currentPage} de ${Math.ceil(filteredMovements.length / itemsPerPage)}`}</span>
+        <span className="text-[#6B3710] content-center poppins-medium  align-middle mx-4">{`Página ${currentPage} de ${Math.ceil(filteredMovements.length / itemsPerPage)}`}</span>
         <button
           onClick={goToNextPage}
-          className="bg-[#6B3710] text-white px-4 py-2 rounded-lg ml-2"
+          className="bg-[#6B3710] text-[#FFC376]  poppins-medium px-4 py-2 rounded-lg ml-2"
           disabled={currentPage * itemsPerPage >= filteredMovements.length}
         >
           Próxima

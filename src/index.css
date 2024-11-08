@@ -41,7 +41,7 @@
       margin-top:50px;
       margin-bottom: 50px;
       border: 1.5px solid #F4BD76;
-      border-radius: 1px;}
+     }
   
   
       ::-webkit-scrollbar-thumb:horizontal {
@@ -190,6 +190,10 @@ code {
 .alt-color-5 {
   color: var(--alt-color-5);
 }
+::placeholder {
+  color:var(--main-color)!important;
+  opacity: 1; /* Firefox */
+}
 
 .recharts-responsive-container {
   display: flex;
@@ -246,4 +250,13 @@ code {
   margin-right: 12px;
   background-color: var(--main-color);
 
+}
+td{
+  border: 4px solid transparent;
+  margin: auto;
+  border: 2px solid var(--main-color);
+  padding: 8px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 650;
+  font-style: normal;
 }
