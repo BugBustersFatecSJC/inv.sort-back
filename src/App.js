@@ -51,7 +51,7 @@ function App() {
           <Route path="/sectors" element={<ProtectedRoute element={Sector} />} />
           <Route path="/suppliers" element={<ProtectedRoute element={Supplier} />} />
           <Route path="/profile" element={<ProtectedRoute element={UserProfile} />} />
-          <Route path="/buyandsell" element={<ProtectedRoute element={BuyAndSell}/>}/>
+          <Route path="/buyandsell/:id" element={<ProtectedRoute element={BuyAndSell}/>}/>
           <Route path="/cadastra-usuario" element={<ProtectedRoute element={UserRegister} />} />
 
         </Routes>
