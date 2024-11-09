@@ -53,7 +53,7 @@ function ProductTableMvSt() {
       setLoading(false);
     }
   };
-
+  
   // Usar useEffect para buscar os dados quando o componente for montado
   useEffect(() => {
     fetchStockMovements();
@@ -124,7 +124,7 @@ function ProductTableMvSt() {
   return (
     <div className="overflow-x-auto ">
       {/* Barra de pesquisa */}
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar handlesSearch={handleSearch} />
 
       
       <div className="max-h-[450px] overflow-y-auto overflow-x-scroll ">

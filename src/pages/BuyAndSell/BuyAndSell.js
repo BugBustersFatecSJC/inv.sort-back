@@ -14,9 +14,9 @@ function BuyAndSell() {
 
   return (
     <MainPage title="Compra e Venda">
-      <div className="flex bg-[rgb(255,195,118)] ">
+      <div className="flex bg-[rgb(255,195,118)]  ">
         {/* Conteúdo */}
-        <section className="border-0 border-[rgb(180,81,5)] h-full w-full shadow-sm shadow-inner">
+        <section className="border-0 border-[rgb(180,81,5)]    w-full shadow-sm shadow-inner">
           {/* Barra de pesquisa (componente que você pode personalizar se necessário) */}
           <ProductTable products={products} /> {/* Passando os produtos como prop para o ProductTable */}
 

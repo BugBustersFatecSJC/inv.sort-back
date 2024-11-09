@@ -1,13 +1,15 @@
 import React, { useState ,useEffect} from 'react';
 
-const SearchBar = ({ onSearch }) => {
+const SearchBar = ({handlesSearch}) => {
   const [query, setQuery] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  
   const handleSearch = () => {
-    onSearch(query);
+    handlesSearch(query);
   };
   useEffect(() => {
     
-    onSearch(query);
+    handlesSearch(query);
     
   }, [query]);
 

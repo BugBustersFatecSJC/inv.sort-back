@@ -11,7 +11,7 @@ function MainPage(props) {
   };
   
   return (
-    <div className='flex main-color-bg min-h-[100vh]  '>
+    <div className='flex main-color-bg min-h-[105vh]  '>
       
       <Sidebari />
 

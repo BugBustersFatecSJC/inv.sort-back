@@ -214,9 +214,8 @@ code {
   margin-bottom: 20px;
   width: 100%!important;
   max-width: 16rem!important;
-   
+   padding: 0%!important;
  }
-
 
 .ps-sidebar-container{
   background-color: var(--alt-color)!important;
