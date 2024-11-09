@@ -25,15 +25,15 @@ function Sidebari(props) {
     } else {
       setCollapsed(false);
     }
-  }, [windowWidth]);
+  }, [window.innerWidth]);
   const collapsedId = document.getElementById('collapse');
   return (
     <>
-    <div className={` flex ${windowWidth > 640 ? 'max-w-[14rem]' : windowWidth > 450 ? 'max-w-[4rem] ' : 'max-w-[0rem]' } bg-clip-border alt-color-bg   `}>
+    <div className={` flex bg-clip-border alt-color-bg   `}>
       
-      <div className='mb-8 justify-center self-center flex-col flex-wrap  w-full h-full  align-center text-center  py-4'>
+      <div className='mb-8 justify-center self-center flex-col flex-wrap   h-full  align-center text-center  py-4'>
         <div className='text-center self-center  align-middle flex justify-center'>
-          {windowWidth > 450 ? <img  src={'img/logo_invsort.svg'}className={`w-[50%] sm:w-[30%] ${windowWidth<450?'rounded-m outline-4 outline-[#3E1900] bg-[#3E1900]':''}  mt-4 sb-button z-10`}  onClick={() => {if (windowWidth > 640) {
+          {windowWidth > 450 ? <img  src={'img/logo_invsort.svg'} className={`w-[50%] sm:w-[30%] ${windowWidth<450?'rounded-m outline-4 outline-[#3E1900] bg-[#3E1900]':''}  mt-4 sb-button z-10`}  onClick={() => {if (windowWidth > 640) {
               setCollapsed(!collapsed);
               
             } else {
@@ -47,7 +47,7 @@ function Sidebari(props) {
         {props.content}
         <div className="mt-[40px] w-full flex justify-center"> 
        
-      <Sidebar  className='text-center m-auto '   onBackdropClick={() => setToggled(false)} toggled={toggled} breakPoint="always" 
+      <Sidebar  className='text-center m-auto w-full'   onBackdropClick={() => setToggled(false)} toggled={toggled} breakPoint="always" 
           >
       <Menu 
         menuItemStyles={{
@@ -83,7 +83,7 @@ function Sidebari(props) {
   <Watermark  className="bottom-0"/>
         
 </Sidebar>
-{windowWidth > 450 ? <Sidebar id='collapse' width='14rem' className='' collapsedWidth='4rem ' collapsed={!collapsed}>
+{windowWidth > 450 ? <Sidebar id='collapse' width='13.85rem'  collapsedWidth='4rem ' collapsed={!collapsed}>
 <Menu 
         menuItemStyles={{
           button: ({ level, active, disabled }) => {
@@ -105,7 +105,7 @@ function Sidebari(props) {
               
           ;},
         }}
-      className='mb-12 w-full' >
+      className='mb-12 w-full p-2' >
         
     <MenuItem className='MenuItem poppins-semibold ' title='Produtos' icon={<img id='carrinho' alt='produtos'   src="/images/grocery-store.png" />} component={<Link to="/products" />}>Produtos</MenuItem>
     <MenuItem className='MenuItem poppins-semibold ' title='Analise' icon={<img id='chart' className='' src="/images/pie-chart.png" />} component={<Link to="/analytics" />}>Análise </MenuItem>

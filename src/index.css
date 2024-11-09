@@ -204,7 +204,7 @@ code {
 .ps-menu-button {
 
   color: var(--secondary-color);
-  padding-left: 14px!important;
+  padding: 0!important;
   width: 100%!important;
   max-width: 16rem!important;
   
@@ -214,7 +214,8 @@ code {
 .ps-sidebar-container{
   background-color: var(--alt-color)!important;
  width: 100%!important;
- max-width: 16rem!important;
+
+ padding: 5px;
 }
 .ps-sidebar-root{
   margin: 0!important;
@@ -225,6 +226,9 @@ code {
 }
 .ps-menu-root{
   max-width: 16rem!important;
+}
+.MenuItem{
+  font-size: 15px;
 }
 .ps-menu-button:hover {
   

@@ -23,7 +23,7 @@ function ProductCategory(props) {
    * Criação dos quadrados dos produtos no inventário
    */
   const [products, setProducts] = useState([]) // Aqui, em vez de `squares`, use `products`
-
+  const [windowWidth,setWindowWidth] = useState(window.innerWidth)
   const fetchProducts = async () => {
     try {
       const response = await api.get('/products')
@@ -158,7 +158,16 @@ function ProductCategory(props) {
 
       fetchData()
     }, [])
+    useEffect(() => {
+      const handleResize = () => {
+        setWindowWidth(window.innerWidth)
+      }
 
+      window.addEventListener('resize', handleResize)
+      return () => {
+        window.removeEventListener('resize', handleResize)
+      }
+    })
     /**
      * Abre e fecha o modal de produtos
      */
@@ -394,11 +403,10 @@ function ProductCategory(props) {
     return (
       // Container da categoria
 
-    <div className='w-[49%] rounded bg-[#5F2E09] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] mt-4 h-[260px] py-5'>
-        <div className=' p-4 mx-4 flex relative'>
-          <div className={` p-4 transition-opacity duration-200 max-h-[100px] absolute inset-0 top-[80px] bg-[#5F2E09] z-30 flex justify-between  items-center justify-center ${!showCategoryProducts ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-          <div className="flex justify-between w-full">
-            <figure className='w-[5rem] h-[5rem] rounded-full alt-color-4-bg border-4 border-[#D87B26] shadow-[inset_-2px_3px_2px_4px_rgba(0,0,0,0.2)]'>
+        <div className='w-[100%] my-2 mx-auto g  bg-[#5F2E09] rounded-md hover:bg-[#3E1900] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] mt-1 h-[200px]  mx-4 flex relative'>
+          <div className={`  transition-opacity duration-200 rounded-md  w-full  bg-[#5F2E09] flex justify-center  items-center justify-center ${!showCategoryProducts ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+          <div className="flex flex-col justify-center flex-wrap w-full  "> 
+            <figure className='w-[4rem] mx-auto h-[4rem] rounded-full alt-color-4-bg border-4 border-[#D87B26] shadow-[inset_-2px_3px_2px_4px_rgba(0,0,0,0.2)]'>
               {props.categoryImage ? (
                 <img
                   src={`http://localhost:3001${props.categoryImage}`}
@@ -408,34 +416,32 @@ function ProductCategory(props) {
               ) : null}
             </figure>
             
-            <div className="flex flex-col w-[80%] h-[180px] justify-between ml-10">
-              <div>
-                <p className="my-2 poppins-semibold text-[28px]" style={{ color: "var(--tertiary-color)" }}>
+            <div className="flex flex-col w-[100%] h-full text-ellipsis text-wrap text-center justify-center mx-auto ">
+              
+                <p className={`my-2  mx-auto px-1 poppins-semibold  ${windowWidth > 450?'text-[15px]  ':'text-[13px]'} w-full  text-center`} style={{ color: "var(--tertiary-color)" }}>
                   {props.categoryName}
                 </p>
-                <p className="my-2 poppins-semibold text-[14px]" style={{ color: "var(--tertiary-color)" }}>
-                  {props.categoryName}
-                </p>
-              </div>
-              <div className="flex justify-between rounded-md w-[70%] font-pixel m">
-                <p className="cursor-pointer text-center" onClick={handleClickShow} style={{ color: "var(--tertiary-color)" }}>
+                
+              
+              <div className="flex justify-center rounded-md w-[100%] mt-4 mx-auto  poppins-medium mx-auto">
+                <p className="cursor-pointer text-center mx-2 flex flex-col justify-center w-8" onClick={handleClickShow} style={{ color: "var(--tertiary-color)" }}>
                   <i className="fa-solid fa-eye"></i>
-                  <span className="text-xs block mt-1">Visualizar</span>
+                  
                 </p>
-                <p className="cursor-pointer text-center" onClick={() => handleCategoryDelete(props.categoryKey)} style={{ color: "var(--tertiary-color)" }}>
+                <p className="cursor-pointer text-center mx-2 flex flex-col justify-center w-8" onClick={() => handleCategoryDelete(props.categoryKey)} style={{ color: "var(--tertiary-color)" }}>
                   <i className="fa-solid fa-trash"></i>
-                  <span className="text-xs block mt-1">Excluir</span>
+                  
                 </p>
-                <p className="cursor-pointer text-center" onClick={openCategoryModal} style={{ color: "var(--tertiary-color)" }}>
+                <p className="cursor-pointer text-center mx-2 flex flex-col justify-center w-8" onClick={openCategoryModal} style={{ color: "var(--tertiary-color)" }}>
                   <i className="fa-solid fa-pencil"></i>
-                  <span className="text-xs block mt-1">Editar</span>
+                  
                 </p>
               </div>
             </div>
 
 
             </div>
-          </div>
+     
             {/*
               Aqui ocorre a criação de cada quadrado, é obtido uma lista com todos os produtos
               que são mapeados, cada produto irá gerar um quadrado e cada quadrado terá sua tooltip           

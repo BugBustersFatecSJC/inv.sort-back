@@ -26,7 +26,7 @@ function MainPage(props) {
         
         <div className='w-[100%]  mx-auto flex flex-col'>
           <div className='w-full flex justify-start'>
-            <h1 className='text-4xl ml-8 poppins-semibold'>{props.title}</h1>
+            <h1 className='text-xl md:text-2xg lg:text-4xg ml-1 sm:ml-3 md:ml-6 lg:ml-8 poppins-semibold'>{props.title}</h1>
           </div>
 
           <main className=' mb-8'>
