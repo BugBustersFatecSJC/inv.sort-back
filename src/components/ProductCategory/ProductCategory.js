@@ -176,6 +176,9 @@ function ProductCategory(props) {
       setProductBrand('')
       setProductModel('')
       setProductImage(null)
+      setProductStock('')
+      setProductStockMin('')
+      setQuantityMax('')
       setIsModalOpen(false)
     }
 
@@ -295,6 +298,7 @@ function ProductCategory(props) {
    */
   const [isProdEditModalOpen, setIsProdEditModalOpen] = useState(false)
   const [currentProduct, setCurrentProduct] = useState(null)
+  const [tooltipKey, setTooltipKey] = useState(0)
 
   const openProdEditModal = (product) => {
     setCurrentProduct(product)
@@ -359,10 +363,10 @@ function ProductCategory(props) {
                 },
             })
             .then((response) => {
-                console.log(response);
-                props.onProductUpdated(currentProduct.product_id, response.data)
-                flashInfo()
-                closeProdEditModal()
+              setTooltipKey((prevKey) => prevKey + 1)
+              props.onProductUpdated(currentProduct.product_id, response.data)
+              flashInfo()
+              closeProdEditModal()
             });
     } catch (err) {
         console.log(err)
@@ -480,7 +484,7 @@ function ProductCategory(props) {
               const unit = units.find((u) => u.unit_id === product.unit_id)?.unit_type || 'N/A'
               return (
                 <Tooltip
-                key={index}
+                key={`${product.product_id}-${tooltipKey}`}
                 html={(
                   <div className={styles.myTippyTheme}>
                     <strong>Nome:</strong> {product.product_name}<br />
