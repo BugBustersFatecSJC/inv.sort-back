@@ -1,5 +1,4 @@
 import React from 'react'
-
 import { useState, useEffect } from 'react'
 import api from '../../services/api'
 
@@ -40,7 +39,13 @@ function DropdownButtons({ options = [],type, label, onChange, disabled = false,
           <option key={option[`${type}_id`]} value={option[`${type}_id`]}>
             {option[`${type}_name`]}
           </option>
-        </>))}
+          </>
+        ))}
+      </select>
+    </div>
+  )
+}
+
 
       
      
