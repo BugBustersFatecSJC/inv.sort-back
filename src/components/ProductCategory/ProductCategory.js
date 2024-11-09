@@ -393,6 +393,7 @@ function ProductCategory(props) {
 
     return (
       // Container da categoria
+
     <div className='w-[49%] rounded bg-[#5F2E09] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] mt-4 h-[260px] py-5'>
         <div className=' p-4 mx-4 flex relative'>
           <div className={` p-4 transition-opacity duration-200 max-h-[100px] absolute inset-0 top-[80px] bg-[#5F2E09] z-30 flex justify-between  items-center justify-center ${!showCategoryProducts ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
@@ -431,6 +432,7 @@ function ProductCategory(props) {
                 </p>
               </div>
             </div>
+
 
             </div>
           </div>
@@ -484,7 +486,7 @@ function ProductCategory(props) {
 
         {/* Modal de produto */}
         {isModalOpen && (
-  <div className="modal modal-open text-slate-400">
+  <div className="modal modal-open text-slate-400 ">
     <div className="modal-box">
       <h3 className="font-bold text-lg text-white">Adicionar novo produto</h3>
 

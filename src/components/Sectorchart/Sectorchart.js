@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, LabelList, Tooltip } from 'recharts';
-import Label2 from '../../components/Label/Label';
+import Label from '../../components/Label/Label';
 import Tooltipporcentagem from '../../components/Tooltipporcentagem/Tooltipporcentagem';
 import api from '../../services/api';
 import SectorButton from '../sectorButton/sectorButton';
@@ -84,7 +84,7 @@ const Sectorchart = () => {
         </Pie>
       </PieChart>
       <div className='flex flex-wrap w-[100%] px-1/2 pt-2 text-center justify-center'>
-        <Label2 className='border-[#B45105] border-4' data={data} colors={COLORS} />
+        <Label className='border-[#B45105] border-4' data={data} colors={COLORS} />
       </div>
     </ResponsiveContainer>
   );

@@ -19,6 +19,7 @@ function DropdownButtons({ options = [],type, label, onChange, disabled = false,
   })
   
   const opt =options;
+  
   return (
     <div className=' mx-2 w-full'>
       <select
@@ -27,6 +28,7 @@ function DropdownButtons({ options = [],type, label, onChange, disabled = false,
         id="filtrodrop"
         onChange={onChange}
         disabled={disabled}
+
         
       >
         {padrao === true ? <option value="null"  >{label}</option> : ''}
@@ -44,4 +46,10 @@ function DropdownButtons({ options = [],type, label, onChange, disabled = false,
   )
 }
 
+
+      
+     
+      </select> 
+      </div>)
+};
 export default DropdownButtons

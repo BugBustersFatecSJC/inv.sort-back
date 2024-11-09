@@ -118,6 +118,7 @@ function MainPageRender() {
       <MainPage title="Categorias de Produtos">
         {loading ? (
           <Loading />
+
         ) : (
           <div className="flex justify-between">
             {categories.map((category) => {
@@ -144,6 +145,7 @@ function MainPageRender() {
         <Category onCategoryAdded={addCategory} />
       </MainPage>
     );  
+
   }
   
   export default MainPageRender
