@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import api from '../../services/api'
 import FlashMessage from '../../components/FlashMessage/FlashMessage'
-import Modal from '../Modal/Modal'
 import ShortModal from '../ShortModal/ShortModal'
 
 /**
@@ -16,9 +15,15 @@ function Category(props) {
     const [categoryName, setCategoryName] = useState('')
     const [categoryImage, setCategoryImage] = useState(null)
     const [imagePreview, setImagePreview] = useState(null)
+    const [nameError, setNameError] = useState(null)
 
     const openModal = () => setIsModalOpen(true)
-    const closeModal = () => setIsModalOpen(false)
+    const closeModal = () => {
+        setIsModalOpen(false)
+        setCategoryName('')
+        setCategoryImage(null)
+        setNameError(null)
+    }
 
     /**
      * Renderização da flash message
@@ -67,6 +72,9 @@ function Category(props) {
             flashSuccess()
         } catch(err) {
             console.log(err)
+            if (err.response && err.response.status === 400 && err.response.data.error.code === 'P2002') {
+                setNameError("Esta categoria já existe")
+            }
             flashError()
         }
     }
@@ -132,6 +140,9 @@ function Category(props) {
                         <span className="label-text alt-color-5">Nome da categoria</span>
                     </label>
                     <input type="text" placeholder="Digite o nome da categoria" className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5" required value={categoryName} onChange={(e) => setCategoryName(e.target.value)} name='category-name' />
+                    {nameError && (
+                        <p className="text-red-500 mt-1 text-xl font-pixel">{nameError}</p>
+                    )}
                 </div>
                 </ShortModal>
             )}

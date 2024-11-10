@@ -17,6 +17,7 @@ function Sector() {
   const [currentSector, setCurrentSector] = useState(null);
   const [flash, setFlash] = useState(null);
   const [sectorName, setSectorName] = useState('');
+  const [nameError, setNameError] = useState(null);
 
   const fetchLocals = async () => {
     try {
@@ -69,6 +70,7 @@ function Sector() {
     setCurrentLocalId(localId);
     setSectorName('');
     setIsEditingSector(false);
+    setNameError(null);
     setShowSectorModal(true);
   };
 
@@ -76,6 +78,7 @@ function Sector() {
     setCurrentSector(sector);
     setSectorName(sector.sector_name);
     setIsEditingSector(true);
+    setNameError(null);
     setShowSectorModal(true);
   };
 
@@ -84,8 +87,17 @@ function Sector() {
     setTimeout(() => setFlash(null), 3000);
   };
 
+  const validateSectorName = (sectorName) => {
+    return sectors.some((sector) => sector.sector_name.toLowerCase() === sectorName.toLowerCase());
+  };
+
   const handleSectorSubmit = async (e) => {
     e.preventDefault();
+    if (validateSectorName(sectorName)) {
+      setNameError('Este setor já existe');
+      return;
+    }
+
     try {
       if (isEditingSector) {
         const response = await api.put(`/sector/${currentSector.sector_id}`, { sector_name: sectorName });
@@ -167,6 +179,9 @@ function Sector() {
               onChange={(e) => setSectorName(e.target.value)}
               required
             />
+            {nameError && (
+              <p className="text-red-500 mt-1 text-xl font-pixel">{nameError}</p>
+            )}
           </div>
         </ShortModal>
       )}

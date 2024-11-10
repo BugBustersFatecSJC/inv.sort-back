@@ -14,6 +14,8 @@ function SupplierPage() {
   const [supplierName, setSupplierName] = useState('');
   const [contactInfo, setContactInfo] = useState('');
   const [address, setAddress] = useState('');
+  const [nameError, setNameError] = useState(null)
+
 
   const fetchSuppliers = async () => {
     try {
@@ -68,6 +70,7 @@ function SupplierPage() {
       setSupplierName('');
       setContactInfo('');
       setAddress('');
+      setNameError(null)
     }
   };
 
@@ -96,7 +99,10 @@ function SupplierPage() {
       showFlashMessage('Fornecedor salvo com sucesso!', 'success');
       toggleModal();
     } catch (err) {
-      console.error(err);
+      console.log(err)
+      if (err.response && err.response.status === 400 && err.response.data.error.code === 'P2002') {
+          setNameError("Já existe um fornecedor com o mesmo nome")
+      }
       showFlashMessage('Um erro aconteceu', 'error');
     }
   };
@@ -137,6 +143,9 @@ function SupplierPage() {
               className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
               required
             />
+            {nameError && (
+              <p className="text-red-500 mt-1 text-xl font-pixel">{nameError}</p>
+            )}
           </div>
 
           <div className="form-control mb-4">

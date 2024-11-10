@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
-import FlashMessage from '../../components/FlashMessage/FlashMessage';
 import ShortModal from '../../components/ShortModal/ShortModal';
 
 function LocalModal({ localId, onClose, onLocalAdded, isEditMode }) {
   const [localName, setLocalName] = useState('');
   const [localAddress, setLocalAddress] = useState('');
-  const [flash, setFlash] = useState(null);
+  const [nameError, setNameError] = useState(null)
 
   useEffect(() => {
     if (isEditMode && localId) {
@@ -17,17 +16,11 @@ function LocalModal({ localId, onClose, onLocalAdded, isEditMode }) {
           setLocalAddress(response.data.local_address);
         } catch (err) {
           console.error(err);
-          showFlashMessage('Erro ao carregar os dados do local', 'error');
         }
       };
       fetchLocal();
     }
   }, [isEditMode, localId]);
-
-  const showFlashMessage = (message, type) => {
-    setFlash({ message, type });
-    setTimeout(() => setFlash(null), 3000);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,19 +28,21 @@ function LocalModal({ localId, onClose, onLocalAdded, isEditMode }) {
       let response;
       if (isEditMode) {
         response = await api.put(`/local/${localId}`, { local_name: localName, local_address: localAddress });
-        showFlashMessage('Local atualizado com sucesso!', 'success');
       } else {
         response = await api.post('/local', { local_name: localName, local_address: localAddress });
         onLocalAdded(response.data);
-        showFlashMessage('Local adicionado com sucesso!', 'success');
       }
-
+  
       setLocalName('');
       setLocalAddress('');
+      setNameError(null)
       onClose();
     } catch (err) {
       console.error(err);
-      showFlashMessage('Erro ao salvar o local', 'error');
+  
+      if (err.response && err.response.status === 400 && err.response.data.error.code === 'P2002') {
+        setNameError("Este local já existe");
+      }
     }
   };
 
@@ -64,6 +59,9 @@ function LocalModal({ localId, onClose, onLocalAdded, isEditMode }) {
           onChange={(e) => setLocalName(e.target.value)}
           required
         />
+        {nameError && (
+          <p className="text-red-500 mt-1 text-xl font-pixel">{nameError}</p>
+        )}
       </div>
 
       <div className="form-control mb-4">
@@ -75,8 +73,6 @@ function LocalModal({ localId, onClose, onLocalAdded, isEditMode }) {
           onChange={(e) => setLocalAddress(e.target.value)}
         />
       </div>
-
-      {flash && <FlashMessage message={flash.message} type={flash.type} />}
     </ShortModal>
   );
 }
