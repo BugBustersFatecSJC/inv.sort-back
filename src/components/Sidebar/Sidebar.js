@@ -51,7 +51,7 @@ function Sidebari({ role, content }) {
             
         </div>
         {content}
-        <div className="mt-[40px] w-full flex justify-center"> 
+        <div className="mt-[40px] w-full flex justify-center text-center self-center "> 
        
       <Sidebar  className='text-center m-auto w-full'   onBackdropClick={() => setToggled(false)} toggled={toggled} breakPoint="always" 
           >
@@ -78,7 +78,7 @@ function Sidebari({ role, content }) {
           ;},
           
         }}
-      className='mb-12 p-4' >
+      className='mb-12 ' >
         
     <MenuItem className='MenuItem w-full poppins-semibold ' icon={<img id='carrinho'  src="/images/grocery-store.png" />} component={<Link to="/products" />}>Produtos</MenuItem>
     <MenuItem className='MenuItem poppins-semibold ' icon={<img id='chart' className='' src="/images/pie-chart.png" />} component={<Link to="/analytics" />}>Análise </MenuItem>
@@ -89,7 +89,7 @@ function Sidebari({ role, content }) {
   <Watermark  className="bottom-0"/>
         
 </Sidebar>
-{windowWidth > 450 ? <Sidebar id='collapse' width='13.85rem'  collapsedWidth='4rem ' collapsed={!collapsed}>
+{windowWidth > 450 ? <Sidebar id='collapse' width='13.85rem'  collapsedWidth='3rem ' collapsed={!collapsed}>
 <Menu 
         menuItemStyles={{
           button: ({ level, active, disabled }) => {
@@ -112,13 +112,13 @@ function Sidebari({ role, content }) {
           ;},
         }}
 
-      className='mb-12 w-full p-2' >
+      className='mb-12 w-full ' >
 
         
-    <MenuItem className='MenuItem w-full poppins-semibold ' title='Produtos' icon={<img id='carrinho' alt='produtos'   src="/images/grocery-store.png" />} component={<Link to="/products" />}>{windowWidth>640?'Produtos':''}</MenuItem>
-    <MenuItem className='MenuItem poppins-semibold ' title='Analise' icon={<img id='chart' className='' src="/images/pie-chart.png" />} component={<Link to="/analytics" />}>{windowWidth>640?'Analise':''} </MenuItem>
-    <MenuItem className='MenuItem poppins-semibold '  title='Movimentações' icon={<img id='chart' src="/images/arrows.png" />} component={<Link to="/stockmovements" />}> {windowWidth>640?'Movementações':''} </MenuItem>
-    <MenuItem className='MenuItem poppins-semibold '  title='Gerenciar' icon={<img className='' id='chart' src="/images/profile.png" />} component={<Link to="/e-commerce" />}> {windowWidth>640?'Gerenciar':''}</MenuItem>
+    <MenuItem className='MenuItem sm:p-2 w-full poppins-semibold ' title='Produtos' icon={<img id='carrinho' alt='produtos'   src="/images/grocery-store.png" />} component={<Link to="/products" />}>{windowWidth>640?'Produtos':''}</MenuItem>
+    <MenuItem className='MenuItem sm:p-2 poppins-semibold ' title='Analise' icon={<img id='chart' className='' src="/images/pie-chart.png" />} component={<Link to="/analytics" />}>{windowWidth>640?'Analise':''} </MenuItem>
+    <MenuItem className='MenuItem  sm:p-2 poppins-semibold '  title='Movimentações' icon={<img id='chart' src="/images/arrows.png" />} component={<Link to="/stockmovements" />}> {windowWidth>640?'Movementações':''} </MenuItem>
+    <MenuItem className='MenuItem sm:p-2 poppins-semibold '  title='Gerenciar' icon={<img className='' id='chart' src="/images/profile.png" />} component={<Link to="/e-commerce" />}> {windowWidth>640?'Gerenciar':''}</MenuItem>
 </Menu>
       </Sidebar> : null}
 
@@ -133,7 +133,7 @@ function Sidebari({ role, content }) {
     
     {windowWidth <450 ? 
     <div className='w-[35px] h-[33px] rounded-md border-2 border-[#6B3710] bg-[#6B3710] absolute   m-1'>
-      <img  src={'images/menu.png'} className=' object-fit w-full h-full p-1    sb-button '  onClick={() => {if (windowWidth > 640) {
+      <img  src={'images/menu.png'} className=' object-fit w-full h-full    sb-button '  onClick={() => {if (windowWidth > 640) {
       setCollapsed(!collapsed);
       
     } else {
