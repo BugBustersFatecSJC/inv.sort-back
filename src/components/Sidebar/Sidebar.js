@@ -74,17 +74,13 @@ function Sidebari({ role, content }) {
               <MenuItem className='MenuItem poppins-semibold' icon={<img id='carrinho' src="/images/grocery-store.png" />} component={<Link to="/products" />}>Produtos</MenuItem>
               <MenuItem className='MenuItem poppins-semibold' icon={<img id='chart' className='' src="/images/pie-chart.png" />} component={<Link to="/analytics" />}>Análise</MenuItem>
               <MenuItem className='MenuItem poppins-semibold' icon={<img id='chart' src="/images/arrows.png" />} component={<Link to="/stockmovements" />}>Movimentações</MenuItem>
-              {(role === 'admin' || role === 'gerente') && (
-                <SubMenu title='Gerenciar' icon={<img className='' id='chart' src="/images/profile.png" />}>
-                  Gerenciamento
-                  <MenuItem component={<Link to="/userpage" />}>Gerenciar Usuários</MenuItem>
-                </SubMenu>
-              )}
+
             </Menu>
             <Watermark className="bottom-0" />
           </Sidebar>
           <Sidebar width='14rem' collapsed={!collapsed}>
-            <Menu menuItemStyles={{
+            <Menu
+              menuItemStyles={{
                 button: ({ level, active, disabled }) => {
                   if (level === 0) {
                     return {
@@ -94,18 +90,77 @@ function Sidebari({ role, content }) {
                         color: '#b6c8d9',
                       },
                       [`&:hover`]: {
-                        backgroundColor: '#3E1900'
-                      }
+                        backgroundColor: '#3E1900',
+                      },
                     };
                   }
                 },
-              }} className='mb-12 w-full'>
-              <MenuItem className='MenuItem poppins-semibold' title='Produtos' icon={<img id='carrinho' alt='produtos' src="/images/grocery-store.png" />} component={<Link to="/products" />}>Produtos</MenuItem>
-              <MenuItem className='MenuItem poppins-semibold' title='Analise' icon={<img id='chart' className='' src="/images/pie-chart.png" />} component={<Link to="/analytics" />}>Análise</MenuItem>
-              <MenuItem className='MenuItem poppins-semibold' title='Movimentações' icon={<img id='chart' src="/images/arrows.png" />} component={<Link to="/stockmovements" />}>Movimentações</MenuItem>
+              }}
+              className='mb-12 w-full'
+            >
+              <MenuItem
+                className='MenuItem poppins-semibold'
+                title='Produtos'
+                icon={<img id='carrinho' alt='produtos' src="/images/grocery-store.png" />}
+                component={<Link to="/products" />}
+              >
+                Produtos
+              </MenuItem>
+              <MenuItem
+                className='MenuItem poppins-semibold'
+                title='Análise'
+                icon={<img id='chart' className='' src="/images/pie-chart.png" />}
+                component={<Link to="/analytics" />}
+              >
+                Análise
+              </MenuItem>
+              <MenuItem
+                className='MenuItem poppins-semibold'
+                title='Movimentações'
+                icon={<img id='chart' src="/images/arrows.png" />}
+                component={<Link to="/stockmovements" />}
+              >
+                Movimentações
+              </MenuItem>
               {(role === 'admin' || role === 'gerente') && (
-                <SubMenu title='Gerenciar' icon={<img className='' id='chart' src="/images/profile.png" />}>
-                  <MenuItem component={<Link to="/userpage" />}>Gerenciar Usuários</MenuItem>
+                <SubMenu
+                  title='Gerenciar'
+                  icon={<img id='chart' src="/images/profile.png" />}
+                  className="poppins-semibold"
+                  style={{
+                    color: 'rgb(255,195,118)',
+                  }}
+                >
+                  <MenuItem
+                    className='poppins-semibold'
+                    component={<Link to="/userpage" />}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3E1900'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#6b3710'}
+                    style={{
+                      backgroundColor: '#6b3710',
+                      color: 'rgb(255,195,118)',
+                      margin: '0',
+                      border: 'none',
+                      padding: '10px',
+                      transition: 'background-color 0.3s ease',
+                      width: collapsed ? '200px' : '40px', 
+                      height: '40px',
+                    }}
+                  >
+                    {collapsed ? (
+                      'Gerenciar Usuários'
+                    ) : (
+                      <img
+                        id='user-icon'
+                        src="/images/profile.png"
+                        alt="gerenciar usuários"
+                        style={{
+                          width: '24px',
+                          height: '24px',
+                        }}
+                      />
+                    )}
+                  </MenuItem>
                 </SubMenu>
               )}
             </Menu>

@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react'; // Import useContext
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import MainLogo from "../../components/MainLogo/MainLogo";
@@ -10,32 +10,47 @@ import { UserContext } from '../../context/userContext';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
-  const { setRole } = useContext(UserContext); // Use useContext para acessar setRole
+  const { setUser, setRole } = useContext(UserContext);
 
   useEffect(() => {
-    api.get('/check-login')
-      .then(response => {
-        if (response.data.needsRegistration) {
-          navigate('/cadastro');
-        }
-      })
-      .catch(error => {
-        console.error("Erro ao verificar usuários:", error);
-      });
-  }, [navigate]);
+    const storedRememberMe = localStorage.getItem("rememberMe") === 'true';
+    const storedUser = localStorage.getItem("user");
+
+    if (storedRememberMe && storedUser) {
+      const userData = JSON.parse(storedUser);
+      api.defaults.headers["X-User-Id"] = userData.user_id;
+      setUser(userData);
+      setRole(userData.role);
+      navigate('/products');
+    } else {
+      localStorage.removeItem("user");
+      setUser(null);
+    }
+  }, [navigate, setRole, setUser]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Submitting form with email: ", email);
     try {
       const data = { email, password };
       const response = await api.post('/login', data);
       const userData = response.data;
+      setUser(userData);
+      setRole(userData.role);
 
-      localStorage.setItem("user", JSON.stringify(userData));
+      if (rememberMe) {
+        localStorage.setItem("user", JSON.stringify(userData));
+        localStorage.setItem("rememberMe", 'true');
+      } else {
+        localStorage.removeItem("user");
+        localStorage.setItem("rememberMe", 'false');
+      }
+      
       api.defaults.headers["X-User-Id"] = userData.user_id;
-      setRole(userData.role); // Certifique-se de que setRole está acessível aqui
       navigate('/products');
+      
     } catch (error) {
       console.error('Erro na requisição:', error);
       alert("Usuário ou Senha Inválidos");
@@ -52,14 +67,20 @@ function Login() {
         <Field name="password" type="password" placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)} />
         <div className='font-pixel flex justify-between w-full secondary-color'>
           <a href='/cadastro'>Esqueceu sua senha?</a>
-          <p href="#">Lembrar-me
-            <input className='ms-2 rounded shadow-none border' type="checkbox" />
-          </p>
+          <label>
+            Lembrar-me
+            <input
+              className='ms-2 rounded shadow-none border'
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+            />
+          </label>
         </div>
         <div className='mt-[40px]'>
           <SendButton text="ENTRAR" />
         </div>
-        <a className='font-pixel mt-[20px] secondary-color' href='#'>Não tem cadastro?</a>
+        <a className='font-pixel mt-[20px] secondary-color' href='/cadastro'>Não tem cadastro?</a>
       </form>
       <div className='fixed bottom-0'>
         <Watermark />

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react'; // Certifique-se de que useContext é importado aqui
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { UserProvider } from './context/userContext';
+import { UserContext, UserProvider } from './context/userContext'; // Importações dos seus contextos
 import Login from './pages/Login/Login';
 import InitialSignUp from './pages/InitialSignUp/InitialSignUp';
 import MainPageRender from './pages/MainPageRender/MainPageRender';
@@ -14,15 +14,13 @@ import UserProfile from './pages/UserProfile/UserProfile';
 import BuyAndSell from './pages/BuyAndSell/BuyAndSell';
 import UserRegister from './pages/UserRegister/UserRegister';
 
-// Define rotas protegidas que direcionam o usuário para login se não estiver autenticado
 function ProtectedRoute({ element: Element }) {
-  const user = localStorage.getItem("user");
+  const { user } = useContext(UserContext);
   return user ? <Element /> : <Navigate to="/login" />;
 }
 
-// Evita que usuários autenticados vejam a página de login
 function ProtectedLogin({ element: Element }) {
-  const user = localStorage.getItem("user");
+  const { user } = useContext(UserContext);
   return !user ? <Element /> : <Navigate to="/products" />;
 }
 

@@ -4,16 +4,19 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
+  const [user, setUser] = useState(storedUser || null);
   const [role, setRole] = useState(storedUser ? storedUser.role : "funcionario");
 
   useEffect(() => {
-    if (storedUser) {
-      localStorage.setItem("user", JSON.stringify({ ...storedUser, role }));
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("user");
     }
-  }, [role, storedUser]);
+  }, [user]);
 
   return (
-    <UserContext.Provider value={{ role, setRole }}>
+    <UserContext.Provider value={{ user, setUser, role, setRole }}>
       {children}
     </UserContext.Provider>
   );
