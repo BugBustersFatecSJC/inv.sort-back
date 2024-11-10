@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import api from '../../services/api'
 import FlashMessage from '../../components/FlashMessage/FlashMessage'
 import Modal from '../Modal/Modal'
@@ -15,6 +15,7 @@ function Category(props) {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [categoryName, setCategoryName] = useState('')
     const [categoryImage, setCategoryImage] = useState(null)
+    const [imagePreview, setImagePreview] = useState(null)
 
     const openModal = () => setIsModalOpen(true)
     const closeModal = () => setIsModalOpen(false)
@@ -70,6 +71,21 @@ function Category(props) {
         }
     }
 
+    /**
+     * Renderização da preview da imagem
+     */
+    useEffect(() => {
+        if (categoryImage instanceof File) {
+            const previewUrl = URL.createObjectURL(categoryImage)
+            setImagePreview(previewUrl)
+            return () => URL.revokeObjectURL(previewUrl)
+        } else if (typeof categoryImage === 'string') {
+            setImagePreview(categoryImage)
+        } else {
+            setImagePreview(null)
+        }
+      }, [categoryImage])
+
     return (
         <>
             <div onClick={openModal} className='w-full alt-color-2-bg rounded shadow-md mt-4 mb-[40px] cursor-pointer'>
@@ -86,19 +102,37 @@ function Category(props) {
                     modalName="cria-categoria"
                     closeModal={closeModal}
                 >
-                    <div className="form-control mb-4">
-                        <label className="label">
-                            <span className="label-text alt-color-5">Nome da categoria</span>
-                        </label>
-                        <input type="text" placeholder="Digite o nome da categoria" className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5" required value={categoryName} onChange={(e) => setCategoryName(e.target.value)} name='category-name' />
-                    </div>
+                <div className='w-full flex flex-col items-center mt-4 '>
+                    <label className='label'>Imagem da categoria</label>
+                    <div
+                        className="bg-[#FFC376] p-[1rem] h-[14rem] w-[14rem] flex items-center justify-center border-8 border-[#D87B26] cursor-pointer mt-4 shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] shadow-[inset_-2px_5px_2px_2px_rgba(0,0,0,0.25)] relative"
+                        onClick={() => document.getElementById('category-image-input').click()}
+                    >
+                        <input
+                            type="file"
+                            id="category-image-input"
+                            className="hidden"
+                            onChange={(e) => {
+                                setCategoryImage(e.target.files[0]);
+                            }}
+                            name="category-image"
+                        />
+                        <i className="fa-solid fa-plus text-5xl cursor-pointer alt-color-5"></i>
 
-                    <div className="form-control mb-4">
-                        <label className="label">
-                            <span className="label-text alt-color-5">Selecione uma imagem</span>
-                        </label>
-                        <input type="file" className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5" onChange={(e) => setCategoryImage(e.target.files[0])} name='category-image' />
+                        {imagePreview && (
+                            <div className="mt-4">
+                                <img src={imagePreview} alt="preview da imagem" className="w-full h-full z-0 absolute object-cover inset-0" />
+                            </div>
+                        )}
                     </div>
+                </div>  
+
+                <div className="form-control mb-4">
+                    <label className="label">
+                        <span className="label-text alt-color-5">Nome da categoria</span>
+                    </label>
+                    <input type="text" placeholder="Digite o nome da categoria" className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5" required value={categoryName} onChange={(e) => setCategoryName(e.target.value)} name='category-name' />
+                </div>
                 </ShortModal>
             )}
 

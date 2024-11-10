@@ -395,10 +395,18 @@ function ProductCategory(props) {
 
   const openCategoryModal = (category) => {
     setCategoryName(category.category_name)
-    setCategoryImage(category)
+
+    const imageUrl = `http://localhost:3001${category.category_image}`
+    setCategoryImage(imageUrl)
+    setImagePreview(imageUrl)
+
     setIsCategoryModalOpen(true)
   }
-  const closeCategoryModal = () => setIsCategoryModalOpen(false)
+  const closeCategoryModal = () => {
+    setCategoryImage(null)
+    setCategoryName('')
+    setIsCategoryModalOpen(false)
+  }
 
   const [categoryName, setCategoryName] = useState('')
   const [categoryImage, setCategoryImage] = useState(null)
@@ -406,17 +414,20 @@ function ProductCategory(props) {
   const handleCategoryUpdate = async(e) => {
       e.preventDefault()
 
-      const categoryData = {
-          category_name: categoryName,
-      }
+      const formData = new FormData();
+      formData.append('category_name', categoryName)
+      formData.append('category_image', categoryImage)
 
       try {
           await api
-          .put(`/category/${props.categoryKey}`, categoryData)
+          .put(`/category/${props.categoryKey}`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
           .then(response => console.log(response))
           
-          props.onCategoryUpdated(props.categoryKey, categoryName)
-          setCategoryName('')
+          props.onCategoryUpdated(props.categoryKey, categoryName, categoryImage)
 
           closeCategoryModal()
           flashInfo()
@@ -471,7 +482,7 @@ function ProductCategory(props) {
               <p className='cursor-pointer' onClick={() => handleCategoryDelete(props.categoryKey)}>
                 <i class="fa-solid fa-trash"></i>
               </p>
-              <p className='cursor-pointer' onClick={openCategoryModal}>
+              <p className='cursor-pointer' onClick={() => openCategoryModal(props.category)}>
                 <i class="fa-solid fa-pencil"></i>
               </p>
             </div>
@@ -749,29 +760,29 @@ function ProductCategory(props) {
         <Modal closeModal={closeProdEditModal} title="Editar Produto" handleSubmit={handleProdUpdate}>
             <div className='flex justify-between'>
               <div className='w-[20%]'>
-              <div
-                className="bg-[#FFC376] p-[1rem] h-[14rem] w-[14rem] flex items-center justify-center border-8 border-[#D87B26] cursor-pointer mt-4 shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] shadow-[inset_-2px_5px_2px_2px_rgba(0,0,0,0.25)] relative"
-                onClick={() => document.getElementById('product-image-input').click()}
-              >
-                <input
-                  type="file"
-                  id="product-image-input"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files[0]
-                    if (file) {
-                      setProductImage(file)
-                      setImagePreview(URL.createObjectURL(file))
-                    }
-                  }}
-                  name="product-image"
-                />
-                {imagePreview ? (
-                  <img src={imagePreview} alt="preview da imagem" className="w-full h-full z-0 absolute object-cover inset-0" />
-                ) : (
-                  <i className="fa-solid fa-plus text-5xl cursor-pointer alt-color-5"></i>
-                )}
-              </div>
+                <div
+                  className="bg-[#FFC376] p-[1rem] h-[14rem] w-[14rem] flex items-center justify-center border-8 border-[#D87B26] cursor-pointer mt-4 shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] shadow-[inset_-2px_5px_2px_2px_rgba(0,0,0,0.25)] relative"
+                  onClick={() => document.getElementById('product-image-input').click()}
+                >
+                  <input
+                    type="file"
+                    id="product-image-input"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files[0]
+                      if (file) {
+                        setProductImage(file)
+                        setImagePreview(URL.createObjectURL(file))
+                      }
+                    }}
+                    name="product-image"
+                  />
+                  {imagePreview ? (
+                    <img src={imagePreview} alt="preview da imagem" className="w-full h-full z-0 absolute object-cover inset-0" />
+                  ) : (
+                    <i className="fa-solid fa-plus text-5xl cursor-pointer alt-color-5"></i>
+                  )}
+                </div>
               </div>
 
               <div className='w-[38%]'>
@@ -973,18 +984,38 @@ function ProductCategory(props) {
             modalName="editar-categoria"
             closeModal={closeCategoryModal}
         >
+            <div className='w-full flex flex-col items-center mt-4 '>
+              <label className='label'>Imagem da categoria</label>
+              <div
+                className="bg-[#FFC376] p-[1rem] h-[14rem] w-[14rem] flex items-center justify-center border-8 border-[#D87B26] cursor-pointer shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] shadow-[inset_-2px_5px_2px_2px_rgba(0,0,0,0.25)] relative"
+                onClick={() => document.getElementById('category-image-input').click()}
+              >
+                <input
+                  type="file"
+                  id="category-image-input"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files[0]
+                    if (file) {
+                      setCategoryImage(file)
+                      setImagePreview(URL.createObjectURL(file))
+                    }
+                  }}
+                  name="category-image"
+                />
+                {imagePreview ? (
+                  <img src={imagePreview} alt="preview da imagem" className="w-full h-full z-0 absolute object-cover inset-0" />
+                ) : (
+                  <i className="fa-solid fa-plus text-5xl cursor-pointer alt-color-5"></i>
+                )}
+              </div>
+            </div>
+
             <div className="form-control mb-4">
                 <label className="label">
                     <span className="label-text alt-color-5">Nome da categoria</span>
                 </label>
                 <input type="text" placeholder="Digite o nome da categoria" className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5" required value={categoryName} onChange={(e) => setCategoryName(e.target.value)} name='category-name' />
-            </div>
-
-            <div className="form-control mb-4">
-                <label className="label">
-                    <span className="label-text alt-color-5">Selecione uma imagem</span>
-                </label>
-                <input type="file" className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5" onChange={(e) => setCategoryImage(e.target.files[0])} name='category-image' />
             </div>
         </ShortModal>
       )}
