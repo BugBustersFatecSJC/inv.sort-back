@@ -50,7 +50,7 @@ function Sidebari({ role, content }) {
            : null}
             
         </div>
-        {props.content}
+        {content}
         <div className="mt-[40px] w-full flex justify-center"> 
        
       <Sidebar  className='text-center m-auto w-full'   onBackdropClick={() => setToggled(false)} toggled={toggled} breakPoint="always" 

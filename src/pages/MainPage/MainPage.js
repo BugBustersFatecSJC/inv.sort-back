@@ -32,15 +32,14 @@ function MainPage(props) {
           </div>
 
 
-            <h1 className='text-2xl sm:text-4xl poppins-semibold'>{props.title}</h1>
 
           </div>
-          <main className=''>
+          <main className='w-full p-4'>
             {props.children}
           </main>
         </div>
       </div>
-    </div>
+    
   );
 }
 

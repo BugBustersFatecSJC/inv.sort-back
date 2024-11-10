@@ -7,6 +7,7 @@ import Modal from '../Modal/Modal'
 import 'react-tippy/dist/tippy.css'
 import { Tooltip } from 'react-tippy'
 import FlashMessage from '../../components/FlashMessage/FlashMessage'
+import { useNavigate } from 'react-router-dom'
 
 
 /******************************************************************************
@@ -343,9 +344,10 @@ function ProductCategory(props) {
    * Funcionalidade de abrir o container de categoria
    */
   const [showCategoryProducts, setShowCategoryProducts] = useState(false)
-
+  const id = props.categoryKey
+  const navigate = useNavigate()
   const handleClickShow = () => {
-    setShowCategoryProducts(!showCategoryProducts)
+    navigate('/buyandsell/'+id)
   }
 
 
@@ -442,50 +444,6 @@ function ProductCategory(props) {
 
             </div>
      
-            {/*
-              Aqui ocorre a criação de cada quadrado, é obtido uma lista com todos os produtos
-              que são mapeados, cada produto irá gerar um quadrado e cada quadrado terá sua tooltip           
-            */}
-            {/* {props.products.map((product, index) => {
-              const unit = units.find((u) => u.unit_id === product.unit_id)?.unit_type || 'N/A'
-              return (
-                <Tooltip
-                key={index}
-                html={(
-                  <div className={styles.myTippyTheme}>
-                    <strong>Nome:</strong> {product.product_name}<br />
-                    <strong>Unidade:</strong> {unit}<br />
-                    <strong>Perecível:</strong> {product.is_perishable ? 'Sim' : 'Não'}
-                  </div>
-                )}
-                title={product.product_name}
-                arrow={true}
-                theme='dark'
-                delay={20}
-                trigger='mouseenter'
-              >
-                <div key={index} className={`relative w-12 h-12 mb-4 bg-transparent border-l-[3px] border-b-[3px] border-[#FFE4A1] cursor-pointer ${styles.borderDepth}`} id={product.product_id} onMouseEnter={() => setHoveredProductId(product.product_id)}
-                onMouseLeave={() => setHoveredProductId(null)}
-                onClick={() => openProdEditModal(product)}
-                >
-                {hoveredProductId === product.product_id && (
-                  <i 
-                    className="fa-solid fa-trash absolute top-[-10px] right-[-5px] text-red-500 cursor-pointer" 
-                    onClick={() => handleDelete(product.product_id)}
-                  ></i>
-                )}
-                </div>
-              </Tooltip>
-              )
-            })} */}
-
-            {/* Botão para adicionar novo produto */}
-{/*             <button
-                onClick={openModal}
-                className="w-12 h-12 alt-color-4-bg border-[3px] border-[#D87B26] flex items-center justify-center text-2xl"
-            >
-            <i class="fa-solid fa-plus"></i>
-            </button> */}
         </div>
 
             
