@@ -192,8 +192,8 @@ function ProductCategory(props) {
     const [isPerishable, setIsPerishable] = useState(false)
     const [productBrand, setProductBrand] = useState('')
     const [productModel, setProductModel] = useState('')
-    const [productCostValue, setProductCostValue] = useState(0)
-    const [productSellValue, setProductSellValue] = useState(0)
+    const [productCostValue, setProductCostValue] = useState('')
+    const [productSellValue, setProductSellValue] = useState('')
     const [productLocalId, setProductLocalId] = useState('')
     const [productSectorId, setProductSectorId] = useState('')
     const [expirationDate, setExpirationDate] = useState('')
@@ -215,8 +215,8 @@ function ProductCategory(props) {
       formData.append('unit_id', productUnitId);
       formData.append('prod_model', productModel);
       formData.append('prod_brand', productBrand);
-      formData.append('prod_cost_value', productCostValue);
-      formData.append('prod_sell_value', productSellValue);
+      formData.append("prod_cost_value", parseCurrencyToFloat(productCostValue));
+      formData.append("prod_sell_value", parseCurrencyToFloat(productSellValue));
       formData.append('local_id', productLocalId);
       formData.append('sector_id', productSectorId);
       formData.append('product_stock', productStock);
@@ -256,6 +256,18 @@ function ProductCategory(props) {
           console.log(err)
           flashError()
       }
+    }
+
+    const formatCurrency = (value) => {
+      const formattedValue = parseFloat(value.replace(/[^\d]/g, '') / 100).toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL'
+      });
+      return formattedValue;
+    };
+
+    const parseCurrencyToFloat = (value) => {
+      return parseFloat(value.replace("R$", "").replace(".", "").replace(",", "."));
     }
 
     useEffect(() => {
@@ -308,7 +320,7 @@ function ProductCategory(props) {
     setProductLocalId(product.supplier_id)
     setProductSectorId(product.supplier_id)
     setIsPerishable(product.is_perishable)
-    setProductCostValue(product.prod_cost_value) 
+    setProductCostValue(product.prod_cost_value)
     setProductSellValue(product.prod_sell_value)
     setProductStock(product.product_stock)
     setProductStockMin(product.product_stock_min)
@@ -343,8 +355,8 @@ function ProductCategory(props) {
     updatedProductData.append('unit_id', productUnitId)
     updatedProductData.append('prod_model', productModel)
     updatedProductData.append('prod_brand', productBrand)
-    updatedProductData.append('prod_cost_value', productCostValue)
-    updatedProductData.append('prod_sell_value', productSellValue)
+    updatedProductData.append("prod_cost_value", parseCurrencyToFloat(productCostValue))
+    updatedProductData.append("prod_sell_value", parseCurrencyToFloat(productSellValue))
     updatedProductData.append('local_id', productLocalId)
     updatedProductData.append('sector_id', productSectorId)
     updatedProductData.append('product_stock', productStock)
@@ -619,13 +631,13 @@ function ProductCategory(props) {
 								<span className="label-text alt-color-5">Preço de Custo</span>
 								</label>
 								<input
-								type="number"
+								type="text"
 								placeholder="Digite o preço de custo"
 								className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
 								required
 								name='cost_price'
 								value={productCostValue}
-								onChange={(e) => setProductCostValue(parseFloat(e.target.value) || 0)} 
+								onChange={(e) => setProductCostValue(formatCurrency(e.target.value))} 
 								/>
 							</div>
 
@@ -634,13 +646,13 @@ function ProductCategory(props) {
 								<span className="label-text alt-color-5">Preço de Venda</span>
 								</label>
 								<input
-								type="number"
+								type="text"
 								placeholder="Digite o preço de venda"
 								className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
 								required
 								name='sell_price'
 								value={productSellValue}
-								onChange={(e) => setProductSellValue(parseFloat(e.target.value) || 0)} 
+								onChange={(e) => setProductSellValue(formatCurrency(e.target.value))} 
 								/>
 							</div>
 						</div>
@@ -717,7 +729,8 @@ function ProductCategory(props) {
 									name="expiration_date"
 									value={productStockMin}
 									placeholder='Mínimo'
-									onChange={(e) => setProductStockMin(e.target.value)}
+                  required
+									onChange={(e) => setProductStockMin(e.target.value.replace(/\D/g, ''))}
 								/>
 								<input
 									type="text"
@@ -725,7 +738,8 @@ function ProductCategory(props) {
 									name="expiration_date"
 									value={productStock}
 									placeholder='Atual'
-									onChange={(e) => setProductStock(e.target.value)}
+                  required
+									onChange={(e) => setProductStock(e.target.value.replace(/\D/g, ''))}
 								/>
 								<input
 									type="text"
@@ -733,7 +747,8 @@ function ProductCategory(props) {
 									name="expiration_date"
 									value={quantityMax}
 									placeholder='Máximo'
-									onChange={(e) => setQuantityMax(e.target.value)}
+                  required
+									onChange={(e) => setQuantityMax(e.target.value.replace(/\D/g, ''))}
 								/>
 							</div>
 
@@ -841,13 +856,13 @@ function ProductCategory(props) {
                     <span className="label-text alt-color-5">Preço de Custo</span>
                     </label>
                     <input
-                    type="number"
+                    type="text"
                     placeholder="Digite o preço de custo"
                     className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
                     required
                     name='cost_price'
                     value={productCostValue}
-                    onChange={(e) => setProductCostValue(parseFloat(e.target.value) || 0)} 
+                    onChange={(e) => setProductCostValue(formatCurrency(e.target.value))} 
                     />
                   </div>
 
@@ -856,13 +871,13 @@ function ProductCategory(props) {
                     <span className="label-text alt-color-5">Preço de Venda</span>
                     </label>
                     <input
-                    type="number"
+                    type="text"
                     placeholder="Digite o preço de venda"
                     className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
                     required
                     name='sell_price'
                     value={productSellValue}
-                    onChange={(e) => setProductSellValue(parseFloat(e.target.value) || 0)} 
+                    onChange={(e) => setProductSellValue(formatCurrency(e.target.value))} 
                     />
                   </div>
                 </div>
@@ -939,7 +954,7 @@ function ProductCategory(props) {
                       name="expiration_date"
                       value={productStockMin}
                       placeholder='Mínimo'
-                      onChange={(e) => setProductStockMin(e.target.value)}
+                      onChange={(e) => setProductStockMin(e.target.value.replace(/\D/g, ''))}
                     />
                     <input
                       type="text"
@@ -947,7 +962,7 @@ function ProductCategory(props) {
                       name="expiration_date"
                       value={productStock}
                       placeholder='Atual'
-                      onChange={(e) => setProductStock(e.target.value)}
+                      onChange={(e) => setProductStock(e.target.value.replace(/\D/g, ''))}
                     />
                     <input
                       type="text"
@@ -955,7 +970,7 @@ function ProductCategory(props) {
                       name="expiration_date"
                       value={quantityMax}
                       placeholder='Máximo'
-                      onChange={(e) => setQuantityMax(e.target.value)}
+                      onChange={(e) => setQuantityMax(e.target.value.replace(/\D/g, ''))}
                     />
                   </div>
                   <div className="form-control mb-4 mt-4 w-full">
