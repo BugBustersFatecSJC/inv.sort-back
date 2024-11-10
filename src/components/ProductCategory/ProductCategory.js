@@ -538,7 +538,7 @@ function ProductCategory(props) {
     {/* Modal de produto */}
 		{isModalOpen && (
 			<Modal closeModal={closeModal} title="Adicionar novo produto" handleSubmit={handleSubmit}>
-				<div className='flex justify-between'>
+				<div className='flex justify-between modal-main-container'>
 					<div className='w-[20%]'>
 						<div
 							className="bg-[#FFC376] p-[1rem] h-[14rem] w-[14rem] flex items-center justify-center border-8 border-[#D87B26] cursor-pointer mt-4 shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] shadow-[inset_-2px_5px_2px_2px_rgba(0,0,0,0.25)] relative"
@@ -613,7 +613,7 @@ function ProductCategory(props) {
 							</select>
 						</div>
 
-						<div className='flex justify-between'>
+						<div className='flex justify-between preco-container'>
 							<div className="form-control mb-4">
 								<label className="label">
 								<span className="label-text alt-color-5">Preço de Custo</span>
@@ -758,7 +758,7 @@ function ProductCategory(props) {
       {/* Modal para editar produto */}
       {isProdEditModalOpen && (
         <Modal closeModal={closeProdEditModal} title="Editar Produto" handleSubmit={handleProdUpdate}>
-            <div className='flex justify-between'>
+            <div className='flex justify-between modal-main-container'>
               <div className='w-[20%]'>
                 <div
                   className="bg-[#FFC376] p-[1rem] h-[14rem] w-[14rem] flex items-center justify-center border-8 border-[#D87B26] cursor-pointer mt-4 shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] shadow-[inset_-2px_5px_2px_2px_rgba(0,0,0,0.25)] relative"
@@ -835,7 +835,7 @@ function ProductCategory(props) {
                   </select>
                 </div>
 
-                <div className='flex justify-between'>
+                <div className='flex justify-between preco-container'>
                   <div className="form-control mb-4">
                     <label className="label">
                     <span className="label-text alt-color-5">Preço de Custo</span>
