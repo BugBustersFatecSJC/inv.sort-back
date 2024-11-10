@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { json, useNavigate } from 'react-router-dom'
 
 function UserProfileIcon() {
@@ -6,6 +6,11 @@ function UserProfileIcon() {
   
   const navigateUserProfile = () => {
     navigate('/profile')
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('user')
+    navigate('/login')
   }
   
   const user = localStorage.getItem("user")
@@ -16,10 +21,19 @@ function UserProfileIcon() {
         <p className='font-pixel text-2xl'>
           {jsonUser.username}
         </p>
+        <div className="flex justify-between">
         <p className='font-pixel text-lg'>
           {jsonUser.role}
         </p>
+        <img
+          src="/img/logout.png"
+          className="w-6 h-6 ms-[20px] cursor-pointer"
+          alt="botão de logout"
+          onClick={handleLogout}
+        />
+        </div>
       </div>
+
       <figure className='bg-white rounded-full w-[4.4rem] h-[4.4rem] cursor-pointer' onClick={navigateUserProfile}>
         {jsonUser.user_img && (
           <img
