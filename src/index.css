@@ -252,3 +252,61 @@ code {
 .placeholder-color::placeholder {
   color: var(--alt-color-5) !important;
 }
+
+@keyframes pixel-pop {
+	0% {
+			transform: scale(0) rotate(0deg);
+			opacity: 0;
+	}
+	50% {
+			transform: scale(1.1) rotate(10deg);
+			opacity: 1;
+	}
+	70% {
+			transform: scale(0.9) rotate(-5deg);
+	}
+	100% {
+			transform: scale(1) rotate(0deg);
+	}
+}
+      
+.pixelPopIn {
+	animation: pixel-pop 0.6s ease-out forwards;
+}
+
+.pulse {
+  -webkit-animation-name: pulse;
+  animation-name: pulse;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+@-webkit-keyframes pulse {
+  0% {
+  -webkit-transform: scale3d(1, 1, 1);
+  transform: scale3d(1, 1, 1);
+  }
+  50% {
+  -webkit-transform: scale3d(1.05, 1.05, 1.05);
+  transform: scale3d(1.05, 1.05, 1.05);
+  }
+  100% {
+  -webkit-transform: scale3d(1, 1, 1);
+  transform: scale3d(1, 1, 1);
+  }
+}
+@keyframes pulse {
+  0% {
+  -webkit-transform: scale3d(1, 1, 1);
+  transform: scale3d(1, 1, 1);
+  }
+  50% {
+  -webkit-transform: scale3d(1.05, 1.05, 1.05);
+  transform: scale3d(1.05, 1.05, 1.05);
+  }
+  100% {
+  -webkit-transform: scale3d(1, 1, 1);
+  transform: scale3d(1, 1, 1);
+  }
+} 

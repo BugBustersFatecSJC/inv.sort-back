@@ -49,9 +49,17 @@ function MainPageRender() {
   /**
    * Função para dinamicamente adicionar a nova categoria após ela ser criada
    */
+  const [categoryVisible, setCategoryVisible] = useState(false);
+  const [newCategoryId, setNewCategoryId] = useState(null);
+
   const addCategory = (newCategory) => {
-    setCategories((prevCategories) => [...prevCategories, newCategory])
-  }
+    setCategories((prevCategories) => [...prevCategories, newCategory]);  
+    setNewCategoryId(newCategory.category_id);
+    setCategoryVisible(false);  
+    setTimeout(() => {
+      setCategoryVisible(true);
+    }, 100);
+  };
 
   /**
    * Função para dinamicamente adicionar o novo produto após ele ser criado
@@ -114,20 +122,36 @@ function MainPageRender() {
   //       console.log(err)
   //     })
   // }, [])
-    return (
-      <MainPage title="Produtos">
-          {loading ? (
-          <Loading />
-          ) :
-          categories.map((category) => {
+  return (
+    <MainPage title="Produtos">
+      {loading ? (
+        <Loading />
+      ) : (
+        categories.map((category) => {
           const categoryProducts = products.filter(product => product.category_id === category.category_id);
-          return (
-              <ProductCategory key={category.category_id} categoryKey={category.category_id} products={categoryProducts} onProductAdded={addProduct} onProductDeleted={removeProduct} categoryName={category.category_name} onCategoryUpdated={updateCategory} onCategoryDeleted={removeCategory} onProductUpdated={updateProduct} categoryImage={category.category_image} category={category} />
-          )
-          })}
-          <Category onCategoryAdded={addCategory} />
-      </MainPage> 
-    )
-  }
+          const shouldAnimate = category.category_id === newCategoryId && categoryVisible;
   
-  export default MainPageRender
+          return (
+            <div key={category.category_id} className={`${shouldAnimate ? 'pulse' : ''}`}>
+              <ProductCategory
+                categoryKey={category.category_id}
+                products={categoryProducts}
+                onProductAdded={addProduct}
+                onProductDeleted={removeProduct}
+                categoryName={category.category_name}
+                onCategoryUpdated={updateCategory}
+                onCategoryDeleted={removeCategory}
+                onProductUpdated={updateProduct}
+                categoryImage={category.category_image}
+                category={category}
+              />
+            </div>
+          );
+        })
+      )}
+      <Category onCategoryAdded={addCategory} />
+    </MainPage> 
+  );
+}
+  
+export default MainPageRender
