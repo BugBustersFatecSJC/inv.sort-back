@@ -120,7 +120,7 @@ function MainPageRender() {
           <Loading />
 
         ) : (
-          <div className="flex justify-between">
+          <div className="flex justify-between gap-4 grid mt-6 overflow-y-scroll grid-cols-2 lg:grid-cols-4  md:grid-cols-3 sm:grid-cols-3 ">
             {categories.map((category) => {
               const categoryProducts = products.filter(
                 (product) => product.category_id === category.category_id
