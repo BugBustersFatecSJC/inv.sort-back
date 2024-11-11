@@ -77,7 +77,9 @@ router.delete('/supplier/:supplier_id', supplierController.deleteSupplier);
 
 // Rotas do Fluxo de Estoque "BUYANDSELL"
 router.put('/buyandsell/:batch_id', batchController.sellBatch);
-
+router.get('/buyandsell/:product_id/batches', batchController.getBatchesByProductId);
+router.put('/buyandsell/sell/:product_id', batchController.sellBatchByProductId);
+router.post('/buyandsell/buy/:product_id', batchController.buyBatchByProductId);
 // fim das rotas
 
 module.exports = router;
