@@ -7,10 +7,6 @@ import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 
 
-/**
- * Container para adicionar uma nova categoria
- */
-
 function Category(props) {
     /**
      * Lógica para o modal

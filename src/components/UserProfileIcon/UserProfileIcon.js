@@ -1,31 +1,24 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../context/userContext'; // Pegando o contexto do usuário
 
 function UserProfileIcon() {
   const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
 
   const navigateUserProfile = () => {
     navigate('/profile');
   };
 
-  // Obtendo o usuário do localStorage com verificações de segurança
-  const user = localStorage.getItem("user");
-  let jsonUser = null;
-
-  try {
-    jsonUser = user ? JSON.parse(user) : null;
-  } catch (error) {
-    console.error("Invalid user JSON:", error);
-  }
-
   const handleLogout = () => {
-    localStorage.removeItem('user');
-    navigate('/login');
-  }
+    localStorage.removeItem('user');  // Remove do localStorage
+    setUser(null);  // Também atualiza o estado do contexto
+    navigate('/login');  // Redireciona para login
+  };
 
-  if (!jsonUser) {
-    // Renderize um estado padrão quando jsonUser não está disponível
-    return <div>Usuário não autenticado</div>;
+  // Não depende mais apenas de localStorage para exibir; usa Contexto
+  if (!user) {
+    return null;
   }
 
   return (
@@ -34,17 +27,26 @@ function UserProfileIcon() {
       <div className='me-3 flex flex-col justify-end text-end mr-4'> 
         <p className='poppins-medium text-xl'>
           {jsonUser.username}
+
         </p>
-        <p className='poppins-medium '>
-          {jsonUser.role}
-        </p>
+        <div className="flex justify-between">
+          <p className='font-pixel text-lg'>
+            {user.role}
+          </p>
+          <img
+            src="/img/logout.png"
+            className="w-6 h-6 ms-[20px] cursor-pointer"
+            alt="botão de logout"
+            onClick={handleLogout}
+          />
+        </div>
 
       </div>
 
       <figure className='bg-white rounded-full w-[4.4rem] h-[4.4rem] cursor-pointer' onClick={navigateUserProfile}>
-        {jsonUser.user_img && (
+        {user.user_img && (
           <img
-            src={`http://localhost:3001${jsonUser.user_img}`}
+            src={`http://localhost:3001${user.user_img}`}
             className="w-full h-full rounded-full"
             alt="imagem do usuário"
           />
