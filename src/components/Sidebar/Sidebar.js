@@ -1,12 +1,17 @@
+
+import React, { useState, useEffect } from 'react';
+
 import { Link } from 'react-router-dom';
-import Watermark from '../Watermark/Watermark'
-import CategoryButtons from '../../components/CategoryButtons/CategoryButtons';
-import React, { useState, useEffect ,  } from 'react';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
-function Sidebari(props) {
+import Watermark from '../Watermark/Watermark';
+import CategoryButtons from '../../components/CategoryButtons/CategoryButtons';
+
+function Sidebari({ role, content }) {
+  console.log('Current user role:', role);
+
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [collapsed, setCollapsed] = React.useState(false);
-  const [toggled, setToggled] = React.useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+  const [toggled, setToggled] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -18,9 +23,9 @@ function Sidebari(props) {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
   useEffect(() => {
     if (windowWidth > 640) {
-      
       setCollapsed(true);
     } else {
       setCollapsed(false);
@@ -28,6 +33,7 @@ function Sidebari(props) {
   }, [window.innerWidth]);
   const collapsedId = document.getElementById('collapse');
   return (
+
     <>
     <div className={` flex bg-clip-border alt-color-bg   `}>
       
@@ -72,9 +78,9 @@ function Sidebari(props) {
           ;},
           
         }}
-      className='mb-12' >
+      className='mb-12 p-4' >
         
-    <MenuItem className='MenuItem poppins-semibold ' icon={<img id='carrinho'  src="/images/grocery-store.png" />} component={<Link to="/products" />}>Produtos</MenuItem>
+    <MenuItem className='MenuItem w-full poppins-semibold ' icon={<img id='carrinho'  src="/images/grocery-store.png" />} component={<Link to="/products" />}>Produtos</MenuItem>
     <MenuItem className='MenuItem poppins-semibold ' icon={<img id='chart' className='' src="/images/pie-chart.png" />} component={<Link to="/analytics" />}>Análise </MenuItem>
     <MenuItem className='MenuItem poppins-semibold ' icon={<img id='chart' src="/images/arrows.png" />} component={<Link to="/stockmovements" />}> Movimentações </MenuItem>
     <MenuItem className='MenuItem poppins-semibold ' icon={<img className='' id='chart' src="/images/profile.png" />} component={<Link to="/userpage" />}> Gerenciar </MenuItem>
@@ -105,37 +111,40 @@ function Sidebari(props) {
               
           ;},
         }}
+
       className='mb-12 w-full p-2' >
+
         
-    <MenuItem className='MenuItem poppins-semibold ' title='Produtos' icon={<img id='carrinho' alt='produtos'   src="/images/grocery-store.png" />} component={<Link to="/products" />}>Produtos</MenuItem>
-    <MenuItem className='MenuItem poppins-semibold ' title='Analise' icon={<img id='chart' className='' src="/images/pie-chart.png" />} component={<Link to="/analytics" />}>Análise </MenuItem>
-    <MenuItem className='MenuItem poppins-semibold '  title='Movimentações' icon={<img id='chart' src="/images/arrows.png" />} component={<Link to="/stockmovements" />}> Movimentações </MenuItem>
-    <MenuItem className='MenuItem poppins-semibold '  title='Gerenciar' icon={<img className='' id='chart' src="/images/profile.png" />} component={<Link to="/userpage" />}> Gerenciar </MenuItem>
+    <MenuItem className='MenuItem w-full poppins-semibold ' title='Produtos' icon={<img id='carrinho' alt='produtos'   src="/images/grocery-store.png" />} component={<Link to="/products" />}>{windowWidth>640?'Produtos':''}</MenuItem>
+    <MenuItem className='MenuItem poppins-semibold ' title='Analise' icon={<img id='chart' className='' src="/images/pie-chart.png" />} component={<Link to="/analytics" />}>{windowWidth>640?'Analise':''} </MenuItem>
+    <MenuItem className='MenuItem poppins-semibold '  title='Movimentações' icon={<img id='chart' src="/images/arrows.png" />} component={<Link to="/stockmovements" />}> {windowWidth>640?'Movementações':''} </MenuItem>
+    <MenuItem className='MenuItem poppins-semibold '  title='Gerenciar' icon={<img className='' id='chart' src="/images/profile.png" />} component={<Link to="/e-commerce" />}> {windowWidth>640?'Gerenciar':''}</MenuItem>
 </Menu>
       </Sidebar> : null}
 
           
 
         
+
         </div>
-        
       </div>
-      
     </div>
+
     
     {windowWidth <450 ? 
     <div className='w-[35px] h-[33px] rounded-md border-2 border-[#6B3710] bg-[#6B3710] absolute   m-1'>
-      <img  src={'images/option.png'}className=' object-fit w-full h-full p-1    sb-button '  onClick={() => {if (windowWidth > 640) {
+      <img  src={'images/menu.png'} className=' object-fit w-full h-full p-1    sb-button '  onClick={() => {if (windowWidth > 640) {
       setCollapsed(!collapsed);
       
     } else {
       setToggled(!toggled);
       
     }
-  }} alt=""/>
+  }} alt="asd"/>
     </div>: null}
   </>
   )
+
 }
 
-export default Sidebari
+export default Sidebari;
