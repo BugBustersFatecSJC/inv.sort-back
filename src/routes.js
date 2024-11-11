@@ -34,6 +34,8 @@ router.get('/check-first-login', userController.checkFirstLogin);
 router.post('/users', upload.single('user_img'), userController.createUser);
 router.get('/users', userController.getAllUsers);
 router.post('/login', userController.loginUser);
+router.put('/users/:user_id/role', userController.updateUserRole);
+router.delete('/users/:user_id', userController.deleteUser);
 
 //Rotas de Produtos
 router.post('/products', upload.single('product_img'), productController.createProduct, auditLogMiddleware);
