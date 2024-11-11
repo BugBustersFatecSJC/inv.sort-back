@@ -15,6 +15,7 @@ const batchController = require('./controllers/batchController');
 const auditLogMiddleware = require('./controllers/auditController');
 const sectorchartController = require('./controllers/sectorchartController');
 const cardsController = require('./controllers/cardsController');
+const stockMoveController = require('./controllers/stockmoveController');
 
 
 //Inicio das Rotas
@@ -81,6 +82,16 @@ router.delete('/supplier/:supplier_id', supplierController.deleteSupplier);
 
 // Rotas do Fluxo de Estoque "BUYANDSELL"
 router.put('/buyandsell/:batch_id', batchController.sellBatch);
+
+router.get('/buyandsell/:product_id/batches', batchController.getBatchesByProductId);
+
+router.put('/buyandsell/sell/:product_id', batchController.sellBatchByProductId);
+router.post('/buyandsell/buy/:product_id', batchController.buyBatchByProductId);
+
+
+// Rotas de Movimentação de estoque
+router.get('/movementpage', stockMoveController.getAllStockMovements);
+router.post('/filter-stock-movement', stockMoveController.getAllStockMovements);
 
 // fim das rotas
 
