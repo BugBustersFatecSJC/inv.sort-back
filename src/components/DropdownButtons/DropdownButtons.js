@@ -45,11 +45,4 @@ function DropdownButtons({ options = [],type, label, onChange, disabled = false,
     </div>
   )
 }
-
-
-      
-     
-      </select> 
-      </div>)
-};
 export default DropdownButtons
