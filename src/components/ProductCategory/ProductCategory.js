@@ -393,36 +393,54 @@ function ProductCategory(props) {
 
     return (
       // Container da categoria
-    <div className='w-full  rounded bg-[#5F2E09]  shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] mt-4'>
-        <div className=' p-4 mx-4 h-[100px] overflow-y-auto flex flex-wrap relative'>
-          <div className={` p-4 transition-opacity duration-200 max-h-[100px] absolute inset-0 bg-[#5F2E09]  z-30 flex justify-between  items-center justify-center ${!showCategoryProducts ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-          <figure className='w-[5rem] h-[5rem] rounded-full alt-color-4-bg border-4 border-[#D87B26] shadow-[inset_-2px_3px_2px_4px_rgba(0,0,0,0.2)]'>
-            {props.categoryImage ? (
-              <img
-                src={`http://localhost:3001${props.categoryImage}`}
-                alt={props.categoryName}
-                className='w-full h-full object-cover rounded-full'
-              />
-            ) : null}
-          </figure>
-            <p className='my-2 poppins-semibold text-[#EFBB7F] text-[24px]'>{ props.categoryName }</p>
-            <div className='flex justify-evenly bg-[#EFBB7F] rounded-md w-[10%]'>
-              <p className='cursor-pointer' onClick={handleClickShow}>
-                <i class="fa-solid fa-eye"></i>
-              </p>
-              <p className='cursor-pointer' onClick={() => handleCategoryDelete(props.categoryKey)}>
-                <i class="fa-solid fa-trash"></i>
-              </p>
-              <p className='cursor-pointer' onClick={openCategoryModal}>
-                <i class="fa-solid fa-pencil"></i>
-              </p>
+
+    <div className='w-[49%] rounded bg-[#5F2E09] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] mt-4 h-[260px] py-5'>
+        <div className=' p-4 mx-4 flex relative'>
+          <div className={` p-4 transition-opacity duration-200 max-h-[100px] absolute inset-0 top-[80px] bg-[#5F2E09] z-30 flex justify-between  items-center justify-center ${!showCategoryProducts ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+          <div className="flex justify-between w-full">
+            <figure className='w-[5rem] h-[5rem] rounded-full alt-color-4-bg border-4 border-[#D87B26] shadow-[inset_-2px_3px_2px_4px_rgba(0,0,0,0.2)]'>
+              {props.categoryImage ? (
+                <img
+                  src={`http://localhost:3001${props.categoryImage}`}
+                  alt={props.categoryName}
+                  className='w-full h-full object-cover rounded-full'
+                />
+              ) : null}
+            </figure>
+            
+            <div className="flex flex-col w-[80%] h-[180px] justify-between ml-10">
+              <div>
+                <p className="my-2 poppins-semibold text-[28px]" style={{ color: "var(--tertiary-color)" }}>
+                  {props.categoryName}
+                </p>
+                <p className="my-2 poppins-semibold text-[14px]" style={{ color: "var(--tertiary-color)" }}>
+                  {props.categoryName}
+                </p>
+              </div>
+              <div className="flex justify-between rounded-md w-[70%] font-pixel m">
+                <p className="cursor-pointer text-center" onClick={handleClickShow} style={{ color: "var(--tertiary-color)" }}>
+                  <i className="fa-solid fa-eye"></i>
+                  <span className="text-xs block mt-1">Visualizar</span>
+                </p>
+                <p className="cursor-pointer text-center" onClick={() => handleCategoryDelete(props.categoryKey)} style={{ color: "var(--tertiary-color)" }}>
+                  <i className="fa-solid fa-trash"></i>
+                  <span className="text-xs block mt-1">Excluir</span>
+                </p>
+                <p className="cursor-pointer text-center" onClick={openCategoryModal} style={{ color: "var(--tertiary-color)" }}>
+                  <i className="fa-solid fa-pencil"></i>
+                  <span className="text-xs block mt-1">Editar</span>
+                </p>
+              </div>
+            </div>
+
+
             </div>
           </div>
             {/*
               Aqui ocorre a criação de cada quadrado, é obtido uma lista com todos os produtos
               que são mapeados, cada produto irá gerar um quadrado e cada quadrado terá sua tooltip           
             */}
-            {props.products.map((product, index) => {
+            {/* {props.products.map((product, index) => {
               const unit = units.find((u) => u.unit_id === product.unit_id)?.unit_type || 'N/A'
               return (
                 <Tooltip
@@ -453,22 +471,22 @@ function ProductCategory(props) {
                 </div>
               </Tooltip>
               )
-            })}
+            })} */}
 
             {/* Botão para adicionar novo produto */}
-            <button
+{/*             <button
                 onClick={openModal}
                 className="w-12 h-12 alt-color-4-bg border-[3px] border-[#D87B26] flex items-center justify-center text-2xl"
             >
             <i class="fa-solid fa-plus"></i>
-            </button>
+            </button> */}
         </div>
 
             
 
         {/* Modal de produto */}
         {isModalOpen && (
-  <div className="modal modal-open text-slate-400">
+  <div className="modal modal-open text-slate-400 ">
     <div className="modal-box">
       <h3 className="font-bold text-lg text-white">Adicionar novo produto</h3>
 
@@ -650,7 +668,7 @@ function ProductCategory(props) {
 )}
 
 
- {/* Modal para editar produto */}
+{/* Modal para editar produto */}
 {isProdEditModalOpen && (
   <Modal closeModal={closeProdEditModal} title="Editar Produto" handleSubmit={handleProdUpdate}>
     <div className="form-control mb-4">
