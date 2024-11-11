@@ -5,6 +5,8 @@ import ProductTable from '../../components/ProductTable/ProductTable2';
 
 import React, { useState, useEffect } from 'react'; // Importação dos hooks do React
 
+import Sidebari from '../../components/Sidebar/Sidebari';
+
 // Página para registrar compra e venda de estoque
 function BuyAndSell() {
   const [products, setProducts] = useState([]); // Estado para armazenar os dados dos produtos
@@ -26,7 +28,7 @@ function BuyAndSell() {
 
   return (
     <MainPage title="Compra e Venda">
-
+      <Sidebari />
       <div className="flex bg-[rgb(255,195,118)]  ">
         
         <section className="border-0 border-[rgb(180,81,5)]    w-full shadow-sm shadow-inner">

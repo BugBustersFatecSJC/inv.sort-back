@@ -1,5 +1,5 @@
 import {useState,useEffect} from 'react';
-import Sidebar from '../../components/Sidebar/Sidebar';
+import Sidebar from '../../components/Sidebar/Sidebari';
 import UserProfileIcon from '../../components/UserProfileIcon/UserProfileIcon';
 import Cardsanalytics from '../../components/Cardsanlaytics/Cardsanalytics';
 import Mainchart from '../../components/MainChart/Mainchart';

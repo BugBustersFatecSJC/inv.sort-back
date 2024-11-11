@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import Sidebari from '../../components/Sidebar/Sidebar';
+import Sidebari from '../../components/Sidebar/Sidebari';
 import UserProfileIcon from '../../components/UserProfileIcon/UserProfileIcon';
 import CategoryButtons from '../../components/CategoryButtons/CategoryButtons';
 import Loading from '../../components/Loading/Loading';
