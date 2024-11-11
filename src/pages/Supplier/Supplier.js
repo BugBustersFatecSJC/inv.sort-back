@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import api from '../../services/api';
 import MainPage from '../MainPage/MainPage';
 import SupplierModal from '../../components/SupplierModal/SupplierModal';
@@ -11,6 +12,7 @@ function SupplierPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
+  const [lastAddedId, setLastAddedId] = useState(null);
 
   const fetchSuppliers = async () => {
     try {
@@ -30,6 +32,7 @@ function SupplierPage() {
 
   const addSupplier = (newSupplier) => {
     setSuppliers((prevSuppliers) => [...prevSuppliers, newSupplier]);
+    setLastAddedId(newSupplier.supplier_id);
   };
 
   const updateSupplier = (supplierId, updatedSupplier) => {
@@ -82,7 +85,7 @@ function SupplierPage() {
                   <p className="font-pixel text-2xl cursor-pointer" onClick={() => toggleModal()}>
                     Adicionar novo fornecedor
                   </p>
-                  <i class="fa-solid fa-plus ml-2 text-lg text-bold text-green-500"></i>
+                  <i className="fa-solid fa-plus ml-2 text-lg text-bold text-green-500"></i>
                 </div>
                 <SearchBar onSearch={handleSearch} />
               </div>
@@ -101,10 +104,13 @@ function SupplierPage() {
                     const buttonBgColor = index % 2 === 0 ? '#F2B080' : '#F7B687';
 
                     return (
-                      <tr 
+                      <motion.tr 
                         key={supplier.supplier_id} 
                         className={`${rowBgColor} border-b border-[#FFCB8F] hover:bg-orange-100`}
                         style={{ backgroundColor: rowBgColor }}
+                        initial={{ scale: supplier.supplier_id === lastAddedId ? 0.8 : 1 }}
+                        animate={{ scale: 1 }}
+                        transition={{ duration: 0.3 }}
                       >
                         <td className="border border-[#FFCB8F] p-2 py-3 w-1/2">
                           {supplier.supplier_name}
@@ -117,24 +123,24 @@ function SupplierPage() {
                         </td>
                         <td className="flex items-center justify-center space-x-4 w-full">
                           <div className='w-full flex justify-evenly my-2'>
-                          <button 
-                            onClick={() => toggleModal(supplier)} 
-                            className="flex space-x-3 font-pixel p-2 justify-center items-center btn-3d" 
-                            style={{ backgroundColor: buttonBgColor }}
-                          >
-                            <i className="fa-solid fa-pencil"></i>
-                          </button> 
+                            <button 
+                              onClick={() => toggleModal(supplier)} 
+                              className="flex space-x-3 font-pixel p-2 justify-center items-center btn-3d" 
+                              style={{ backgroundColor: buttonBgColor }}
+                            >
+                              <i className="fa-solid fa-pencil"></i>
+                            </button> 
 
-                          <button 
-                            onClick={() => removeSupplier(supplier.supplier_id)} 
-                            className="flex space-x-3 font-pixel p-2 justify-center items-center btn-3d" 
-                            style={{ backgroundColor: buttonBgColor }}
-                          >
-                            <i className="fa-solid fa-trash"></i>
-                          </button>
+                            <button 
+                              onClick={() => removeSupplier(supplier.supplier_id)} 
+                              className="flex space-x-3 font-pixel p-2 justify-center items-center btn-3d" 
+                              style={{ backgroundColor: buttonBgColor }}
+                            >
+                              <i className="fa-solid fa-trash"></i>
+                            </button>
                           </div>
                         </td>
-                      </tr>
+                      </motion.tr>
                     );
                   })}
                 </tbody>
