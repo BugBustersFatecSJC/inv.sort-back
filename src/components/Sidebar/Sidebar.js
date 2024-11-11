@@ -39,7 +39,7 @@ function Sidebari({ role, content }) {
       
       <div className='mb-8 justify-center self-center flex-col flex-wrap   h-full  align-center text-center  py-4'>
         <div className='text-center self-center  align-middle flex justify-center'>
-          {windowWidth > 450 ? <img  src={'img/logo_invsort.svg'} className={`w-[50%] sm:w-[30%] ${windowWidth<450?'rounded-m outline-4 outline-[#3E1900] bg-[#3E1900]':''}  mt-4 sb-button z-10`}  onClick={() => {if (windowWidth > 640) {
+          {windowWidth > 450 ? <img  src={'img/logo_invsort.svg'} className={`w-[40%] sm:w-[30%] ${windowWidth<450?'rounded-m outline-4 outline-[#3E1900] bg-[#3E1900]':''}  mt-4 sb-button z-10`}  onClick={() => {if (windowWidth > 640) {
               setCollapsed(!collapsed);
               
             } else {
@@ -89,7 +89,7 @@ function Sidebari({ role, content }) {
   <Watermark  className="bottom-0"/>
         
 </Sidebar>
-{windowWidth > 450 ? <Sidebar id='collapse' width='13.85rem'  collapsedWidth='3rem ' collapsed={!collapsed}>
+{windowWidth > 450 ? <Sidebar id='collapse' width='14rem'  collapsedWidth='5rem ' collapsed={!collapsed}>
 <Menu 
         menuItemStyles={{
           button: ({ level, active, disabled }) => {
@@ -103,7 +103,7 @@ function Sidebari({ role, content }) {
                   color: '#b6c8d9',
                 },
                 [`&:hover`]: {
-                  backgroundColor: '#3E1900'
+                  backgroundColor: '#3E1900',
                   
                 }
                 
@@ -112,14 +112,13 @@ function Sidebari({ role, content }) {
           ;},
         }}
 
-      className='mb-12 w-full ' >
+      className='mb-12 w-full hover:rounded-md md:hover:rounded-none' >
 
-        
 
-    <MenuItem className='MenuItem sm:p-2 w-full poppins-semibold ' title='Produtos' icon={<img id='carrinho' alt='produtos'   src="/images/grocery-store.png" />} component={<Link to="/products" />}>{windowWidth>640?'Produtos':''}</MenuItem>
-    <MenuItem className='MenuItem sm:p-2 poppins-semibold ' title='Analise' icon={<img id='chart' className='' src="/images/pie-chart.png" />} component={<Link to="/analytics" />}>{windowWidth>640?'Analise':''} </MenuItem>
-    <MenuItem className='MenuItem  sm:p-2 poppins-semibold '  title='Movimentações' icon={<img id='chart' src="/images/arrows.png" />} component={<Link to="/stockmovements" />}> {windowWidth>640?'Movementações':''} </MenuItem>
-    <MenuItem className='MenuItem sm:p-2 poppins-semibold '  title='Gerenciar' icon={<img className='' id='chart' src="/images/profile.png" />} component={<Link to="/e-commerce" />}> {windowWidth>640?'Gerenciar':''}</MenuItem>
+    <MenuItem className='MenuItem sm:p-0 w-full poppins-semibold ' title='Produtos' icon={<img id='carrinho' alt='produtos'   src="/images/grocery-store.png" />} component={<Link to="/products" />}>{windowWidth>640?'Produtos':''}</MenuItem>
+    <MenuItem className='MenuItem sm:p-0 poppins-semibold ' title='Analise' icon={<img id='chart' className='' src="/images/pie-chart.png" />} component={<Link to="/analytics" />}>{windowWidth>640?'Analise':''} </MenuItem>
+    <MenuItem className='MenuItem  sm:p-0 poppins-semibold '  title='Movimentações' icon={<img id='chart' src="/images/arrows.png" />} component={<Link to="/stockmovements" />}> {windowWidth>640?'Movementações':''} </MenuItem>
+    <MenuItem className='MenuItem sm:p-0 poppins-semibold '  title='Gerenciar' icon={<img className='' id='chart' src="/images/profile.png" />} component={<Link to="/e-commerce" />}> {windowWidth>640?'Gerenciar':''}</MenuItem>
 
 </Menu>
       </Sidebar> : null}

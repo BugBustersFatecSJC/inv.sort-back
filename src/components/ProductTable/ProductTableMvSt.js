@@ -17,7 +17,6 @@ function ProductTableMvSt() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
 
-
   const fetchStockMovements = async () => {
     try {
       const response = await Axios.get('http://localhost:3001/movementpage');
@@ -32,7 +31,6 @@ function ProductTableMvSt() {
   useEffect(() => {
     fetchStockMovements();
   }, []);
-
 
   const applyFilters = (newFilters) => {
     setFilters(newFilters);
@@ -74,18 +72,15 @@ function ProductTableMvSt() {
 
   const currentMovements = filteredMovements.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-
   const openModal = (movement) => {
     setSelectedMovement(movement);
     setIsModalOpen(true);
   };
 
-
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedMovement(null);
   };
-
 
   const goToNextPage = () => {
     if (currentPage * itemsPerPage < filteredMovements.length) {
@@ -99,14 +94,12 @@ function ProductTableMvSt() {
     }
   };
 
-
   const toggleOrder = () => {
     setOrder(prevOrder => prevOrder === 'desc' ? 'asc' : 'desc');
   };
 
   if (loading) {
     return <Loading />;
-
   }
 
   if (error) {
@@ -148,7 +141,6 @@ function ProductTableMvSt() {
               <th className="px-4 py-2 border text-xs sm:text-sm">Usuário</th>
               <th className="px-4 py-2 border text-xs sm:text-sm">Data da Movimentação</th>
               <th className="px-4 py-2 border text-xs sm:text-sm">Categoria</th>
-
             </tr>
           </thead>
           <tbody>
@@ -158,7 +150,6 @@ function ProductTableMvSt() {
                 className={index % 2 === 0 ? "bg-[#F5A66D]" : "bg-[#EA9457]"}
                 onClick={() => openModal(movement)}
               >
-
                 <td className="text-xs sm:text-sm">{movement.product ? movement.product.product_name : "N/A"}</td>
                 <td className="text-xs sm:text-sm">{movement.quantity}</td>
                 <td className="text-xs sm:text-sm">{movement.batch ? movement.batch.batch_id : "N/A"}</td>
@@ -166,13 +157,11 @@ function ProductTableMvSt() {
                 <td className="text-xs sm:text-sm">{movement.user ? movement.user.username : "N/A"}</td>
                 <td className="text-xs sm:text-sm">{new Date(movement.movement_date).toLocaleString()}</td>
                 <td className="text-xs sm:text-sm">{movement.category ? movement.category.category_name : "N/A"}</td>
-
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-
 
       <div className="flex justify-center mt-8">
         <button
@@ -180,7 +169,6 @@ function ProductTableMvSt() {
           className="bg-[#6B3710] text-[#FFC376] font-medium px-4 py-2 rounded-lg mr-2 
           hover:bg-[#4e2d19] disabled:bg-[#4c2a17] disabled:text-[#ccc] 
           disabled:cursor-not-allowed"
-
           disabled={currentPage === 1}
         >
           Anterior
@@ -194,13 +182,14 @@ function ProductTableMvSt() {
           className="bg-[#6B3710] text-[#FFC376] font-medium px-4 py-2 rounded-lg mr-2 
           hover:bg-[#4e2d19] disabled:bg-[#4c2a17] disabled:text-[#ccc] 
           disabled:cursor-not-allowed"
-
           disabled={currentPage * itemsPerPage >= filteredMovements.length}
         >
           Próxima
         </button>
 
- {isModalOpen && selectedMovement && (
+      </div>
+
+      {isModalOpen && selectedMovement && (
 
         <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50">
           <div className="bg-[#6B3710] p-6 rounded-lg max-w-4xl w-full">
@@ -224,7 +213,9 @@ function ProductTableMvSt() {
         </div>
       )}
     </div>
+
     </div>
+
   );
 }
 
