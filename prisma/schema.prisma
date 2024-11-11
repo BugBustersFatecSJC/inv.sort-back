@@ -54,6 +54,7 @@ model Product {
   product_img         String? 
   product_stock       Int  // Add
   product_stock_min   Int  // Add
+  quantity_max        Int
   category_id         Int
   prod_brand          String?
   prod_model          String?

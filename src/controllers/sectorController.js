@@ -10,7 +10,7 @@ const createSector = async (req, res) => {
         });
 
         if (existingSector) {
-            return res.status(400).json({ error: "já existe um setor com este nome." });
+            return res.status(400).json({ error });
         }
 
 

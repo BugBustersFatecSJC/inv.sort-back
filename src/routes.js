@@ -39,7 +39,7 @@ router.post('/login', userController.loginUser);
 router.post('/products', upload.single('product_img'), productController.createProduct, auditLogMiddleware);
 router.get('/products', productController.getAllProducts);
 router.get('/products/:product_id', productController.getProductsbyId);
-router.put('/products/:product_id',auditLogMiddleware, productController.updateProduct);
+router.put('/products/:product_id', upload.single('product_img'), auditLogMiddleware, productController.updateProduct);
 router.delete('/products/:product_id',auditLogMiddleware, productController.deleteProduct);
 router.get('/products/category/:category_id', productController.getProductsByCategory);
 
