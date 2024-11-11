@@ -41,7 +41,7 @@
       margin-top:50px;
       margin-bottom: 50px;
       border: 1.5px solid #F4BD76;
-      border-radius: 1px;}
+     }
   
   
       ::-webkit-scrollbar-thumb:horizontal {
@@ -190,6 +190,10 @@ code {
 .alt-color-5 {
   color: var(--alt-color-5);
 }
+::placeholder {
+  color:var(--main-color)!important;
+  opacity: 1; /* Firefox */
+}
 
 .recharts-wrapper{
   display: flex;
@@ -204,17 +208,22 @@ code {
 .ps-menu-button {
 
   color: var(--secondary-color);
-  padding-left: 14px!important;
-  width: 100%!important;
-  max-width: 16rem!important;
-  
- }
+  padding: 0!important;
+  width: auto!important;
+  text-align: center;
+  align-items: center;
+  align-items: center;
+  justify-content: center;
+  display: flex;
 
+
+ }
 
 .ps-sidebar-container{
   background-color: var(--alt-color)!important;
  width: 100%!important;
- max-width: 16rem!important;
+
+ padding: 0px;
 }
 .ps-sidebar-root{
   margin: 0!important;
@@ -224,7 +233,10 @@ code {
  
 }
 .ps-menu-root{
-  max-width: 16rem!important;
+  max-width: 14rem!important;
+}
+.MenuItem{
+  font-size: 15px;
 }
 .ps-menu-button:hover {
   
@@ -244,24 +256,14 @@ code {
   background-color: var(--main-color);
 
 }
-@keyframes slide {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
+
+td{
+  border: 4px solid transparent;
+  margin: auto;
+  border: 2px solid var(--main-color);
+  padding: 8px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 650;
+  font-style: normal;
 }
 
-.animated-placeholder span{
-  display: inline-block;
-  white-space: nowrap;
-  animation: slide 5s linear infinite;
-}
-input::file-selector-button {
-  font-size: 1.2rem;
-  font-family: 'VT323', monospace;
-  background-color: hwb(26 2% 30%);    
-  border: thin solid hwb(26 2% 30%);
-  border-radius: 3px;
-}

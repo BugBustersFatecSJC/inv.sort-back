@@ -23,6 +23,7 @@ function UserProfileIcon() {
 
   return (
     <div className='flex items-center'>
+
       <div className='me-3'>
         <p className='font-pixel text-2xl'>
           {user.username}
@@ -38,6 +39,7 @@ function UserProfileIcon() {
             onClick={handleLogout}
           />
         </div>
+
       </div>
 
       <figure className='bg-white rounded-full w-[4.4rem] h-[4.4rem] cursor-pointer' onClick={navigateUserProfile}>
