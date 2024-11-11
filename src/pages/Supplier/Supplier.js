@@ -12,6 +12,8 @@ function SupplierPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const suppliersPerPage = 15;
   const [lastAddedId, setLastAddedId] = useState(null);
 
   const fetchSuppliers = async () => {
@@ -66,11 +68,21 @@ function SupplierPage() {
 
   const handleSearch = (query) => {
     setSearchQuery(query);
+    setCurrentPage(1);
   };
 
   const filteredSuppliers = suppliers.filter((supplier) =>
     supplier.supplier_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const indexOfLastSupplier = currentPage * suppliersPerPage;
+  const indexOfFirstSupplier = indexOfLastSupplier - suppliersPerPage;
+  const currentSuppliers = filteredSuppliers.slice(indexOfFirstSupplier, indexOfLastSupplier);
+
+  const totalPages = Math.ceil(filteredSuppliers.length / suppliersPerPage);
+
+  const goToNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  const goToPreviousPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
   return (
     <MainPage title="Gestão de Fornecedores">
@@ -80,7 +92,7 @@ function SupplierPage() {
         <>
           <div className="product-table w-full bg-[#FFC376]">
             <div className=''>
-              <div className='flex justify-between w-full items-end'>
+              <div className='flex justify-between w-full items-end mb-6'>
                 <div className='flex items-end'>
                   <p className="font-pixel text-2xl cursor-pointer" onClick={() => toggleModal()}>
                     Adicionar novo fornecedor
@@ -99,18 +111,23 @@ function SupplierPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredSuppliers.map((supplier, index) => {
+                  {currentSuppliers.map((supplier, index) => {
                     const rowBgColor = index % 2 === 0 ? '#EA9457' : '#F5A66D';
                     const buttonBgColor = index % 2 === 0 ? '#F2B080' : '#F7B687';
 
                     return (
-                      <motion.tr 
-                        key={supplier.supplier_id} 
+                      <motion.tr
+                        key={supplier.supplier_id}
+                        initial={lastAddedId === supplier.supplier_id ? { scale: 0.8, opacity: 0 } : {}}
+                        animate={lastAddedId === supplier.supplier_id ? { scale: 1, opacity: 1 } : {}}
+                        transition={{
+                          type: "spring",
+                          stiffness: 260,
+                          damping: 20,
+                          duration: 0.3
+                        }}
                         className={`${rowBgColor} border-b border-[#FFCB8F] hover:bg-orange-100`}
                         style={{ backgroundColor: rowBgColor }}
-                        initial={{ scale: supplier.supplier_id === lastAddedId ? 0.8 : 1 }}
-                        animate={{ scale: 1 }}
-                        transition={{ duration: 0.3 }}
                       >
                         <td className="border border-[#FFCB8F] p-2 py-3 w-1/2">
                           {supplier.supplier_name}
@@ -145,11 +162,31 @@ function SupplierPage() {
                   })}
                 </tbody>
               </table>
+
+              <div className="flex justify-center items-center space-x-4 mt-4">
+                <button
+                  onClick={goToPreviousPage}
+                  className="shadow-none w-[2rem]"
+                  disabled={currentPage === 1}
+                >
+                  <img src="/img/pointer-2.svg" alt="" />
+                </button>
+                <span className="font-pixel">
+                  Página {currentPage} de {totalPages}
+                </span>
+                <button
+                  onClick={goToNextPage}
+                  className="shadow-none w-[2rem]"
+                  disabled={currentPage === totalPages}
+                >
+                  <img src="/img/pointer-1.svg" alt="" />
+                </button>
+              </div>
             </div>
           </div>
         </>
       )}
-  
+
       {showModal && <SupplierModal supplier={selectedSupplier} onSupplierAdded={addSupplier} onSupplierUpdated={updateSupplier} onClose={toggleModal} />}
     </MainPage>
   );
