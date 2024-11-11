@@ -85,6 +85,7 @@ router.put('/buyandsell/:batch_id', batchController.sellBatch);
 
 // Rotas de Movimentação de estoque
 router.get('/movementpage', stockMoveController.getAllStockMovements);
+router.post('/filter-stock-movement', stockMoveController.getAllStockMovements);
 
 // fim das rotas
 
