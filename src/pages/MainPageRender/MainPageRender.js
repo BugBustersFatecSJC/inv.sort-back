@@ -109,6 +109,7 @@ function MainPageRender() {
         ) : (<> 
       
           <div className="flex justify-between gap-4 grid mt-6 overflow-y-scroll grid-cols-2 lg:grid-cols-4  md:grid-cols-3 sm:grid-cols-3 ">
+          
           <Category onCategoryAdded={addCategory} />
             {categories.map((category) => {
               const categoryProducts = products.filter(

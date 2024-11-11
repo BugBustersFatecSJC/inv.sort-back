@@ -4,8 +4,9 @@ import ProductRow from '../../components/ProductRow/ProductRow2';
 import ProductTable from '../../components/ProductTable/ProductTable2';
 
 import React, { useState, useEffect } from 'react'; // Importação dos hooks do React
+import Sidebar from '../../components/Sidebar/Sidebari'; // Importação do componente Sidebar
 
-import Sidebari from '../../components/Sidebar/Sidebari';
+
 
 // Página para registrar compra e venda de estoque
 function BuyAndSell() {
@@ -28,11 +29,11 @@ function BuyAndSell() {
 
   return (
     <MainPage title="Compra e Venda">
-      <Sidebari />
+      
       <div className="flex bg-[rgb(255,195,118)]  ">
-        
+      
         <section className="border-0 border-[rgb(180,81,5)]    w-full shadow-sm shadow-inner">
-
+        
           {/* Barra de pesquisa (componente que você pode personalizar se necessário) */}
           <ProductTable products={products} /> {/* Passando os produtos como prop para o ProductTable */}
 
