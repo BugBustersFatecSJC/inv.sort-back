@@ -5,6 +5,7 @@ import MainPage from '../MainPage/MainPage';
 import SupplierModal from '../../components/SupplierModal/SupplierModal';
 import Loading from '../../components/Loading/Loading';
 import SearchBar from '../../components/SearchBar/SearchBar';
+import './Supplier.css'
 
 function SupplierPage() {
   const [loading, setLoading] = useState(true);
@@ -92,7 +93,7 @@ function SupplierPage() {
         <>
           <div className="product-table w-full bg-[#FFC376]">
             <div className=''>
-              <div className='flex justify-between w-full items-end mb-6'>
+              <div className='flex justify-between w-full items-end mb-6 table-header-container'>
                 <div className='flex items-end'>
                   <p className="font-pixel text-2xl cursor-pointer" onClick={() => toggleModal()}>
                     Adicionar novo fornecedor
@@ -101,67 +102,70 @@ function SupplierPage() {
                 </div>
                 <SearchBar onSearch={handleSearch} />
               </div>
-              <table className="w-full border-collapse overflow-x-auto">
-                <thead>
-                  <tr>
-                    <th className="text-2xl font-pixel py-2 w-1/2 text-left">Nome</th>
-                    <th className="text-2xl font-pixel py-2 w-1/6 text-left">Contato</th>
-                    <th className="text-2xl font-pixel py-2 w-1/4 text-left">Endereço</th>
-                    <th className="text-2xl font-pixel py-2 w-[10%]"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentSuppliers.map((supplier, index) => {
-                    const rowBgColor = index % 2 === 0 ? '#EA9457' : '#F5A66D';
-                    const buttonBgColor = index % 2 === 0 ? '#F2B080' : '#F7B687';
 
-                    return (
-                      <motion.tr
-                        key={supplier.supplier_id}
-                        initial={lastAddedId === supplier.supplier_id ? { scale: 0.8, opacity: 0 } : {}}
-                        animate={lastAddedId === supplier.supplier_id ? { scale: 1, opacity: 1 } : {}}
-                        transition={{
-                          type: "spring",
-                          stiffness: 260,
-                          damping: 20,
-                          duration: 0.3
-                        }}
-                        className={`${rowBgColor} border-b border-[#FFCB8F] hover:bg-orange-100`}
-                        style={{ backgroundColor: rowBgColor }}
-                      >
-                        <td className="border border-[#FFCB8F] p-2 py-3 w-1/2">
-                          {supplier.supplier_name}
-                        </td>
-                        <td className="border border-[#FFCB8F] p-2 w-1/6">
-                          {supplier.contact_info}
-                        </td>
-                        <td className="border border-[#FFCB8F] p-2 w-1/4">
-                          {supplier.address}
-                        </td>
-                        <td className="flex items-center justify-center space-x-4 w-full">
-                          <div className='w-full flex justify-evenly my-2'>
-                            <button 
-                              onClick={() => toggleModal(supplier)} 
-                              className="flex space-x-3 font-pixel p-2 justify-center items-center btn-3d" 
-                              style={{ backgroundColor: buttonBgColor }}
-                            >
-                              <i className="fa-solid fa-pencil"></i>
-                            </button> 
+              <div className='overflow-x-auto w-full'>
+                <table className="min-w-[600px] w-full border-collapse main-table">
+                  <thead>
+                    <tr>
+                      <th className="text-2xl font-pixel py-2 w-1/2 text-left">Nome</th>
+                      <th className="text-2xl font-pixel py-2 w-1/6 text-left">Contato</th>
+                      <th className="text-2xl font-pixel py-2 w-1/4 text-left">Endereço</th>
+                      <th className="text-2xl font-pixel py-2 w-[10%]"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentSuppliers.map((supplier, index) => {
+                      const rowBgColor = index % 2 === 0 ? '#EA9457' : '#F5A66D';
+                      const buttonBgColor = index % 2 === 0 ? '#F2B080' : '#F7B687';
 
-                            <button 
-                              onClick={() => removeSupplier(supplier.supplier_id)} 
-                              className="flex space-x-3 font-pixel p-2 justify-center items-center btn-3d" 
-                              style={{ backgroundColor: buttonBgColor }}
-                            >
-                              <i className="fa-solid fa-trash"></i>
-                            </button>
-                          </div>
-                        </td>
-                      </motion.tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                      return (
+                        <motion.tr
+                          key={supplier.supplier_id}
+                          initial={lastAddedId === supplier.supplier_id ? { scale: 0.8, opacity: 0 } : {}}
+                          animate={lastAddedId === supplier.supplier_id ? { scale: 1, opacity: 1 } : {}}
+                          transition={{
+                            type: "spring",
+                            stiffness: 260,
+                            damping: 20,
+                            duration: 0.3
+                          }}
+                          className={`${rowBgColor} border-b border-[#FFCB8F] hover:bg-orange-100`}
+                          style={{ backgroundColor: rowBgColor }}
+                        >
+                          <td className="border border-[#FFCB8F] p-2 py-3 w-1/2">
+                            {supplier.supplier_name}
+                          </td>
+                          <td className="border border-[#FFCB8F] p-2 w-1/6">
+                            {supplier.contact_info}
+                          </td>
+                          <td className="border border-[#FFCB8F] p-2 w-1/4">
+                            {supplier.address}
+                          </td>
+                          <td className="flex items-center justify-center space-x-4 w-full">
+                            <div className='w-full flex justify-evenly my-2'>
+                              <button 
+                                onClick={() => toggleModal(supplier)} 
+                                className="flex space-x-3 font-pixel p-2 justify-center items-center btn-3d" 
+                                style={{ backgroundColor: buttonBgColor }}
+                              >
+                                <i className="fa-solid fa-pencil"></i>
+                              </button> 
+
+                              <button 
+                                onClick={() => removeSupplier(supplier.supplier_id)} 
+                                className="flex space-x-3 font-pixel p-2 justify-center items-center btn-3d" 
+                                style={{ backgroundColor: buttonBgColor }}
+                              >
+                                <i className="fa-solid fa-trash"></i>
+                              </button>
+                            </div>
+                          </td>
+                        </motion.tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
 
               <div className="flex justify-center items-center space-x-4 mt-4">
                 <button
