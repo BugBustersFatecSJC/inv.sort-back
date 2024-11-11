@@ -115,10 +115,12 @@ function Sidebari({ role, content }) {
       className='mb-12 w-full ' >
 
         
+
     <MenuItem className='MenuItem sm:p-2 w-full poppins-semibold ' title='Produtos' icon={<img id='carrinho' alt='produtos'   src="/images/grocery-store.png" />} component={<Link to="/products" />}>{windowWidth>640?'Produtos':''}</MenuItem>
     <MenuItem className='MenuItem sm:p-2 poppins-semibold ' title='Analise' icon={<img id='chart' className='' src="/images/pie-chart.png" />} component={<Link to="/analytics" />}>{windowWidth>640?'Analise':''} </MenuItem>
     <MenuItem className='MenuItem  sm:p-2 poppins-semibold '  title='Movimentações' icon={<img id='chart' src="/images/arrows.png" />} component={<Link to="/stockmovements" />}> {windowWidth>640?'Movementações':''} </MenuItem>
     <MenuItem className='MenuItem sm:p-2 poppins-semibold '  title='Gerenciar' icon={<img className='' id='chart' src="/images/profile.png" />} component={<Link to="/e-commerce" />}> {windowWidth>640?'Gerenciar':''}</MenuItem>
+
 </Menu>
       </Sidebar> : null}
 

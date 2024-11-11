@@ -24,9 +24,10 @@ function UserProfileIcon() {
   return (
     <div className='flex items-center'>
 
-      <div className='me-3'>
-        <p className='font-pixel text-2xl'>
-          {user.username}
+      <div className='me-3 flex flex-col justify-end text-end mr-4'> 
+        <p className='poppins-medium text-xl'>
+          {jsonUser.username}
+
         </p>
         <div className="flex justify-between">
           <p className='font-pixel text-lg'>
