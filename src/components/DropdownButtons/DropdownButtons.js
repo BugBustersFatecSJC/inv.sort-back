@@ -20,6 +20,7 @@ function DropdownButtons({ options = [],type, label, onChange, disabled = false,
   })
   
   const opt =options;
+  
   return (
     <div className=' mx-2 w-full'>
       <select
