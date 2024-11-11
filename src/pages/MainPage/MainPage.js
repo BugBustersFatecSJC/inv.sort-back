@@ -14,7 +14,7 @@ function MainPage(props) {
   
   
   return (
-    <div className='flex main-color-bg min-h-[100vh]  '>
+    <div className='flex main-color-bg min-h-[100vh]'>
       
       <Sidebari />
 
@@ -24,9 +24,9 @@ function MainPage(props) {
           <UserProfileIcon />
         </div>
         
-        <div className='w-[100%]  mx-auto flex flex-col'>
+        <div className='w-[96%]  mx-auto flex flex-col'>
           <div className='w-full flex justify-start'>
-            <h1 className='text-4xl ml-8 poppins-semibold'>{props.title}</h1>
+            <h1 className='text-3xl font-poppins text-regular'>{props.title}</h1>
           </div>
 
           <main className=' mb-8'>

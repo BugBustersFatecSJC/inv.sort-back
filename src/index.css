@@ -75,8 +75,6 @@ body{
 * {
   margin: 0;
   padding: 0;
- 
- 
 }
 .border-main {
   background: rgb(180,81,5);
@@ -97,6 +95,11 @@ code {
 
 .font-pixel {
   font-family: 'VT323', monospace;
+}
+
+/* Não é necessário criar um atributo para cada peso de fonte, basta apenas adicionar .text-bold e afins para mudar o peso da fonte */
+.font-poppins {
+  font-family: "Poppins", sans-serif;
 }
 
 .main-color-bg {
