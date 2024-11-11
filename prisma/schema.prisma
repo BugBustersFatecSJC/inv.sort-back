@@ -34,7 +34,7 @@ model Supplier {
   supplier_id   Int        @id @default(autoincrement())
   supplier_name String     @unique
   contact_info  String?
-  supplier_img  String? // pode ser null
+  supplier_img  String? 
   address       String?
   created_at    DateTime   @default(now())
   products      Product[]
@@ -48,25 +48,27 @@ model ProductUnit {
 }
 
 model Product {
-  product_id      Int             @id @default(autoincrement())
-  product_name    String
-  description     String?
-  product_img     String? // pode ser null
-  category_id     Int
-  prod_brand      String?
-  prod_model      String?
-  supplier_id     Int
-  unit_id         Int
-  is_perishable   Boolean         @default(false)
-  created_at      DateTime        @default(now())
-  prod_cost_value Float?
-  prod_sell_value Float?
-  category        Category        @relation(fields: [category_id], references: [category_id])
-  supplier        Supplier        @relation(fields: [supplier_id], references: [supplier_id])
-  productUnit     ProductUnit     @relation(fields: [unit_id], references: [unit_id])
-  batches         Batch[]
-  auditLogs       AuditLog[]
-  StockMovement   StockMovement[]
+  product_id          Int             @id @default(autoincrement())
+  product_name        String
+  description         String?
+  product_img         String? 
+  product_stock       Int  // Add
+  product_stock_min   Int  // Add
+  category_id         Int
+  prod_brand          String?
+  prod_model          String?
+  supplier_id         Int
+  unit_id             Int
+  is_perishable       Boolean         @default(false)
+  created_at          DateTime        @default(now())
+  prod_cost_value     Float?
+  prod_sell_value     Float?
+  category            Category        @relation(fields: [category_id], references: [category_id])
+  supplier            Supplier        @relation(fields: [supplier_id], references: [supplier_id])
+  productUnit         ProductUnit     @relation(fields: [unit_id], references: [unit_id])
+  batches             Batch[]
+  auditLogs           AuditLog[]
+  StockMovement       StockMovement[]
 
   @@index([product_name], name: "idx_product_name")
   @@index([category_id], name: "idx_products_category")
@@ -76,7 +78,7 @@ model Product {
 
 model Local {
   local_id      Int        @id @default(autoincrement())
-  local_name    String?
+  local_name    String?    @unique
   local_address String?
   created_at    DateTime   @default(now())
   auditLogs     AuditLog[]
@@ -86,7 +88,7 @@ model Local {
 model Sector {
   sector_id   Int        @id @default(autoincrement())
   local_id    Int
-  sector_name String
+  sector_name String     @unique
   created_at  DateTime   @default(now())
   auditLogs   AuditLog[]
   Local       Local      @relation(fields: [local_id], references: [local_id])
@@ -95,7 +97,8 @@ model Sector {
 model Batch {
   batch_id          Int             @id @default(autoincrement())
   product_id        Int
-  quantity          Int
+  quantity          Int 
+  quantity_max      Int // Add
   expiration_date   DateTime?
   manufacture_date  DateTime?
   batch_value_total Float?
@@ -109,6 +112,9 @@ model StockMovement {
   movement_id   Int          @id @default(autoincrement())
   batch_id      Int
   quantity      Int
+  quantity_max    Int? // Add
+  product_stock      Int? // Add
+  product_stock_min  Int? // Add
   movement_type MovementType
   movement_date DateTime     @default(now())
   user_id       Int
@@ -141,6 +147,9 @@ model AuditLog {
   primary_key_value String
   old_value         String?
   new_value         String?
+  product_stock     Int? // Add
+  product_stock_min Int? // Add
+  quantity_max      Int? // Add
   action_date       DateTime  @default(now())
   user              User      @relation(fields: [user_id], references: [user_id])
   batch             Batch?    @relation(fields: [batch_id], references: [batch_id])
