@@ -77,10 +77,15 @@ function SupplierPage() {
         <>
           <div className="product-table w-full bg-[#FFC376]">
             <div className=''>
-              <h2 className="font-pixel text-2xl mb-4 cursor-pointer" onClick={() => toggleModal()}>
-                Adicionar Novo Fornecedor
-              </h2>
-              <SearchBar onSearch={handleSearch} />
+              <div className='flex justify-between w-full items-end'>
+                <div className='flex items-end'>
+                  <p className="font-pixel text-2xl cursor-pointer" onClick={() => toggleModal()}>
+                    Adicionar novo fornecedor
+                  </p>
+                  <i class="fa-solid fa-plus ml-2 text-lg text-bold text-green-500"></i>
+                </div>
+                <SearchBar onSearch={handleSearch} />
+              </div>
               <table className="w-full border-collapse overflow-x-auto">
                 <thead>
                   <tr>
@@ -112,20 +117,21 @@ function SupplierPage() {
                         </td>
                         <td className="flex items-center justify-center space-x-4 w-full">
                           <div className='w-full flex justify-evenly my-2'>
-                            <button 
-                              onClick={() => toggleModal(supplier)} 
-                              className="flex space-x-3 font-pixel p-2 justify-center items-center" 
-                              style={{ backgroundColor: buttonBgColor }}
-                            >
-                              <i className="fa-solid fa-pencil"></i>
-                            </button> 
-                            <button 
-                              onClick={() => removeSupplier(supplier.supplier_id)} 
-                              className="flex space-x-3 font-pixel p-2 justify-center items-center" 
-                              style={{ backgroundColor: buttonBgColor }}
-                            >
-                              <i className="fa-solid fa-trash"></i>
-                            </button>
+                          <button 
+                            onClick={() => toggleModal(supplier)} 
+                            className="flex space-x-3 font-pixel p-2 justify-center items-center btn-3d" 
+                            style={{ backgroundColor: buttonBgColor }}
+                          >
+                            <i className="fa-solid fa-pencil"></i>
+                          </button> 
+
+                          <button 
+                            onClick={() => removeSupplier(supplier.supplier_id)} 
+                            className="flex space-x-3 font-pixel p-2 justify-center items-center btn-3d" 
+                            style={{ backgroundColor: buttonBgColor }}
+                          >
+                            <i className="fa-solid fa-trash"></i>
+                          </button>
                           </div>
                         </td>
                       </tr>
