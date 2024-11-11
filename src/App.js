@@ -35,7 +35,7 @@ function App() {
           <Route path="/products" element={<ProtectedRoute element={MainPageRender} />} />
           <Route path="/analytics" element={<ProtectedRoute element={Analytics} />} />
           <Route path="/userpage" element={<ProtectedRoute element={UserPage} />} />
-          <Route path="/historic" element={<ProtectedRoute element={MovementPage} />} />
+          <Route path="/stockmovements" element={<ProtectedRoute element={MovementPage} />} />
           <Route path="/batches" element={<ProtectedRoute element={Batch} />} />
           <Route path="/sectors" element={<ProtectedRoute element={Sector} />} />
           <Route path="/suppliers" element={<ProtectedRoute element={Supplier} />} />

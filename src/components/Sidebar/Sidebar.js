@@ -74,7 +74,6 @@ function Sidebari({ role, content }) {
               <MenuItem className='MenuItem poppins-semibold' icon={<img id='carrinho' src="/images/grocery-store.png" />} component={<Link to="/products" />}>Produtos</MenuItem>
               <MenuItem className='MenuItem poppins-semibold' icon={<img id='chart' className='' src="/images/pie-chart.png" />} component={<Link to="/analytics" />}>Análise</MenuItem>
               <MenuItem className='MenuItem poppins-semibold' icon={<img id='chart' src="/images/arrows.png" />} component={<Link to="/stockmovements" />}>Movimentações</MenuItem>
-
             </Menu>
             <Watermark className="bottom-0" />
           </Sidebar>

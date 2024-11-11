@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function UserProfileIcon() {
@@ -8,7 +8,7 @@ function UserProfileIcon() {
     navigate('/profile');
   };
 
-  // Obter o usuário do localStorage com verificações de segurança
+  // Obtendo o usuário do localStorage com verificações de segurança
   const user = localStorage.getItem("user");
   let jsonUser = null;
 
@@ -16,6 +16,11 @@ function UserProfileIcon() {
     jsonUser = user ? JSON.parse(user) : null;
   } catch (error) {
     console.error("Invalid user JSON:", error);
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    navigate('/login');
   }
 
   if (!jsonUser) {
@@ -29,15 +34,24 @@ function UserProfileIcon() {
         <p className='font-pixel text-2xl'>
           {jsonUser.username}
         </p>
-        <p className='font-pixel text-lg'>
-          {jsonUser.role}
-        </p>
+        <div className="flex justify-between">
+          <p className='font-pixel text-lg'>
+            {jsonUser.role}
+          </p>
+          <img
+            src="/img/logout.png"
+            className="w-6 h-6 ms-[20px] cursor-pointer"
+            alt="botão de logout"
+            onClick={handleLogout}
+          />
+        </div>
       </div>
+
       <figure className='bg-white rounded-full w-[4.4rem] h-[4.4rem] cursor-pointer' onClick={navigateUserProfile}>
         {jsonUser.user_img && (
           <img
             src={`http://localhost:3001${jsonUser.user_img}`}
-            className="w-full h-full rounded-full" // Corrigido para 'className'
+            className="w-full h-full rounded-full"
             alt="imagem do usuário"
           />
         )}
