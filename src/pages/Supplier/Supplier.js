@@ -3,10 +3,12 @@ import api from '../../services/api';
 import MainPage from '../MainPage/MainPage';
 import SupplierModal from '../../components/SupplierModal/SupplierModal';
 import Loading from '../../components/Loading/Loading';
+import SearchBar from '../../components/SearchBar/SearchBar';
 
 function SupplierPage() {
   const [loading, setLoading] = useState(true);
   const [suppliers, setSuppliers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
 
@@ -59,6 +61,14 @@ function SupplierPage() {
     setShowModal(!showModal);
   };
 
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
+
+  const filteredSuppliers = suppliers.filter((supplier) =>
+    supplier.supplier_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <MainPage title="Gestão de Fornecedores">
       {loading ? (
@@ -70,6 +80,7 @@ function SupplierPage() {
               <h2 className="font-pixel text-2xl mb-4 cursor-pointer" onClick={() => toggleModal()}>
                 Adicionar Novo Fornecedor
               </h2>
+              <SearchBar onSearch={handleSearch} />
               <table className="w-full border-collapse overflow-x-auto">
                 <thead>
                   <tr>
@@ -80,7 +91,7 @@ function SupplierPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {suppliers.map((supplier, index) => {
+                  {filteredSuppliers.map((supplier, index) => {
                     const rowBgColor = index % 2 === 0 ? '#EA9457' : '#F5A66D';
                     const buttonBgColor = index % 2 === 0 ? '#F2B080' : '#F7B687';
 
@@ -103,14 +114,14 @@ function SupplierPage() {
                           <div className='w-full flex justify-evenly my-2'>
                             <button 
                               onClick={() => toggleModal(supplier)} 
-                              className="flex space-x-3 font-pixel px-2 py-1" 
+                              className="flex space-x-3 font-pixel p-2 justify-center items-center" 
                               style={{ backgroundColor: buttonBgColor }}
                             >
                               <i className="fa-solid fa-pencil"></i>
                             </button> 
                             <button 
                               onClick={() => removeSupplier(supplier.supplier_id)} 
-                              className="flex space-x-3 font-pixel px-2 py-1" 
+                              className="flex space-x-3 font-pixel p-2 justify-center items-center" 
                               style={{ backgroundColor: buttonBgColor }}
                             >
                               <i className="fa-solid fa-trash"></i>
