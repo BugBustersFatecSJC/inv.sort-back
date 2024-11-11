@@ -75,9 +75,9 @@ const Sectorchart = () => {
           dataKey="total_difference"
           stroke="#ffc376"
           strokeWidth={2.5}
-          
-          
-        >
+
+ >
+
           <LabelList dataKey="%" stroke='none'  fill='#ffc376' className='poppins-semibold text-white text-sm' />
           {data.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index]} />

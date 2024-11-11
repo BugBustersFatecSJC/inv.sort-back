@@ -1,72 +1,116 @@
+
 import { useState, useEffect } from 'react';
 import ProductRow from '../../components/ProductRow/ProductRow2';
 import api from '../../services/api';
 import SearchBar from '../SearchBar/SearchBar';
-//Fluxo de Estoque, Usado No Buy And Sell
+import { useParams } from 'react-router-dom';
+import ProductCell from '../ProductCell/ProductCell';
+
 const ProductTable = () => {
   const [products, setProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filtrado, setFiltrado] = useState(products);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(20); // Default to 20 for desktop
 
+  const id = useParams().id;
+  console.log(id);
+
+  // Fetch products from API
   const fetchProducts = async () => {
     try {
-      const response = await api.get('/products');
+      const response = await api.get('/products/category/' + id);
       setProducts(Array.isArray(response.data) ? response.data : []);
+      console.log(response.data);
     } catch (err) {
       console.log(err);
     }
   };
 
+  // Filter products based on search term
+  const filtrarProducts = (products) => {
+    return products.filter((product) => {
+      if (searchTerm === '') return true;
+      return product.product_name.toLowerCase().includes(searchTerm.toLowerCase());
+    });
+  };
+
+  // Handle search input change
+  const handleSearch = (query) => {
+    setSearchTerm(query);
+  };
+
+  // Update filtered products when search term changes
   useEffect(() => {
-    fetchProducts();
+    setFiltrado(filtrarProducts(products));
+  }, [searchTerm, products]);
+
+  // Determine items per page based on screen size (mobile vs desktop)
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      if (window.innerWidth <= 768) {
+        setItemsPerPage(6); // Mobile (6 items per page)
+      } else {
+        setItemsPerPage(20); // Desktop (20 items per page)
+      }
+    };
+
+    updateItemsPerPage();
+    window.addEventListener('resize', updateItemsPerPage);
+
+    return () => {
+      window.removeEventListener('resize', updateItemsPerPage);
+    };
   }, []);
 
+  // Paginate the products array
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filtrado.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Handle page change
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, [id]);
+
   return (
-    <div className="product-table w-full">
-      <div className='border-4 border-[#B45105] p-6'>
-        <SearchBar />
-        <h2 className="text-center poppins-medium text-2sm mb-4 px-4 py-2">Lotes</h2>
-        <table className="w-full border-collapse ">
-          <thead>
-            <tr className="">
-              <th className=" text-sm poppins-medium px-4 py-2">ID</th>
-              <th className=" text-sm poppins-medium px-4 py-2">Nome</th>
-              <th className=" text-sm poppins-medium px-4 py-2">Categoria</th>
-              <th className=" text-sm poppins-medium px-4 py-2">Un. de medida</th>
-              <th className=" text-sm poppins-medium px-4 py-2">Preço</th>
-              <th className=" text-sm poppins-medium px-4 py-2">Quantidade</th>
-              <th className=" text-sm poppins-medium px-4 py-2">Estoque</th>
-              <th className=" text-sm poppins-medium px-4 py-2">Preço uni.</th>
-              <th className=" text-sm poppins-medium px-4 py-2">Qtd lotes</th>
-            </tr>
-          </thead>
-          <tbody className=' border-4 border-[#b5651d]' >
-            {products.map((product, index) => (
-              <ProductRow
-                key={index}
-                product={product}
-                bgColor={index % 2 === 0 ? "bg-[#F5A66D]" : "bg-[#EA9457]"}
-              />
-            ))}
-          </tbody>
-        </table>
-        <div className="flex justify-center mt-4">
-          <button className="bg-[#36571C] poppins-medium border-4 border-black text-[#F4BD76] px-6 py-2 hover:bg-[#4b2b1f]">
-            Compra
-          </button>
-          
-          <button className="bg-[#AF0909] poppins-medium border-4 border-black text-[#F4BD76] px-6 py-2 hover:bg-[#4b2b1f]">
-            Venda
-          </button>
 
-         
-        </div>
-        {/* separa o centro */}
-
+    <div className="product-table max-h-[70%]">
+      <SearchBar handlesSearch={handleSearch} />
+      <div className="flex grid mt-4 overflow-y-auto grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 text-center justify-center flex-wrap gap-2 p-1">
+        {currentItems.map((product, index) => (
+          <ProductCell product={product} key={index} />
+        ))}
 
       </div>
-      {/* Dados Fornecedor */}
 
+      <div className="pagination flex justify-center mt-4">
+      <button
+        className="bg-[#6B3710] text-[#FFC376] font-medium px-4 py-2 rounded-lg mr-2 
+                  hover:bg-[#4e2d19] disabled:bg-[#4c2a17] disabled:text-[#ccc] 
+                  disabled:cursor-not-allowed"
+        onClick={() => handlePageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+      >
+        Anterior
+      </button>
 
-      
+      <span className="text-[#6B3710] font-medium">Página {currentPage}</span>
+
+      <button
+        className="bg-[#6B3710] text-[#FFC376] font-medium px-4 py-2 rounded-lg ml-2 
+                  hover:bg-[#4e2d19] disabled:bg-[#4c2a17] disabled:text-[#ccc] 
+                  disabled:cursor-not-allowed"
+        onClick={() => handlePageChange(currentPage + 1)}
+        disabled={currentPage * itemsPerPage >= filtrado.length}
+      >
+        Próxima
+      </button>
+      </div>
     </div>
   );
 };

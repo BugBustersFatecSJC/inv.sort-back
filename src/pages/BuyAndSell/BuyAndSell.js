@@ -1,7 +1,8 @@
 import MainPage from '../MainPage/MainPage';
-import SearchBar from '../../components/SearchBar/SearchBar'
+
 import ProductRow from '../../components/ProductRow/ProductRow2';
 import ProductTable from '../../components/ProductTable/ProductTable2';
+
 import React, { useState, useEffect } from 'react'; // Importação dos hooks do React
 
 // Página para registrar compra e venda de estoque
@@ -104,6 +105,7 @@ function BuyAndSell() {
               </div>
             </div>
           </div>
+
         </section>
       </div>
     </MainPage>

@@ -1,12 +1,17 @@
+
+import React, { useState, useEffect } from 'react';
+
 import { Link } from 'react-router-dom';
-import Watermark from '../Watermark/Watermark'
-import CategoryButtons from '../../components/CategoryButtons/CategoryButtons';
-import React, { useState, useEffect ,  } from 'react';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
-function Sidebari(props) {
+import Watermark from '../Watermark/Watermark';
+import CategoryButtons from '../../components/CategoryButtons/CategoryButtons';
+
+function Sidebari({ role, content }) {
+  console.log('Current user role:', role);
+
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [collapsed, setCollapsed] = React.useState(false);
-  const [toggled, setToggled] = React.useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+  const [toggled, setToggled] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -18,22 +23,23 @@ function Sidebari(props) {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
   useEffect(() => {
     if (windowWidth > 640) {
-      
       setCollapsed(true);
     } else {
       setCollapsed(false);
     }
-  }, [windowWidth]);
+  }, [window.innerWidth]);
   const collapsedId = document.getElementById('collapse');
   return (
+
     <>
-    <div className={` flex ${windowWidth > 640 ? 'max-w-[14rem]' : windowWidth > 450 ? 'max-w-[4rem] ' : 'max-w-[0rem]' } bg-clip-border alt-color-bg   `}>
+    <div className={` flex bg-clip-border alt-color-bg   `}>
       
-      <div className='mb-8 justify-center self-center flex-col flex-wrap  w-full h-full  align-center text-center  py-4'>
+      <div className='mb-8 justify-center self-center flex-col flex-wrap   h-full  align-center text-center  py-4'>
         <div className='text-center self-center  align-middle flex justify-center'>
-          {windowWidth > 450 ? <img  src={'img/logo_invsort.svg'}className={`w-[50%] sm:w-[30%] ${windowWidth<450?'rounded-m outline-4 outline-[#3E1900] bg-[#3E1900]':''}  mt-4 sb-button z-10`}  onClick={() => {if (windowWidth > 640) {
+          {windowWidth > 450 ? <img  src={'img/logo_invsort.svg'} className={`w-[50%] sm:w-[30%] ${windowWidth<450?'rounded-m outline-4 outline-[#3E1900] bg-[#3E1900]':''}  mt-4 sb-button z-10`}  onClick={() => {if (windowWidth > 640) {
               setCollapsed(!collapsed);
               
             } else {
@@ -44,10 +50,10 @@ function Sidebari(props) {
            : null}
             
         </div>
-        {props.content}
-        <div className="mt-[40px] w-full flex justify-center"> 
+        {content}
+        <div className="mt-[40px] w-full flex justify-center text-center self-center "> 
        
-      <Sidebar  className='text-center m-auto '   onBackdropClick={() => setToggled(false)} toggled={toggled} breakPoint="always" 
+      <Sidebar  className='text-center m-auto w-full'   onBackdropClick={() => setToggled(false)} toggled={toggled} breakPoint="always" 
           >
       <Menu 
         menuItemStyles={{
@@ -72,9 +78,9 @@ function Sidebari(props) {
           ;},
           
         }}
-      className='mb-12' >
+      className='mb-12 ' >
         
-    <MenuItem className='MenuItem poppins-semibold ' icon={<img id='carrinho'  src="/images/grocery-store.png" />} component={<Link to="/products" />}>Produtos</MenuItem>
+    <MenuItem className='MenuItem w-full poppins-semibold ' icon={<img id='carrinho'  src="/images/grocery-store.png" />} component={<Link to="/products" />}>Produtos</MenuItem>
     <MenuItem className='MenuItem poppins-semibold ' icon={<img id='chart' className='' src="/images/pie-chart.png" />} component={<Link to="/analytics" />}>Análise </MenuItem>
     <MenuItem className='MenuItem poppins-semibold ' icon={<img id='chart' src="/images/arrows.png" />} component={<Link to="/stockmovements" />}> Movimentações </MenuItem>
     <MenuItem className='MenuItem poppins-semibold ' icon={<img className='' id='chart' src="/images/profile.png" />} component={<Link to="/userpage" />}> Gerenciar </MenuItem>
@@ -83,7 +89,7 @@ function Sidebari(props) {
   <Watermark  className="bottom-0"/>
         
 </Sidebar>
-{windowWidth > 450 ? <Sidebar id='collapse' width='14rem' className='' collapsedWidth='4rem ' collapsed={!collapsed}>
+{windowWidth > 450 ? <Sidebar id='collapse' width='13.85rem'  collapsedWidth='3rem ' collapsed={!collapsed}>
 <Menu 
         menuItemStyles={{
           button: ({ level, active, disabled }) => {
@@ -105,37 +111,42 @@ function Sidebari(props) {
               
           ;},
         }}
-      className='mb-12 w-full' >
+
+      className='mb-12 w-full ' >
+
         
-    <MenuItem className='MenuItem poppins-semibold ' title='Produtos' icon={<img id='carrinho' alt='produtos'   src="/images/grocery-store.png" />} component={<Link to="/products" />}>Produtos</MenuItem>
-    <MenuItem className='MenuItem poppins-semibold ' title='Analise' icon={<img id='chart' className='' src="/images/pie-chart.png" />} component={<Link to="/analytics" />}>Análise </MenuItem>
-    <MenuItem className='MenuItem poppins-semibold '  title='Movimentações' icon={<img id='chart' src="/images/arrows.png" />} component={<Link to="/movementpage" />}> Movimentações </MenuItem>
-    <MenuItem className='MenuItem poppins-semibold '  title='Gerenciar' icon={<img className='' id='chart' src="/images/profile.png" />} component={<Link to="/e-commerce" />}> Gerenciar </MenuItem>
+
+    <MenuItem className='MenuItem sm:p-2 w-full poppins-semibold ' title='Produtos' icon={<img id='carrinho' alt='produtos'   src="/images/grocery-store.png" />} component={<Link to="/products" />}>{windowWidth>640?'Produtos':''}</MenuItem>
+    <MenuItem className='MenuItem sm:p-2 poppins-semibold ' title='Analise' icon={<img id='chart' className='' src="/images/pie-chart.png" />} component={<Link to="/analytics" />}>{windowWidth>640?'Analise':''} </MenuItem>
+    <MenuItem className='MenuItem  sm:p-2 poppins-semibold '  title='Movimentações' icon={<img id='chart' src="/images/arrows.png" />} component={<Link to="/stockmovements" />}> {windowWidth>640?'Movementações':''} </MenuItem>
+    <MenuItem className='MenuItem sm:p-2 poppins-semibold '  title='Gerenciar' icon={<img className='' id='chart' src="/images/profile.png" />} component={<Link to="/e-commerce" />}> {windowWidth>640?'Gerenciar':''}</MenuItem>
+
 </Menu>
       </Sidebar> : null}
 
           
 
         
+
         </div>
-        
       </div>
-      
     </div>
+
     
     {windowWidth <450 ? 
     <div className='w-[35px] h-[33px] rounded-md border-2 border-[#6B3710] bg-[#6B3710] absolute   m-1'>
-      <img  src={'images/option.png'}className=' object-fit w-full h-full p-1    sb-button '  onClick={() => {if (windowWidth > 640) {
+      <img  src={'images/menu.png'} className=' object-fit w-full h-full    sb-button '  onClick={() => {if (windowWidth > 640) {
       setCollapsed(!collapsed);
       
     } else {
       setToggled(!toggled);
       
     }
-  }} alt=""/>
+  }} alt="asd"/>
     </div>: null}
   </>
   )
+
 }
 
-export default Sidebari
+export default Sidebari;
