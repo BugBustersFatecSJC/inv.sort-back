@@ -1,13 +1,17 @@
 
+import React, { useState, useEffect } from 'react';
+
 import { Link } from 'react-router-dom';
-import Watermark from '../Watermark/Watermark'
-import CategoryButtons from '../../components/CategoryButtons/CategoryButtons';
-import React, { useState, useEffect ,  } from 'react';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
-function Sidebari(props) {
+import Watermark from '../Watermark/Watermark';
+import CategoryButtons from '../../components/CategoryButtons/CategoryButtons';
+
+function Sidebari({ role, content }) {
+  console.log('Current user role:', role);
+
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [collapsed, setCollapsed] = React.useState(false);
-  const [toggled, setToggled] = React.useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+  const [toggled, setToggled] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -19,9 +23,9 @@ function Sidebari(props) {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
   useEffect(() => {
     if (windowWidth > 640) {
-      
       setCollapsed(true);
     } else {
       setCollapsed(false);
@@ -29,6 +33,7 @@ function Sidebari(props) {
   }, [windowWidth]);
   const collapsedId = document.getElementById('collapse');
   return (
+
     <>
     <div className={` flex ${windowWidth > 640 ? 'max-w-[14rem]' : windowWidth > 450 ? 'max-w-[4rem] ' : 'max-w-[0rem]' } bg-clip-border alt-color-bg   `}>
       
@@ -118,11 +123,11 @@ function Sidebari(props) {
           
 
         
+
         </div>
-        
       </div>
-      
     </div>
+
     
     {windowWidth <450 ? 
     <div className='w-[35px] h-[33px] rounded-md border-2 border-[#6B3710] bg-[#6B3710] absolute   m-1'>
@@ -137,6 +142,7 @@ function Sidebari(props) {
     </div>: null}
   </>
   )
+
 }
 
-export default Sidebari
+export default Sidebari;
