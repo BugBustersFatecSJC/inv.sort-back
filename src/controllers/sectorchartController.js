@@ -15,6 +15,10 @@ const valorAntigo = async (req, res) => {
   return res.status(404).json({ message: 'Nenhum registro encontrado' });
 
 }
+aaa =`'SELECT 
+c.category_name,p.product_name, (sum(quantity)*p.prod_sell_value) as faturamento
+FROM db.StockMovement as sm join db.Product as p inner join Category as c
+WHERE movement_type = 'venda' and p.product_id = sm.product_id and sm.category_id=c.category_id AND MONTH(sm.movement_date) = 10 AND YEAR(movement_date) = 2024  group by p.product_name order by faturamento`
 const sectorYear = async (req, res) => {
     prisma.$connect()
 
@@ -29,11 +33,11 @@ const sectorYear = async (req, res) => {
     console.log("total", total);
     const results = await prisma.$queryRaw`
       SELECT 
-        category_name,SUM(quantity) as total_difference
-      FROM StockMovement inner join Category on StockMovement.category_id = Category.category_id
-      WHERE movement_type = 'VENDA' AND  YEAR(movement_date) = ${ano} group by Category.category_name; ;
+        c.category_name,SUM(quantity) as total_difference
+      FROM StockMovement as sm inner join Category as c on sm.category_id = c.category_id
+      WHERE sm.movement_type = 'venda' AND  YEAR(sm.movement_date) = ${ano} and c.category_name is not null  group by c.category_name ;
     `;
-    console.log(results);
+    console.log(results,'results');
     let top5 = results.sort((a, b) => b.total_difference - a.total_difference).slice(0, 5); 
     console.log("top5", top5);
     let counter =100;
@@ -42,7 +46,7 @@ const sectorYear = async (req, res) => {
       element.total_difference = parseFloat(((element.total_difference / total[0].total_difference)*100).toFixed(2));
       counter = counter - element.total_difference;
     });
-   counter > 0 ? top5.push({category_name:'Outros',total_difference:counter.toFixed(2),'%':`${counter.toFixed(0)}%`}) : null;
+   counter > 0 ? top5.push({category_name:'Outros',total_difference:parseFloat(counter.toFixed(2)),'%':`${counter.toFixed(0)}%`}) : null;
     console.log("top5", top5);
    
   
