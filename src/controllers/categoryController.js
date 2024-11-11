@@ -68,6 +68,7 @@ const filterCategories = async (req, res) => {
         return res.status(400).json({ error: "Erro ao filtrar categorias." });
     }
 }
+
 const updateCategory = async (req, res) => {
     try {
         const id = parseInt(req.params.category_id)
@@ -78,7 +79,7 @@ const updateCategory = async (req, res) => {
             where: { category_id: id },
             data: {
                 category_name,
-                category_image: categoryImage || undefined
+                category_image: categoryImage
             },
         })
         res.status(200).json(updatedCategory);

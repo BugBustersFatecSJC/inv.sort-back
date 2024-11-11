@@ -5,23 +5,29 @@ const upload = require('./middlewares/uploadImageMiddleware')
 // Importar controllers aqui
 const userController = require('./controllers/userController');
 const productController = require('./controllers/productController');
-const categoryController = require('./controllers/categoryController');
-const unitController = require('./controllers/unitController');
-const supplierController = require('./controllers/supplierController');
-const filterController = require('./controllers/filterController');
+const categoryController = require('./controllers/categoryController')
+const unitController = require('./controllers/unitController')
+const supplierController = require('./controllers/supplierController')
+const filterController = require('./controllers/filterController')
 const localController = require('./controllers/localController'); 
 const sectorController = require('./controllers/sectorController'); 
 const batchController = require('./controllers/batchController');
 const auditLogMiddleware = require('./controllers/auditController');
-const sectorchartController = require('./controllers/sectorchartController')
+const sectorchartController = require('./controllers/sectorchartController');
+const cardsController = require('./controllers/cardsController');
+
 
 //Inicio das Rotas
-
+// Rotas de Cards
+router.get('/cards', cardsController.cardsYear);
 // Rotas para login e filtros
 router.get('/check-login', userController.checkFirstLogin);
 router.get('/sectoranual', sectorchartController.sectorYear);
+router.get('/valorantigo',sectorchartController.valorAntigo);
 router.get('/mensal', filterController.filterMonth);
 router.get('/trimestral', filterController.filterTrimester);
+router.get('/check-first-login', userController.checkFirstLogin);
+//router.get('/sectormensal', sectorchartController.SectorMonth);
 
 // Rotas de Usuários
 router.post('/users', upload.single('user_img'), userController.createUser);
@@ -74,6 +80,9 @@ router.post('/supplier', supplierController.createSupplier);
 router.get('/supplier', supplierController.getAllSuppliers);
 router.put('/supplier/:supplier_id', supplierController.updateSupplier);
 router.delete('/supplier/:supplier_id', supplierController.deleteSupplier);
+
+// Rotas do Fluxo de Estoque "BUYANDSELL"
+router.put('/buyandsell/:batch_id', batchController.sellBatch);
 
 // fim das rotas
 

@@ -5,6 +5,15 @@ const createSector = async (req, res) => {
     const { sector_name, local_id } = req.body;
 
     try {
+        const existingSector = await prisma.sector.findUnique({
+            where: { sector_name }
+        });
+
+        if (existingSector) {
+            return res.status(400).json({ error: "já existe um setor com este nome." });
+        }
+
+
         const createSec = await prisma.sector.create({
             data: {
                 sector_name,
@@ -51,6 +60,7 @@ const deleteSector = async (req, res) => {
         });
         res.status(200).json(deleteSec);
     } catch (error) {
+        console.log(error);
         res.status(400).json({ error: "Erro ao deletar o setor" });
     }
 };
