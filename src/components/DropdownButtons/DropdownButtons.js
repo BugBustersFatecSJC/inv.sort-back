@@ -22,7 +22,7 @@ function DropdownButtons({ options = [],type, label, onChange, disabled = false,
   const opt =options;
   
   return (
-    <div className='  w-full align-start'>
+    <div className='  w-full ml-2 align-start'>
       <select
         className={`${windowWidth >500?'w-[8rem]': 'w-[90%]'} poppins-semibold border-4 rounded border-[#B45105] bg-[#FFC376] animated-placeholder`}
 
