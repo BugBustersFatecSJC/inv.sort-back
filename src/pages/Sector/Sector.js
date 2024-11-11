@@ -5,6 +5,7 @@ import Loading from '../../components/Loading/Loading';
 import FlashMessage from '../../components/FlashMessage/FlashMessage';
 import ShortModal from '../../components/ShortModal/ShortModal';
 import LocalModal from '../../components/SectorModal/LocalModal';
+import ModalDelete from '../../components/ModalDelete/ModalDelete';
 
 function Sector() {
   const [loading, setLoading] = useState(true);
@@ -18,6 +19,7 @@ function Sector() {
   const [flash, setFlash] = useState(null);
   const [sectorName, setSectorName] = useState('');
   const [nameError, setNameError] = useState(null);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   const fetchLocals = async () => {
     try {
@@ -44,6 +46,18 @@ function Sector() {
     fetchLocals();
     fetchSectors();
   }, []);
+
+  const addLocal = (newLocal) => {
+    setLocals((prevLocals) => [...prevLocals, newLocal]);
+  };
+
+  const updateLocal = (updatedLocal) => {
+    setLocals((prevLocals) =>
+      prevLocals.map((local) =>
+        local.local_id === updatedLocal.local_id ? updatedLocal : local
+      )
+    );
+  };
 
   const addSector = (newSector) => {
     setSectors((prevSectors) => [...prevSectors, newSector]);
@@ -119,6 +133,26 @@ function Sector() {
     setLocals((prevLocals) => [...prevLocals, newLocal]);
   };
 
+  const handleLocalDelete = async (e) => {
+    e.preventDefault();
+    try {
+      await api.delete(`/local/${currentLocalId}`);
+      deleteLocal(currentLocalId);
+      setOpenDeleteModal(false);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const openDeleteModalLocal = (local) => {
+    setCurrentLocalId(local.local_id);
+    setOpenDeleteModal(true);
+  };
+
+  const deleteLocal = (localId) => {
+    setLocals((prevLocals) => prevLocals.filter(local => local.local_id !== localId));
+  };
+
   return (
     <MainPage title="Gestão de Locais e Setores">
       {loading ? (
@@ -130,24 +164,26 @@ function Sector() {
               <h2 className="text-center font-pixel text-2x1 mb-4 px-4 py-2">
                 <button onClick={() => setShowLocalModal(true)} className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Adicionar Novo Local</button>
               </h2>
-
               {locals.map((local) => (
                 <div key={local.local_id} className="local-item">
                   <div className='font-pixel flex space-x-6 border-4 border-[#B45105] p-3'>
                     <h3>Local: {local.local_name}</h3>
                     <p>Endereço: {local.local_address}</p>
-                    <button onClick={() => openSectorModal(local.local_id)} className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Adicionar Setor</button>
-                    
+                    <button onClick={() => openEditLocalModal(local)} className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Editar Local</button>
+                    <button onClick={() => openDeleteModalLocal(local)} className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Excluir Local</button>
                     <h4>Setores:</h4>
                     <ul>
-                      {sectors.filter((sector) => sector.local_id === local.local_id).map((sector) => (
-                        <li key={sector.sector_id}>
-                          {sector.sector_name}
-                          <button onClick={() => openEditSectorModal(sector)} className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Editar</button>
-                          <button onClick={() => deleteSector(sector.sector_id)} className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Excluir</button>
-                        </li>
-                      ))}
+                      {sectors
+                        .filter((sector) => sector.local_id === local.local_id)
+                        .map((sector) => (
+                          <li key={sector.sector_id}>
+                            {sector.sector_name}
+                            <button onClick={() => openEditSectorModal(sector)} className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Editar</button>
+                            <button onClick={() => deleteSector(sector.sector_id)} className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Excluir</button>
+                          </li>
+                        ))}
                     </ul>
+                    <button onClick={() => openSectorModal(local.local_id)} className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Adicionar Setor</button>
                   </div>
                 </div>
               ))}
@@ -169,7 +205,7 @@ function Sector() {
           title={isEditingSector ? 'Editar Setor' : 'Adicionar Novo Setor'}
           handleSubmit={handleSectorSubmit}
           closeModal={() => setShowSectorModal(false)}
-        >          
+        >
           <div className="form-control mb-4">
             <label className="label">Nome do Setor</label>
             <input
@@ -187,6 +223,7 @@ function Sector() {
       )}
 
       {flash && <FlashMessage message={flash.message} type={flash.type} duration={3000} onClose={() => setFlash(null)} />}
+      {openDeleteModal && <ModalDelete title="Deseja excluir o local?" handleSubmit={handleLocalDelete} closeModal={() => setOpenDeleteModal(false)} />}
     </MainPage>
   );
 }
