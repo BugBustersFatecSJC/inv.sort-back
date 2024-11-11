@@ -115,19 +115,37 @@ function MainPageRender() {
   //     })
   // }, [])
     return (
-      <MainPage title="Produtos">
-          {loading ? (
+      <MainPage title="Categorias de Produtos">
+        {loading ? (
           <Loading />
-          ) :
-          categories.map((category) => {
-          const categoryProducts = products.filter(product => product.category_id === category.category_id);
-          return (
-              <ProductCategory key={category.category_id} categoryKey={category.category_id} products={categoryProducts} onProductAdded={addProduct} onProductDeleted={removeProduct} categoryName={category.category_name} onCategoryUpdated={updateCategory} onCategoryDeleted={removeCategory} onProductUpdated={updateProduct} categoryImage={category.category_image} />
-          )
-          })}
-          <Category onCategoryAdded={addCategory} />
-      </MainPage> 
-    )
+
+        ) : (
+          <div className="flex justify-between gap-4 grid mt-6 overflow-y-scroll grid-cols-2 lg:grid-cols-4  md:grid-cols-3 sm:grid-cols-3 ">
+            {categories.map((category) => {
+              const categoryProducts = products.filter(
+                (product) => product.category_id === category.category_id
+              );
+              return (
+                <ProductCategory
+                  key={category.category_id}
+                  categoryKey={category.category_id}
+                  products={categoryProducts}
+                  onProductAdded={addProduct}
+                  onProductDeleted={removeProduct}
+                  categoryName={category.category_name}
+                  onCategoryUpdated={updateCategory}
+                  onCategoryDeleted={removeCategory}
+                  onProductUpdated={updateProduct}
+                  categoryImage={category.category_image}
+                />
+              );
+            })}
+          </div>
+        )}
+        <Category onCategoryAdded={addCategory} />
+      </MainPage>
+    );  
+
   }
   
   export default MainPageRender

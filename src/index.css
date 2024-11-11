@@ -195,32 +195,32 @@ code {
   opacity: 1; /* Firefox */
 }
 
-.recharts-responsive-container {
+.recharts-wrapper{
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
-  height: 100%; 
+  height: 100%!important; 
   
   
 }
-.recharts-retangle {
-  margin: 10px!important;
-  padding: 10px !important; ;
-}
+
 
 .ps-menu-button {
 
   color: var(--secondary-color);
-  margin-bottom: 20px;
+  padding: 0!important;
   width: 100%!important;
   max-width: 16rem!important;
+
    padding: 0%!important;
+
  }
 
 .ps-sidebar-container{
   background-color: var(--alt-color)!important;
  width: 100%!important;
- max-width: 16rem!important;
+
+ padding: 5px;
 }
 .ps-sidebar-root{
   margin: 0!important;
@@ -231,6 +231,9 @@ code {
 }
 .ps-menu-root{
   max-width: 16rem!important;
+}
+.MenuItem{
+  font-size: 15px;
 }
 .ps-menu-button:hover {
   
@@ -250,6 +253,7 @@ code {
   background-color: var(--main-color);
 
 }
+
 td{
   border: 4px solid transparent;
   margin: auto;
@@ -259,3 +263,4 @@ td{
   font-weight: 650;
   font-style: normal;
 }
+

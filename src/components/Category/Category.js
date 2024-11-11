@@ -2,6 +2,10 @@ import { useState } from 'react'
 import api from '../../services/api'
 import FlashMessage from '../../components/FlashMessage/FlashMessage'
 import Modal from '../Modal/Modal'
+import './Category.css'
+import Cropper from "react-cropper";
+import "cropperjs/dist/cropper.css";
+
 
 /**
  * Container para adicionar uma nova categoria
@@ -17,6 +21,11 @@ function Category(props) {
 
     const openModal = () => setIsModalOpen(true)
     const closeModal = () => setIsModalOpen(false)
+
+    const [imageSrc, setImageSrc] = useState(null); // Imagem original carregada
+    const [croppedImage, setCroppedImage] = useState(null); // Imagem recortada
+    const [cropper, setCropper] = useState(null); // Instância do Cropper
+
 
     /**
      * Renderização da flash message
@@ -42,33 +51,49 @@ function Category(props) {
     /**
      * Form para enviar os dados da categoria
      */
-    const handleSubmit = async(e) => {
-        e.preventDefault()
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+    
+        if (!cropper) return;
+    
+        // Obtém a imagem recortada em Blob
+        cropper.getCroppedCanvas().toBlob((blob) => {
+            const formData = new FormData();
+            formData.append("category_name", categoryName);
+            formData.append("category_image", blob, "category_image.png");
+            console.log(blob)
+    
+            try {
+                api
+                    .post("/category", formData, {
+                        headers: { "Content-Type": "multipart/form-data" },
+                    })
+                    .then((response) => props.onCategoryAdded(response.data));
+    
+                setCategoryName("");
+                setCategoryImage(null);
+                setImageSrc(null);
+                setCroppedImage(null);
+                closeModal();
+                flashSuccess();
+            } catch (err) {
+                console.log(err);
+                flashError();
+            }
+        });
+    };
 
-        const formData = new FormData();
-        formData.append('category_name', categoryName)
-        formData.append('category_image', categoryImage)
-
-        try {
-            await api
-            .post("/category", formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
-            .then(response => props.onCategoryAdded(response.data))
-
-            setCategoryName('')
-            setCategoryImage(null)
-
-            closeModal()
-            flashSuccess()
-        } catch(err) {
-            console.log(err)
-            flashError()
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                setImageSrc(reader.result);
+            };
+            reader.readAsDataURL(file);
         }
     }
-
+    
     return (
         <>
             <div onClick={openModal} className='w-full alt-color-2-bg rounded shadow-md mt-4 mb-[40px] cursor-pointer'>
@@ -89,15 +114,39 @@ function Category(props) {
                         <label className="label">
                             <span className="label-text alt-color-5">Nome da categoria</span>
                         </label>
-                        <input type="text" placeholder="Digite o nome da categoria" className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5" required value={categoryName} onChange={(e) => setCategoryName(e.target.value)} name='category-name' />
+                        <input
+                            type="text"
+                            placeholder="Digite o nome da categoria"
+                            className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
+                            required
+                            value={categoryName}
+                            onChange={(e) => setCategoryName(e.target.value)}
+                            name="category-name"
+                        />
                     </div>
 
                     <div className="form-control mb-4">
-                        <label className="label">
+                        <label className="label" htmlFor="category-image">
                             <span className="label-text alt-color-5">Selecione uma imagem</span>
                         </label>
-                        <input type="file" className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5" onChange={(e) => setCategoryImage(e.target.files[0])} name='category-image' />
+                        <input
+                            type="file"
+                            className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
+                            onChange={handleImageChange}
+                            name="category-image"
+                        />
                     </div>
+
+                    {imageSrc && (
+                        <Cropper
+                            src={imageSrc}
+                            style={{ height: 400, width: "100%" }}
+                            // Configurações do Cropper.js
+                            aspectRatio={1}
+                            guides={false}
+                            onInitialized={(instance) => setCropper(instance)}
+                        />
+                    )}
                 </Modal>
             )}
 
