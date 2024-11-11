@@ -70,8 +70,8 @@ function Analytics() {
           
         <Cardsanalytics text={'Produto de maior faturamento'} label={`${cards[0].product_name}`} data={cards[0].faturamento} />
         <Cardsanalytics text={'Categoria de maior faturamento'} label={`${cards[1].category_name}`} data={cards[1].faturamento}  />
-        <Cardsanalytics text={'Produto com mais vendas'} label={`${cards[2].category_name}`} data={cards[2].vendas} sufix=' Un.'  />
-        <Cardsanalytics text={'Categoria com mais vendas'} label={`${cards[3].product_name}`} data={cards[3].vendas} sufix=' Un.'  />
+        <Cardsanalytics text={'Categoria com mais vendas'} label={`${cards[2].category_name}`} data={cards[2].vendas} sufix=' Un.'  />
+        <Cardsanalytics text={'Produto com mais vendas'} label={`${cards[3].product_name}`} data={cards[3].vendas} sufix=' Un.'  />
         <p className='poppins-bold text-[10px] text-start'>Dados em relação ao mês anterior</p>
         </div>
       </div>
