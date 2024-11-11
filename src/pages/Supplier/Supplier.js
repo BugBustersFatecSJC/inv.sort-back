@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import api from '../../services/api';
 import MainPage from '../MainPage/MainPage';
-import SupplierModal from '../../components/SupplierModal/SupplierModal'; // Renomeado para SupplierModal
+import SupplierModal from '../../components/SupplierModal/SupplierModal';
 import Loading from '../../components/Loading/Loading';
 
 function SupplierPage() {
   const [loading, setLoading] = useState(true);
   const [suppliers, setSuppliers] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [selectedSupplier, setSelectedSupplier] = useState(null); // Para edição
+  const [selectedSupplier, setSelectedSupplier] = useState(null);
 
   const fetchSuppliers = async () => {
     try {
@@ -41,7 +41,7 @@ function SupplierPage() {
   const removeSupplier = async (supplierId) => {
     const confirmDelete = window.confirm('Você tem certeza que deseja excluir este fornecedor?');
     if (!confirmDelete) {
-      return; // Se o usuário cancelar, não faz nada
+      return;
     }
 
     try {
@@ -65,27 +65,68 @@ function SupplierPage() {
         <Loading />
       ) : (
         <>
-      <div className="product-table w-full bg-[#FFC376] border-4 border-[#85450D]">
-      <div className='border-4 border-[#B45105] p-3'>
-        <h2 className="text-center font-pixel text-2x1 mb-4 px-4 py-2">
-          <button onClick={() => toggleModal()}>Adicionar Novo Fornecedor</button> </h2>
-          {suppliers.map((supplier) => (
-            <div key={supplier.supplier_id} className="supplier-item flex vt323-regular justify-between px-2 bg-[rgb(245,148,87)]">
-              <h3 className="text-center font-pixel text-2xl mb-4 px-4 py-2">{supplier.supplier_name}</h3>
-              <p className="text-center font-pixel text-2xl mb-4 px-4 py-2">Informações de Contato: {supplier.contact_info}</p>
-              <p className="text-center font-pixel text-2xl mb-4 px-4 py-2">Endereço: {supplier.address}</p>
-              <h3 className = " flex space-x-4">
-              <button onClick={() => toggleModal(supplier)} className=" flex space-x-3 bg-[#362010] font-pixel border-4 border-black text-[#F4BD76]">Editar</button> 
-              <button onClick={() => removeSupplier(supplier.supplier_id)} className=" flex space-x-3 bg-[#362010] font-pixel border-4 border-black text-[#F4BD76]">Excluir</button> </h3>
-              
+          <div className="product-table w-full bg-[#FFC376]">
+            <div className=''>
+              <h2 className="font-pixel text-2xl mb-4 cursor-pointer" onClick={() => toggleModal()}>
+                Adicionar Novo Fornecedor
+              </h2>
+              <table className="w-full border-collapse overflow-x-auto">
+                <thead>
+                  <tr>
+                    <th className="text-2xl font-pixel py-2 w-1/2 text-left">Nome</th>
+                    <th className="text-2xl font-pixel py-2 w-1/6 text-left">Contato</th>
+                    <th className="text-2xl font-pixel py-2 w-1/4 text-left">Endereço</th>
+                    <th className="text-2xl font-pixel py-2 w-[10%]"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {suppliers.map((supplier, index) => {
+                    const rowBgColor = index % 2 === 0 ? '#EA9457' : '#F5A66D';
+                    const buttonBgColor = index % 2 === 0 ? '#F2B080' : '#F7B687';
+
+                    return (
+                      <tr 
+                        key={supplier.supplier_id} 
+                        className={`${rowBgColor} border-b border-[#FFCB8F] hover:bg-orange-100`}
+                        style={{ backgroundColor: rowBgColor }}
+                      >
+                        <td className="border border-[#FFCB8F] p-2 py-3 w-1/2">
+                          {supplier.supplier_name}
+                        </td>
+                        <td className="border border-[#FFCB8F] p-2 w-1/6">
+                          {supplier.contact_info}
+                        </td>
+                        <td className="border border-[#FFCB8F] p-2 w-1/4">
+                          {supplier.address}
+                        </td>
+                        <td className="flex items-center justify-center space-x-4 w-full">
+                          <div className='w-full flex justify-evenly my-2'>
+                            <button 
+                              onClick={() => toggleModal(supplier)} 
+                              className="flex space-x-3 font-pixel px-2 py-1" 
+                              style={{ backgroundColor: buttonBgColor }}
+                            >
+                              <i className="fa-solid fa-pencil"></i>
+                            </button> 
+                            <button 
+                              onClick={() => removeSupplier(supplier.supplier_id)} 
+                              className="flex space-x-3 font-pixel px-2 py-1" 
+                              style={{ backgroundColor: buttonBgColor }}
+                            >
+                              <i className="fa-solid fa-trash"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
-          ))}
-             </div>
-      </div>
-    
+          </div>
         </>
       )}
-
+  
       {showModal && <SupplierModal supplier={selectedSupplier} onSupplierAdded={addSupplier} onSupplierUpdated={updateSupplier} onClose={toggleModal} />}
     </MainPage>
   );
