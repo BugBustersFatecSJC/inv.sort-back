@@ -8,9 +8,9 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <div className="flex rounded-lg w-56 bg-[#B45105] m-2 p-2 items-center">
+    <div className="flex rounded-lg w-56 bg-[#6B3710] m-2 p-2 items-center">
       <input
-        className="h-6 w-full bg-[#B45105] text-[#3E1900] poppins-semibold outline-none px-2 shadow-none"
+        className="h-6 w-full bg-[#6B3710] text-[#FFC376] poppins-semibold outline-none px-2 shadow-none"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Procure aqui..."

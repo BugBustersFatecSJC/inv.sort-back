@@ -209,11 +209,61 @@ function Sidebari({ content }) {
                       label="Gerenciar"
                       className="poppins-semibold"
                     >
-                      <MenuItem component={<Link to="/userpage" />}>
-                        {windowWidth > 640 ? 'Gerenciar Usuários' : 'Usuários'}
+                      <MenuItem
+                        className="poppins-semibold"
+                        component={<Link to="/userpage" />}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3E1900'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#6b3710'}
+                        style={{
+                          backgroundColor: '#6b3710',
+                          color: 'rgb(255,195,118)',
+                          margin: '0',
+                          border: 'none',
+                          padding: '10px',
+                          transition: 'background-color 0.3s ease',
+                          width: collapsed ? '200px' : '40px', 
+                          height: '40px',
+                        }}
+                      >
+                        {collapsed ? 'Gerenciar Usuários' : (
+                          <img
+                            id="user-icon"
+                            src="/images/profile.png"
+                            alt="gerenciar usuários"
+                            style={{
+                              width: '24px',
+                              height: '24px',
+                            }}
+                          />
+                        )}
                       </MenuItem>
-                      <MenuItem component={<Link to="/settings" />}>
-                        {windowWidth > 640 ? 'Configurações' : 'Config'}
+                      <MenuItem
+                        className="poppins-semibold"
+                        component={<Link to="/settings" />}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3E1900'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#6b3710'}
+                        style={{
+                          backgroundColor: '#6b3710',
+                          color: 'rgb(255,195,118)',
+                          margin: '0',
+                          border: 'none',
+                          padding: '10px',
+                          transition: 'background-color 0.3s ease',
+                          width: collapsed ? '200px' : '40px', 
+                          height: '40px',
+                        }}
+                      >
+                        {collapsed ? 'Configurações' : (
+                          <img
+                            id="settings-icon"
+                            src="/images/settings.png"
+                            alt="configurações"
+                            style={{
+                              width: '24px',
+                              height: '24px',
+                            }}
+                          />
+                        )}
                       </MenuItem>
                       {/* Adicione outros subitens de gerenciar conforme necessário */}
                     </SubMenu>

@@ -12,6 +12,9 @@
   font-style: normal;
 }
 
+input::placeholder{
+  color: #FFC376!important; 
+}
 .poppins-medium {
   font-family: "Poppins", sans-serif;
   font-weight: 500;
