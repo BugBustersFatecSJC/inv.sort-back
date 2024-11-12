@@ -4,7 +4,7 @@ import api from '../../services/api';
 import MainPage from '../MainPage/MainPage';
 import SupplierModal from '../../components/SupplierModal/SupplierModal';
 import Loading from '../../components/Loading/Loading';
-import SearchBar from '../../components/SearchBar/SearchBar';
+import SearchBarAlt from '../../components/SearchBarAlt/SearchBarAlt';
 import './Supplier.css'
 
 function SupplierPage() {
@@ -100,7 +100,7 @@ function SupplierPage() {
                   </p>
                   <i className="fa-solid fa-plus ml-2 text-lg text-bold text-green-500"></i>
                 </div>
-                <SearchBar onSearch={handleSearch} />
+                <SearchBarAlt onSearch={handleSearch} />
               </div>
 
               <div className='overflow-x-auto w-full'>

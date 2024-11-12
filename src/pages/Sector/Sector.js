@@ -8,7 +8,7 @@ import EditSectorModal from '../../components/SectorModal/EditSectorModal';
 import EditLocalModal from '../../components/SectorModal/EditLocalModal';
 import Loading from '../../components/Loading/Loading';
 import ModalDelete from '../../components/ModalDelete/ModalDelete';
-import SearchBar from '../../components/SearchBar/SearchBar';
+import SearchBarAlt from '../../components/SearchBarAlt/SearchBarAlt';
 
 function LocalPage() {
   const [loading, setLoading] = useState(true);
@@ -154,7 +154,7 @@ function LocalPage() {
                   </p>
                   <i className="fa-solid fa-plus ml-2 text-lg text-bold text-green-500"></i>
                 </div>
-                <SearchBar onSearch={handleSearch} />
+                <SearchBarAlt onSearch={handleSearch} />
               </div>
 
               <div className='overflow-x-auto w-full'>
