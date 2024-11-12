@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import api from '../../services/api';
+import { motion } from 'framer-motion';
 import MainPage from '../MainPage/MainPage';
 import LocalModal from '../../components/SectorModal/LocalModal';
 import SectorModal from '../../components/SectorModal/SectorModal';
-import EditSectorModal from '../../components/SectorModal/EditSectorModal'; // Importar o componente para editar setores
-import EditLocalModal from '../../components/SectorModal/EditLocalModal'; // Importar o componente para editar locais
+import EditSectorModal from '../../components/SectorModal/EditSectorModal';
+import EditLocalModal from '../../components/SectorModal/EditLocalModal';
 import Loading from '../../components/Loading/Loading';
 import ModalDelete from '../../components/ModalDelete/ModalDelete';
+import SearchBar from '../../components/SearchBar/SearchBar';
 
 function LocalPage() {
   const [loading, setLoading] = useState(true);
@@ -18,8 +20,11 @@ function LocalPage() {
   const [showEditLocalModal, setShowEditLocalModal] = useState(false);
   const [currentLocalId, setCurrentLocalId] = useState(null);
   const [currentSector, setCurrentSector] = useState(null);
-  const [openDeleteModal, setOpenDeleteModal] = useState(false); // Setor atual para edição
-
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const localsPerPage = 15;
+  const [lastAddedId, setLastAddedId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const fetchLocals = async () => {
     try {
@@ -49,6 +54,7 @@ function LocalPage() {
 
   const addLocal = (newLocal) => {
     setLocals((prevLocals) => [...prevLocals, newLocal]);
+    setLastAddedId(newLocal.local_id);
   };
 
   const updateLocal = (updatedLocal) => {
@@ -98,21 +104,40 @@ function LocalPage() {
   const handleLocalDelete = async (e) => {
     e.preventDefault();
     try {
-      await api.delete(`/local/${currentLocalId}`)
-      .then(deleteLocal(currentLocalId))
-      setOpenDeleteModal(false)
+      await api.delete(`/local/${currentLocalId}`);
+      deleteLocal(currentLocalId);
+      setOpenDeleteModal(false);
     } catch (err) {
       console.error(err);
     }
-  }
+  };
+
   const openDeleteModalLocal = (local) => {
     setCurrentLocalId(local.local_id);
-    setOpenDeleteModal(true)
+    setOpenDeleteModal(true);
   };
-  const deleteLocal = (localId) => {
-    setLocals((prevLocals) => prevLocals.filter(local => local.local_id !== localId))
- }
 
+  const deleteLocal = (localId) => {
+    setLocals((prevLocals) => prevLocals.filter(local => local.local_id !== localId));
+  };
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    setCurrentPage(1);
+  };
+
+  const filteredLocals = locals.filter((local) =>
+    local.local_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const indexOfLastLocal = currentPage * localsPerPage;
+  const indexOfFirstLocal = indexOfLastLocal - localsPerPage;
+  const currentLocals = filteredLocals.slice(indexOfFirstLocal, indexOfLastLocal);
+
+  const totalPages = Math.ceil(filteredLocals.length / localsPerPage);
+
+  const goToNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  const goToPreviousPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
   return (
     <MainPage title="Gestão de Locais e Setores">
@@ -120,37 +145,130 @@ function LocalPage() {
         <Loading />
       ) : (
         <>
-      <div className="product-table w-full bg-[#FFC376] border-4 border-[#85450D]">
-      <div className='border-4 border-[#B45105] p-3'>
-        <h2 className="text-center font-pixel text-2x1 mb-4 px-4 py-2">
-        
-          <button onClick={() => setShowLocalModal(true)} className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Adicionar Novo Local</button> </h2>
-          
-          {locals.map((local) => (
-            <div key={local.local_id} className="local-item">
-              <div className=' font-pixel flex space-x-6 border-4 border-[#B45105] p-3'> 
-              <h3>Local: {local.local_name}</h3>
-              <p>Endereço: {local.local_address}</p>
-              <button onClick={() => openEditLocalModal(local)} className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Editar Local</button>
-              <button onClick={() => openDeleteModalLocal(local)} className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Excluir Local</button>
-              <h4>Setores:</h4>
-              <ul>
-                {sectors
-                  .filter((sector) => sector.local_id === local.local_id)
-                  .map((sector) => (
-                    <li key={sector.sector_id}>
-                      {sector.sector_name}
-                      <button onClick={() => openEditSectorModal(sector)} className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Editar</button>
-                      <button onClick={() => deleteSector(sector.sector_id)} className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Excluir</button>
-                    </li>
-                  ))}
-              </ul> 
-              <button onClick={() => openSectorModal(local.local_id)}className='font-pixel bg-[#362010] border-4 border-black text-[#F4BD76]'>Adicionar Setor</button>
-              
+          <div className="product-table w-full bg-[#FFC376]">
+            <div className=''>
+              <div className='flex justify-between w-full items-end mb-6 table-header-container'>
+                <div className='flex items-end'>
+                  <p className="font-pixel text-2xl cursor-pointer" onClick={() => setShowLocalModal(true)}>
+                    Adicionar novo local
+                  </p>
+                  <i className="fa-solid fa-plus ml-2 text-lg text-bold text-green-500"></i>
+                </div>
+                <SearchBar onSearch={handleSearch} />
+              </div>
+
+              <div className='overflow-x-auto w-full'>
+                <table className='min-w-[600px] w-full border-collapse main-table'>
+                  <thead>
+                    <tr>
+                      <th className="text-2xl font-pixel py-2 w-1/2 text-left">Local</th>
+                      <th className="text-2xl font-pixel py-2 w-1/6 text-left">Endereço</th>
+                      <th className="text-2xl font-pixel py-2 w-1/4 text-left">Setor</th>
+                      <th className="text-2xl font-pixel py-2 w-[10%]"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentLocals.map((local, index) => {
+                      const rowBgColor = index % 2 === 0 ? '#EA9457' : '#F5A66D';
+                      const buttonBgColor = index % 2 === 0 ? '#F2B080' : '#F7B687';
+
+                      return (
+                        <motion.tr
+                          key={local.local_id}
+                          initial={lastAddedId === local.local_id ? { scale: 0.8, opacity: 0 } : {}}
+                          animate={lastAddedId === local.local_id ? { scale: 1, opacity: 1 } : {}}
+                          transition={{
+                            type: "spring",
+                            stiffness: 260,
+                            damping: 20,
+                            duration: 0.3
+                          }}
+                          className={`${rowBgColor} border-b border-[#FFCB8F] hover:bg-orange-100`}
+                          style={{ backgroundColor: rowBgColor }}
+                        >
+                          <td className="border border-[#FFCB8F] p-2">{local.local_name}</td>
+                          <td className="border border-[#FFCB8F] p-2">{local.local_address}</td>
+                          <td className="border border-[#FFCB8F] p-2">
+                            <ul>
+                              {sectors
+                                .filter((sector) => sector.local_id === local.local_id)
+                                .map((sector) => (
+                                  <li key={sector.sector_id} className='my-2'>
+                                    {sector.sector_name}
+                                    <button
+                                      onClick={() => openEditSectorModal(sector)}
+                                      className="font-pixel p-1 btn-3d text-[#F4BD76] ml-2"
+                                      style={{
+                                        backgroundColor: buttonBgColor,
+                                      }}
+                                    >
+                                      Editar
+                                    </button>
+                                    <button
+                                      onClick={() => deleteSector(sector.sector_id)}
+                                      className="font-pixel p-1 btn-3d text-[#F4BD76] ml-2"
+                                      style={{
+                                        backgroundColor: buttonBgColor,
+                                      }}
+                                    >
+                                      Excluir
+                                    </button>
+                                  </li>
+                                ))}
+                            </ul>
+                          </td>
+                          <td className="flex items-center justify-center space-x-4 w-full">
+                            <div className="w-full flex justify-evenly items-center my-2">
+                              <button
+                                onClick={() => openEditLocalModal(local)}
+                                className="font-pixel p-2 justify-center items-center btn-3d"
+                                style={{ backgroundColor: buttonBgColor }}
+                              >
+                                <i className="fa-solid fa-pencil"></i>
+                              </button>
+                              <button
+                                onClick={() => openDeleteModalLocal(local)}
+                                className="font-pixel p-2 justify-center items-center btn-3d"
+                                style={{ backgroundColor: buttonBgColor }}
+                              >
+                                <i className="fa-solid fa-trash"></i>
+                              </button>
+                              <button
+                                onClick={() => openSectorModal(local.local_id)}
+                                className="font-pixel p-2 justify-center items-center btn-3d"
+                                style={{ backgroundColor: buttonBgColor }}
+                              >
+                                <i className="fa-solid fa-plus"></i>
+                              </button>
+                            </div>
+                          </td>
+                        </motion.tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="flex justify-center items-center space-x-4 mt-4">
+                <button
+                  onClick={goToPreviousPage}
+                  className="shadow-none w-[2rem]"
+                  disabled={currentPage === 1}
+                >
+                  <img src="/img/pointer-2.svg" alt="" />
+                </button>
+                <span className="font-pixel">
+                  Página {currentPage} de {totalPages}
+                </span>
+                <button
+                  onClick={goToNextPage}
+                  className="shadow-none w-[2rem]"
+                  disabled={currentPage === totalPages}
+                >
+                  <img src="/img/pointer-1.svg" alt="" />
+                </button>
               </div>
             </div>
-          ))}
-          </div>
           </div>
         </>
       )}
@@ -159,8 +277,7 @@ function LocalPage() {
       {showSectorModal && <SectorModal localId={currentLocalId} onSectorAdded={addSector} onClose={() => setShowSectorModal(false)} />}
       {showEditSectorModal && <EditSectorModal sector={currentSector} onSectorUpdated={updateSector} onClose={() => setShowEditSectorModal(false)} />}
       {showEditLocalModal && <EditLocalModal localId={currentLocalId} onLocalUpdated={updateLocal} onClose={() => setShowEditLocalModal(false)} />}
-      {openDeleteModal && <ModalDelete title="Deseja excluir o local?" handleSubmit={handleLocalDelete} closeModal={() => setOpenDeleteModal(false)}><div className="form-control mb-4">
-          </div></ModalDelete>}
+      {openDeleteModal && <ModalDelete title="Deseja excluir o local?" handleSubmit={handleLocalDelete} closeModal={() => setOpenDeleteModal(false)} />}
     </MainPage>
   );
 }
