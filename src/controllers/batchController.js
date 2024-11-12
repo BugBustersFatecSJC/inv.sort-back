@@ -182,7 +182,8 @@ const buyBatchByProductId = async (req, res) => {
                 quantity: { lt: quantityMaxPerBatch },
                 ...(product.is_perishable && validadeLote ? { expiration_date: validadeLote } : {}) // Condição para produtos perecíveis
             },
-            orderBy: { created_at: 'asc' }
+            orderBy: [ { expiration_date: 'asc' },
+                        { created_at: 'asc' } ]
         });
 
         // Processamento para adicionar ou criar lotes até que a quantidade seja esgotada
@@ -216,7 +217,8 @@ const buyBatchByProductId = async (req, res) => {
                         quantity: { lt: quantityMaxPerBatch },
                         ...(product.is_perishable && validadeLote ? { expiration_date: validadeLote } : {})
                     },
-                    orderBy: { created_at: 'asc' }
+                    orderBy: [ { expiration_date: 'asc' },
+                        { created_at: 'asc' } ]
                 });
             }
         }
