@@ -182,8 +182,8 @@ function ProductCategory(props) {
      */
     const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false)
 
-    const openCategoryModal = () => setIsCategoryModalOpen(true)
-    const closeCategoryModal = () => setIsCategoryModalOpen(false)
+    const openCategoryModal = () => setIsCategoryModalOpen(true);
+    const closeCategoryModal = () => setIsCategoryModalOpen(false);
 
     /**
      * Registra o produto
@@ -253,6 +253,7 @@ function ProductCategory(props) {
   const handleDelete = async (product_id) => {
     const user = localStorage.getItem("user")
     const jsonUser = JSON.parse(user)
+    
     if (jsonUser.role === "admin"){
     
     try {
@@ -385,7 +386,7 @@ function ProductCategory(props) {
   const handleCategoryDelete = async (category_id) => {
     const user = localStorage.getItem("user")
     const jsonUser = JSON.parse(user)
-    if (jsonUser.role === "admin"){
+    if ( jsonUser.role === "admin" || jsonUser.role === "gerente"  ){
     try {
       await api
         .delete(`/category/${category_id}`)
@@ -434,7 +435,7 @@ function ProductCategory(props) {
                   <i className="fa-solid fa-trash"></i>
                   
                 </p>
-                <p className="cursor-pointer text-center mx-2 flex flex-col justify-center w-8" onClick={openCategoryModal} style={{ color: "var(--tertiary-color)" }}>
+                <p className="cursor-pointer text-center mx-2 flex flex-col justify-center w-8" onClick={openProdEditModal} style={{ color: "var(--tertiary-color)" }}>
                   <i className="fa-solid fa-pencil"></i>
                   
                 </p>

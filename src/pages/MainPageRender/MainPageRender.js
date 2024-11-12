@@ -106,13 +106,18 @@ function MainPageRender() {
         {loading ? (
           <Loading />
 
-        ) : (
+        ) : (<> 
+        <div>
+          <button className='px-5 py-1 bg-[#6B3710] text-[#FFC376] rounded poppins-semibold shadow-md hvr-grow' type="submit">Adicionar Produto</button>
+      </div>
           <div className="flex justify-between gap-4 grid mt-6 overflow-y-scroll grid-cols-2 lg:grid-cols-4  md:grid-cols-3 sm:grid-cols-3 ">
+              
             {categories.map((category) => {
               const categoryProducts = products.filter(
                 (product) => product.category_id === category.category_id
               );
               return (
+                   
                 <ProductCategory
                   key={category.category_id}
                   categoryKey={category.category_id}
@@ -128,6 +133,7 @@ function MainPageRender() {
               );
             })}
           </div>
+          </>
         )}
         <Category onCategoryAdded={addCategory} />
       </MainPage>
