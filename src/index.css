@@ -12,6 +12,9 @@
   font-style: normal;
 }
 
+input::placeholder{
+  color: #FFC376!important; 
+}
 .poppins-medium {
   font-family: "Poppins", sans-serif;
   font-weight: 500;
@@ -195,23 +198,26 @@ code {
   color: var(--alt-color-5);
 }
 
-.recharts-wrapper{
+.recharts-responsive-container {
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
-  height: 100%!important; 
+  height: 100%; 
   
   
 }
-
+.recharts-retangle {
+  margin: 10px!important;
+  padding: 10px !important; ;
+}
 
 .ps-menu-button {
 
   color: var(--secondary-color);
-  padding-left: 14px!important;
+  margin-bottom: 20px;
   width: 100%!important;
   max-width: 16rem!important;
-  
+   
  }
 
 
@@ -247,6 +253,10 @@ code {
   margin-right: 12px;
   background-color: var(--main-color);
 
+}
+
+.placeholder-color::placeholder {
+  color: var(--alt-color-5) !important;
 }
 @keyframes slide {
   0% {
@@ -293,8 +303,14 @@ input::file-selector-button {
   transform: translateY(2px);
 }
 
-.placeholder-color::placeholder {
-  color: var(--alt-color-5) !important;
+td{
+  border: 4px solid transparent;
+  margin: auto;
+  border: 2px solid var(--main-color);
+  padding: 8px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 650;
+  font-style: normal;
 }
 
 @keyframes pixel-pop {

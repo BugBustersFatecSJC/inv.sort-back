@@ -9,6 +9,9 @@ import EditLocalModal from '../../components/SectorModal/EditLocalModal';
 import Loading from '../../components/Loading/Loading';
 import ModalDelete from '../../components/ModalDelete/ModalDelete';
 import SearchBarAlt from '../../components/SearchBarAlt/SearchBarAlt';
+import Loading from '../../components/Loading/Loading';
+import FlashMessage from '../../components/FlashMessage/FlashMessage';
+import ShortModal from '../../components/ShortModal/ShortModal';
 
 function LocalPage() {
   const [loading, setLoading] = useState(true);
@@ -25,6 +28,9 @@ function LocalPage() {
   const localsPerPage = 15;
   const [lastAddedId, setLastAddedId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [flash, setFlash] = useState(null);
+  const [sectorName, setSectorName] = useState('');
+  const [nameError, setNameError] = useState(null);
 
   const fetchLocals = async () => {
     try {

@@ -3,6 +3,10 @@ import api from '../../services/api'
 import FlashMessage from '../../components/FlashMessage/FlashMessage'
 import ShortModal from '../ShortModal/ShortModal'
 import './Category.css'
+import Modal from '../Modal/Modal'
+import './Category.css'
+import Cropper from "react-cropper";
+import "cropperjs/dist/cropper.css";
 
 function Category(props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,6 +25,44 @@ function Category(props) {
 
     const flashSuccess = () => setFlash({ message: 'Item adicionado com sucesso!', type: 'success' });
     const flashError = () => setFlash({ message: 'Um erro aconteceu', type: 'error' });
+    const flashDelete = () => {
+        setFlash({ message: 'Item deletado', type: 'success' });
+    }
+
+    /**
+     * Form para enviar os dados da categoria
+     */
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    
+    //     if (!cropper) return;
+    
+    //     // Obtém a imagem recortada em Blob
+    //     cropper.getCroppedCanvas().toBlob((blob) => {
+    //         const formData = new FormData();
+    //         formData.append("category_name", categoryName);
+    //         formData.append("category_image", blob, "category_image.png");
+    //         console.log(blob)
+    
+    //         try {
+    //             api
+    //                 .post("/category", formData, {
+    //                     headers: { "Content-Type": "multipart/form-data" },
+    //                 })
+    //                 .then((response) => props.onCategoryAdded(response.data));
+    
+    //             setCategoryName("");
+    //             setCategoryImage(null);
+    //             setImageSrc(null);
+    //             setCroppedImage(null);
+    //             closeModal();
+    //             flashSuccess();
+    //         } catch (err) {
+    //             console.log(err);
+    //             flashError();
+    //         }
+    //     });
+    // };
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];

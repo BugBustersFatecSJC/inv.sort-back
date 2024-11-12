@@ -59,7 +59,7 @@ const Mainchart = () => {
 
   return (
     <ResponsiveContainer className="x-auto  flex flex-col w-full h-full"  height={350}  >
-      <div className='flex justify-start w-full mx-1 h-auto '>
+      <div className='flex justify-start w-full ml-2 h-auto '>
         <FilterButton selectedValue={selectedValue} setSelectedValue={setSelectedValue} />
         <span className='flex h-auto  '><DropdownButtons 
           options={categories} 
