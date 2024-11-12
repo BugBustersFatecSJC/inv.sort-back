@@ -3,22 +3,21 @@ import api from '../../services/api';
 import { motion } from 'framer-motion';
 import MainPage from '../MainPage/MainPage';
 import LocalModal from '../../components/SectorModal/LocalModal';
-import SectorModal from '../../components/SectorModal/SectorModal';
+// import SectorModal from '../../components/SectorModal/SectorModal';
 import EditSectorModal from '../../components/SectorModal/EditSectorModal';
 import EditLocalModal from '../../components/SectorModal/EditLocalModal';
 import Loading from '../../components/Loading/Loading';
 import ModalDelete from '../../components/ModalDelete/ModalDelete';
 import SearchBarAlt from '../../components/SearchBarAlt/SearchBarAlt';
-import FlashMessage from '../../components/FlashMessage/FlashMessage';
-import ShortModal from '../../components/ShortModal/ShortModal';
 
-function Sector() {
+function LocalPage() {
   const [loading, setLoading] = useState(true);
   const [locals, setLocals] = useState([]);
   const [sectors, setSectors] = useState([]);
   const [showLocalModal, setShowLocalModal] = useState(false);
   const [showSectorModal, setShowSectorModal] = useState(false);
-  const [isEditingSector, setIsEditingSector] = useState(false);
+  const [showEditSectorModal, setShowEditSectorModal] = useState(false);
+  const [showEditLocalModal, setShowEditLocalModal] = useState(false);
   const [currentLocalId, setCurrentLocalId] = useState(null);
   const [currentSector, setCurrentSector] = useState(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -26,9 +25,6 @@ function Sector() {
   const localsPerPage = 15;
   const [lastAddedId, setLastAddedId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [flash, setFlash] = useState(null);
-  const [sectorName, setSectorName] = useState('');
-  const [nameError, setNameError] = useState(null);
 
   const fetchLocals = async () => {
     try {
@@ -92,55 +88,17 @@ function Sector() {
 
   const openSectorModal = (localId) => {
     setCurrentLocalId(localId);
-    setSectorName('');
-    setIsEditingSector(false);
-    setNameError(null);
     setShowSectorModal(true);
   };
 
   const openEditSectorModal = (sector) => {
     setCurrentSector(sector);
-    setSectorName(sector.sector_name);
-    setIsEditingSector(true);
-    setNameError(null);
-    setShowSectorModal(true);
+    setShowEditSectorModal(true);
   };
 
-  const showFlashMessage = (message, type) => {
-    setFlash({ message, type });
-    setTimeout(() => setFlash(null), 3000);
-  };
-
-  const validateSectorName = (sectorName) => {
-    return sectors.some((sector) => sector.sector_name.toLowerCase() === sectorName.toLowerCase());
-  };
-
-  const handleSectorSubmit = async (e) => {
-    e.preventDefault();
-    if (validateSectorName(sectorName)) {
-      setNameError('Este setor já existe');
-      return;
-    }
-
-    try {
-      if (isEditingSector) {
-        const response = await api.put(`/sector/${currentSector.sector_id}`, { sector_name: sectorName });
-        updateSector(response.data);
-        showFlashMessage('Setor atualizado com sucesso!', 'success');
-      } else {
-        const response = await api.post('/sector', { sector_name: sectorName, local_id: currentLocalId });
-        addSector(response.data);
-        showFlashMessage('Setor adicionado com sucesso!', 'success');
-      }
-      setShowSectorModal(false);
-    } catch (err) {
-      console.error(err);
-      showFlashMessage('Erro ao salvar o setor', 'error');
-    }
-  };
-
-  const handleLocalAdded = (newLocal) => {
-    setLocals((prevLocals) => [...prevLocals, newLocal]);
+  const openEditLocalModal = (local) => {
+    setCurrentLocalId(local.local_id);
+    setShowEditLocalModal(true);
   };
 
   const handleLocalDelete = async (e) => {
@@ -316,43 +274,12 @@ function Sector() {
       )}
 
       {showLocalModal && <LocalModal onLocalAdded={addLocal} onClose={() => setShowLocalModal(false)} />}
-      {showSectorModal && <SectorModal localId={currentLocalId} onSectorAdded={addSector} onClose={() => setShowSectorModal(false)} />}
+      {/* {showSectorModal && <SectorModal localId={currentLocalId} onSectorAdded={addSector} onClose={() => setShowSectorModal(false)} />} */}
       {showEditSectorModal && <EditSectorModal sector={currentSector} onSectorUpdated={updateSector} onClose={() => setShowEditSectorModal(false)} />}
       {showEditLocalModal && <EditLocalModal localId={currentLocalId} onLocalUpdated={updateLocal} onClose={() => setShowEditLocalModal(false)} />}
       {openDeleteModal && <ModalDelete title="Deseja excluir o local?" handleSubmit={handleLocalDelete} closeModal={() => setOpenDeleteModal(false)} />}
-      {showLocalModal && (
-        <LocalModal
-          onLocalAdded={handleLocalAdded}
-          onClose={() => setShowLocalModal(false)}
-          isEditMode={false}
-        />
-      )}
-
-      {showSectorModal && (
-        <ShortModal
-          title={isEditingSector ? 'Editar Setor' : 'Adicionar Novo Setor'}
-          handleSubmit={handleSectorSubmit}
-          closeModal={() => setShowSectorModal(false)}
-        >          
-          <div className="form-control mb-4">
-            <label className="label">Nome do Setor</label>
-            <input
-              type="text"
-              className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
-              value={sectorName}
-              onChange={(e) => setSectorName(e.target.value)}
-              required
-            />
-            {nameError && (
-              <p className="text-red-500 mt-1 text-xl font-pixel">{nameError}</p>
-            )}
-          </div>
-        </ShortModal>
-      )}
-
-      {flash && <FlashMessage message={flash.message} type={flash.type} duration={3000} onClose={() => setFlash(null)} />}
     </MainPage>
   );
 }
 
-export default Sector;
+export default LocalPage;
