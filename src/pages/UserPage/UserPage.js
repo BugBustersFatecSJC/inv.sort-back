@@ -7,7 +7,7 @@ import MainPage from '../../pages/MainPage/MainPage'
 
 const UserPage = () => {
   const [users, setUsers] = useState([]);
-const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
   const [error, setError] = useState('');
 
   

@@ -49,9 +49,17 @@ function MainPageRender() {
   /**
    * Função para dinamicamente adicionar a nova categoria após ela ser criada
    */
+  const [categoryVisible, setCategoryVisible] = useState(false);
+  const [newCategoryId, setNewCategoryId] = useState(null);
+
   const addCategory = (newCategory) => {
-    setCategories((prevCategories) => [...prevCategories, newCategory])
-  }
+    setCategories((prevCategories) => [...prevCategories, newCategory]);  
+    setNewCategoryId(newCategory.category_id);
+    setCategoryVisible(false);  
+    setTimeout(() => {
+      setCategoryVisible(true);
+    }, 100);
+  };
 
   /**
    * Função para dinamicamente adicionar o novo produto após ele ser criado
@@ -114,18 +122,20 @@ function MainPageRender() {
   //       console.log(err)
   //     })
   // }, [])
-    return (
-      <MainPage title="Categorias de Produtos">
-        {loading ? (
-          <Loading />
+  return (
+    <MainPage title="Categorias de Produtos">
+      {loading ? (
+        <Loading />
 
-        ) : (
-          <div className="flex justify-between">
-            {categories.map((category) => {
-              const categoryProducts = products.filter(
-                (product) => product.category_id === category.category_id
-              );
-              return (
+      ) : (
+        <div className="flex justify-between">
+          {categories.map((category) => {
+            const shouldAnimate = category.category_id === newCategoryId && categoryVisible;
+            const categoryProducts = products.filter(
+              (product) => product.category_id === category.category_id
+            );
+            return (
+              <div key={category.category_id} className={`${shouldAnimate ? 'pulse' : ''} w-full`}>
                 <ProductCategory
                   key={category.category_id}
                   categoryKey={category.category_id}
@@ -138,14 +148,15 @@ function MainPageRender() {
                   onProductUpdated={updateProduct}
                   categoryImage={category.category_image}
                 />
-              );
-            })}
-          </div>
-        )}
-        <Category onCategoryAdded={addCategory} />
-      </MainPage>
-    );  
+              </div>
+            );
+          })}
+        </div>
+      )}
+      <Category onCategoryAdded={addCategory} />
+    </MainPage>
+  );  
 
-  }
+}
   
-  export default MainPageRender
+export default MainPageRender

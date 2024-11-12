@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import api from '../../services/api';
 import MainPage from '../MainPage/MainPage';
-import SupplierModal from '../../components/SupplierModal/SupplierModal';
 import Loading from '../../components/Loading/Loading';
 import SearchBarAlt from '../../components/SearchBarAlt/SearchBarAlt';
 import './Supplier.css'
+import FlashMessage from '../../components/FlashMessage/FlashMessage';
+import ShortModal from '../../components/ShortModal/ShortModal';
 
 function SupplierPage() {
   const [loading, setLoading] = useState(true);
@@ -16,6 +17,12 @@ function SupplierPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const suppliersPerPage = 15;
   const [lastAddedId, setLastAddedId] = useState(null);
+  const [flash, setFlash] = useState(null);
+  const [supplierName, setSupplierName] = useState('');
+  const [contactInfo, setContactInfo] = useState('');
+  const [address, setAddress] = useState('');
+  const [nameError, setNameError] = useState(null)
+
 
   const fetchSuppliers = async () => {
     try {
@@ -65,6 +72,49 @@ function SupplierPage() {
   const toggleModal = (supplier = null) => {
     setSelectedSupplier(supplier);
     setShowModal(!showModal);
+    if (supplier) {
+      setSupplierName(supplier.supplier_name);
+      setContactInfo(supplier.contact_info || '');
+      setAddress(supplier.address || '');
+    } else {
+      setSupplierName('');
+      setContactInfo('');
+      setAddress('');
+      setNameError(null)
+    }
+  };
+
+  const showFlashMessage = (message, type) => {
+    setFlash({ message, type });
+    setTimeout(() => setFlash(null), 3000);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const supplierData = {
+      supplier_name: supplierName,
+      contact_info: contactInfo,
+      address: address,
+    };
+
+    try {
+      if (selectedSupplier) {
+        await api.put(`/supplier/${selectedSupplier.supplier_id}`, supplierData);
+        updateSupplier(selectedSupplier.supplier_id, supplierData);
+      } else {
+        const response = await api.post('/supplier', supplierData);
+        addSupplier(response.data);
+      }
+      showFlashMessage('Fornecedor salvo com sucesso!', 'success');
+      toggleModal();
+    } catch (err) {
+      console.log(err)
+      if (err.response && err.response.status === 400 && err.response.data.error.code === 'P2002') {
+          setNameError("Já existe um fornecedor com o mesmo nome")
+      }
+      showFlashMessage('Um erro aconteceu', 'error');
+    }
   };
 
   const handleSearch = (query) => {
@@ -191,7 +241,45 @@ function SupplierPage() {
         </>
       )}
 
-      {showModal && <SupplierModal supplier={selectedSupplier} onSupplierAdded={addSupplier} onSupplierUpdated={updateSupplier} onClose={toggleModal} />}
+      {showModal && (
+        <ShortModal title={selectedSupplier ? 'Editar Fornecedor' : 'Adicionar Fornecedor'} handleSubmit={handleSubmit} modalName="fornecedor-modal" closeModal={() => toggleModal()}>
+          <div className="form-control mb-4">
+            <label className="label">Nome do Fornecedor</label>
+            <input
+              type="text"
+              value={supplierName}
+              onChange={(e) => setSupplierName(e.target.value)}
+              className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
+              required
+            />
+            {nameError && (
+              <p className="text-red-500 mt-1 text-xl font-pixel">{nameError}</p>
+            )}
+          </div>
+
+          <div className="form-control mb-4">
+            <label className="label">Informações de Contato</label>
+            <input
+              type="text"
+              value={contactInfo}
+              onChange={(e) => setContactInfo(e.target.value)}
+              className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
+            />
+          </div>
+
+          <div className="form-control mb-4">
+            <label className="label">Endereço</label>
+            <input
+              type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
+            />
+          </div>
+        </ShortModal>
+      )}
+
+      {flash && <FlashMessage  message={flash.message} type={flash.type} duration={3000} onClose={() => setFlash(null)}  />}
     </MainPage>
   );
 }
