@@ -4,7 +4,7 @@ import MainPage from '../MainPage/MainPage'
 import ProductCategory from '../../components/ProductCategory/ProductCategory'
 import Category from '../../components/Category/Category'
 import Loading from '../../components/Loading/Loading'
-
+import Sidebari from '../../components/Sidebar/Sidebari'
 function MainPageRender() {
   /**
    * Renderização do componente de loading
@@ -101,14 +101,15 @@ function MainPageRender() {
     }
 
     
-    return (
+    return (<div className='flex '><Sidebari />
       <MainPage title="Categorias de Produtos">
+        
         {loading ? (
           <Loading />
 
         ) : (<> 
-      
-          <div className="flex justify-between gap-4 grid mt-6 overflow-y-scroll grid-cols-2 lg:grid-cols-4  md:grid-cols-3 sm:grid-cols-3 ">
+               
+          <div className="flex justify-between gap-4 grid mt-6 overflow-y-scroll grid-cols-2  md:grid-cols-4 sm:grid-cols-3 ">
           
           <Category onCategoryAdded={addCategory} />
             {categories.map((category) => {
@@ -137,6 +138,7 @@ function MainPageRender() {
         )}
        
       </MainPage>
+      </div>
     );  
 
   }

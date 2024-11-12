@@ -4,7 +4,7 @@ import ProductRow from '../../components/ProductRow/ProductRow2';
 import ProductTable from '../../components/ProductTable/ProductTable2';
 
 import React, { useState, useEffect } from 'react'; // Importação dos hooks do React
-import Sidebar from '../../components/Sidebar/Sidebari'; // Importação do componente Sidebar
+import Sidebari from '../../components/Sidebar/Sidebari';
 
 
 
@@ -30,7 +30,8 @@ function BuyAndSell() {
     fetchProducts();
   }, []);
 
-  return (
+  return (<div className='flex'>
+    <Sidebari />
     <MainPage title="Compra e Venda">
       
       <div className="flex bg-[rgb(255,195,118)]  ">
@@ -44,6 +45,7 @@ function BuyAndSell() {
         </section>
       </div>
     </MainPage>
+    </div>
   );
 }
 

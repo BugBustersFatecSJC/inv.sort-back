@@ -406,10 +406,10 @@ function ProductCategory(props) {
     return (
       // Container da categoria
 
-        <div className='w-[100%] my-2 mx-auto g  bg-[#5F2E09] rounded-md hover:bg-[#3E1900] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] mt-1 h-[200px]  mx-4 flex relative'>
+        <div className='w-[90%] my-2 mx-auto g  bg-[#5F2E09] rounded-md hover:bg-[#3E1900] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] mt-1 h-[200px]  mx-4 flex relative'>
           <div className={`  transition-opacity duration-200 rounded-md  w-full  bg-[#5F2E09] flex justify-center  items-center justify-center ${!showCategoryProducts ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
           <div className="flex flex-col justify-center flex-wrap w-full  "> 
-            <figure className='w-[4rem] mx-auto h-[4rem] rounded-full alt-color-4-bg border-4 border-[#D87B26] shadow-[inset_-2px_3px_2px_4px_rgba(0,0,0,0.2)]'>
+            <figure className='w-[3rem] mx-auto h-[3rem] rounded-full alt-color-4-bg border-4 border-[#D87B26] shadow-[inset_-2px_3px_2px_4px_rgba(0,0,0,0.2)]'>
               {props.categoryImage ? (
                 <img
                   src={`http://localhost:3001${props.categoryImage}`}

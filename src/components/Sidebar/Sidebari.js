@@ -21,7 +21,7 @@ function Sidebari({ content }) {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [windowWidth]);
 
   useEffect(() => {
     if (windowWidth > 640) {
@@ -34,12 +34,12 @@ function Sidebari({ content }) {
   return (
     <>
       <div className={`flex bg-clip-border alt-color-bg`}>
-        <div className="mb-8 justify-center self-center flex-col flex-wrap h-full align-center text-center py-4">
-          <div className="text-center self-center align-middle flex justify-center">
+        <div className="mb-8  sm:w-full justify-center self-center flex-col flex-wrap h-full align-center text-center py-4">
+          <div className="text-center mx-auto self-center align-middle flex justify-center z-20   ">
             {windowWidth > 450 ? (
               <img
-                src={'img/logo_invsort.svg'}
-                className={`w-[50%] sm:w-[30%] mt-4 sb-button z-10`}
+                src={'/img/logo_invsort.png'}
+                className={`w-[50%] mx-auto sm:w-[40%] h-full mt-4 sb-button `}
                 onClick={() => {
                   if (windowWidth > 640) {
                     setCollapsed(!collapsed);
@@ -52,9 +52,8 @@ function Sidebari({ content }) {
             ) : null}
           </div>
 
-          {content}
-
-          <div className="mt-[40px] w-full flex justify-center text-center self-center">
+        
+          <div className="mt-[40px] flex justify-center text-center self-center">
             <Sidebar
               className="text-center m-auto w-full"
               onBackdropClick={() => setToggled(false)}
@@ -84,7 +83,7 @@ function Sidebari({ content }) {
                   icon={<img id="carrinho" src="/images/grocery-store.png" />}
                   component={<Link to="/products" />}
                 >
-                  Produtos
+                  {collapsed }
                 </MenuItem>
                 <MenuItem
                   className="MenuItem poppins-semibold"
@@ -144,6 +143,7 @@ function Sidebari({ content }) {
                         transition: 'background-color 0.3s ease',
                         width: collapsed ? '40px' : '200px',
                         height: '40px',
+                        width:'100%',
                       }}
                     >
                       {collapsed ? 'Config' : 'Configurações'}
@@ -178,7 +178,7 @@ function Sidebari({ content }) {
                 >
                   <MenuItem
                     className="MenuItem  w-full poppins-semibold"
-                    title="Produtos"
+                    title=""
                     icon={<img id="carrinho" alt="produtos" src="/images/grocery-store.png" />}
                     component={<Link to="/products" />}
                   >
@@ -186,7 +186,7 @@ function Sidebari({ content }) {
                   </MenuItem>
                   <MenuItem
                     className="MenuItem  poppins-semibold"
-                    title="Analise"
+                    title=""
                     icon={<img id="chart" className="" src="/images/pie-chart.png" />}
                     component={<Link to="/analytics" />}
                   >
@@ -194,7 +194,7 @@ function Sidebari({ content }) {
                   </MenuItem>
                   <MenuItem
                     className="MenuItem poppins-semibold"
-                    title="Movimentações"
+                    title=""
                     icon={<img id="chart" src="/images/arrows.png" />}
                     component={<Link to="/stockmovements" />}
                   >
@@ -206,7 +206,7 @@ function Sidebari({ content }) {
                   {(role === 'admin' || role === 'gerente') && (
                     <SubMenu
                       icon={<img id="chart" src="/images/profile.png" />}
-                      label="Gerenciar"
+                      label={!collapsed ? '' : 'Gerenciar'}
                       className="poppins-semibold"
                     >
                       <MenuItem
@@ -243,6 +243,7 @@ function Sidebari({ content }) {
                         onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3E1900'}
                         onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#6b3710'}
                         style={{
+                          width:'100%',
                           backgroundColor: '#6b3710',
                           color: 'rgb(255,195,118)',
                           margin: '0',
@@ -265,7 +266,7 @@ function Sidebari({ content }) {
                           />
                         )}
                       </MenuItem>
-                      {/* Adicione outros subitens de gerenciar conforme necessário */}
+                      
                     </SubMenu>
                   )}
                 </Menu>
@@ -278,7 +279,7 @@ function Sidebari({ content }) {
       {windowWidth < 450 ? (
         <div className="w-[35px] h-[33px] rounded-md border-2 border-[#6B3710] bg-[#6B3710] absolute m-1">
           <img
-            src={'images/menu.png'}
+            src={'/images/menu.png'}
             className="object-fit w-full h-full sb-button"
             onClick={() => {
               if (windowWidth > 640) {
