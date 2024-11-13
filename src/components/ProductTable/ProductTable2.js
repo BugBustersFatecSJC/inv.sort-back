@@ -13,7 +13,7 @@ const ProductTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(20); // Default to 20 for desktop
 
-  const id = useParams().id;
+  const id = useParams().id || 0;
   console.log(id);
 
   // Fetch products from API
@@ -80,6 +80,7 @@ const ProductTable = () => {
   return (
 
     <div className="product-table max-h-[70%]">
+      
       <SearchBar handlesSearch={handleSearch} />
       <div className="flex grid mt-4 overflow-y-auto grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 text-center justify-center flex-wrap gap-2 p-1">
         {currentItems.map((product, index) => (
