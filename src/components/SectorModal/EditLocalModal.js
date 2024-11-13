@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import FlashMessage from '../../components/FlashMessage/FlashMessage';
+import ShortModal from '../ShortModal/ShortModal';
 
-function EditLocalModal({ localId, onClose }) {
+function EditLocalModal({ localId, onClose, onLocalUpdated }) {
   const [localName, setLocalName] = useState('');
   const [localAddress, setLocalAddress] = useState('');
   const [flash, setFlash] = useState(null);
@@ -29,8 +30,9 @@ function EditLocalModal({ localId, onClose }) {
     e.preventDefault();
     try {
       const response = await api.put(`/local/${localId}`, { local_name: localName, local_address: localAddress });
+      onLocalUpdated(response.data);
       showFlashMessage('Local atualizado com sucesso!', 'success');
-      onClose(); // Fecha o modal
+      onClose();
     } catch (err) {
       console.error(err);
       showFlashMessage('Erro ao atualizar o local', 'error');
@@ -38,45 +40,33 @@ function EditLocalModal({ localId, onClose }) {
   };
 
   return (
-    <div className="modal modal-open">
-      <div className="modal-box">
-        <h3 className="font-bold text-lg">Editar Local</h3>
-
-        {flash && <FlashMessage message={flash.message} type={flash.type} />}
-
-        <form onSubmit={handleSubmit}>
-          <div className="form-control mb-4">
-            <label className="label">Nome do Local</label>
-            <input
-              type="text"
-              className="input input-bordered"
-              value={localName}
-              onChange={(e) => setLocalName(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-control mb-4">
-            <label className="label">Endereço</label>
-            <input
-              type="text"
-              className="input input-bordered"
-              value={localAddress}
-              onChange={(e) => setLocalAddress(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="modal-action">
-            <button type="button" className="btn" onClick={onClose}>
-              Cancelar
-            </button>
-            <button type="submit" className="btn btn-primary">
-              Salvar
-            </button>
-          </div>
-        </form>
+    <ShortModal
+      title="Editar Local"
+      modalName="edit-local-modal"
+      handleSubmit={handleSubmit}
+      closeModal={onClose}
+    >
+      <div className="form-control mb-4">
+        <label className="label">Nome do Local</label>
+        <input
+          type="text"
+          className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
+          value={localName}
+          onChange={(e) => setLocalName(e.target.value)}
+          required
+        />
       </div>
-    </div>
+      <div className="form-control mb-4">
+        <label className="label">Endereço</label>
+        <input
+          type="text"
+          className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
+          value={localAddress}
+          onChange={(e) => setLocalAddress(e.target.value)}
+          required
+        />
+      </div>
+    </ShortModal>
   );
 }
 

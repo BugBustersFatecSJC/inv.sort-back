@@ -100,6 +100,7 @@ function MainPageRender() {
      ))
     }
 
+
     
     return (<div className='flex '><Sidebari />
       <MainPage title="Categorias de Produtos">
@@ -119,6 +120,7 @@ function MainPageRender() {
               return (
                    
                 <ProductCategory
+
                   key={category.category_id}
                   categoryKey={category.category_id}
                   products={categoryProducts}
@@ -130,6 +132,7 @@ function MainPageRender() {
                   onProductUpdated={updateProduct}
                   categoryImage={category.category_image}
                 />
+
               );
             })}
              
@@ -141,6 +144,7 @@ function MainPageRender() {
       </div>
     );  
 
-  }
+
+}
   
-  export default MainPageRender
+export default MainPageRender
