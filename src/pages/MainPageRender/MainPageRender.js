@@ -102,7 +102,7 @@ function MainPageRender() {
 
 
     
-    return (<div className='flex '><Sidebari />
+    return (<div className='flex '>
       <MainPage title="Categorias de Produtos">
         
         {loading ? (

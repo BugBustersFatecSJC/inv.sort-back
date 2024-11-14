@@ -31,7 +31,7 @@ function BuyAndSell() {
   }, []);
 
   return (<div className='flex'>
-    <Sidebari />
+    
     <MainPage title="Compra e Venda">
       
       <div className="flex bg-[rgb(255,195,118)]  ">

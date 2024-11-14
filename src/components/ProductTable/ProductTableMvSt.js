@@ -60,6 +60,9 @@ function ProductTableMvSt() {
           if (key === 'movementDate') {
             return new Date(movement.movement_date).toISOString().split('T')[0] === filters.movementDate;
           }
+          if (key === 'quantity') {
+            return movement.quantity === filters.quantity;
+        }
         }
         return true;
       });
