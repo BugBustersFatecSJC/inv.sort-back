@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import Sidebari from '../../components/Sidebar/Sidebar';
+import Sidebari from '../../components/Sidebar/Sidebari';
 import UserProfileIcon from '../../components/UserProfileIcon/UserProfileIcon';
 import CategoryButtons from '../../components/CategoryButtons/CategoryButtons';
 import Loading from '../../components/Loading/Loading';
@@ -13,9 +13,8 @@ function MainPage(props) {
     setLoading((prevLoading) => !prevLoading);
   };
 
-  
   return (
-    <div className='flex main-color-bg min-h-[105vh]  '>
+    <div className='flex main-color-bg min-h-[100vh]'>
       
       <Sidebari />
 
@@ -25,13 +24,11 @@ function MainPage(props) {
         <div className='flex flex-col w-full items-end justify-start p-4'>
           <UserProfileIcon />
         </div>
-        <div className='w-[90%] mx-auto flex flex-col'>
+        
+        <div className='w-[96%]  mx-auto flex flex-col'>
           <div className='w-full flex justify-start'>
-
-            <h1 className='text-xl md:text-2xg lg:text-4xg ml-1 sm:ml-3 md:ml-6 lg:ml-8 poppins-semibold'>{props.title}</h1>
+            <h1 className='text-3xl font-poppins text-regular'>{props.title}</h1>
           </div>
-
-
 
           </div>
           <main className='w-full p-4'>

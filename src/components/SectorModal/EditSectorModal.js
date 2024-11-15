@@ -1,59 +1,51 @@
-import { useState } from 'react';
+// EditSectorModal.js
+import React, { useState } from 'react';
+import ShortModal from '../ShortModal/ShortModal';
 import api from '../../services/api';
-import FlashMessage from '../../components/FlashMessage/FlashMessage';
 
 function EditSectorModal({ sector, onSectorUpdated, onClose }) {
-  const [sectorName, setSectorName] = useState(sector.sector_name);
-  const [flash, setFlash] = useState(null);
+  const [sectorName, setSectorName] = useState(sector.sector_name || '');
+  const [nameError, setNameError] = useState(null);
 
-  const showFlashMessage = (message, type) => {
-    setFlash({ message, type });
-    setTimeout(() => setFlash(null), 3000);
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSectorUpdate = async (e) => {
     e.preventDefault();
+    
+    if (!sectorName.trim()) {
+      setNameError('O nome do setor não pode estar vazio');
+      return;
+    }
+
     try {
-      const response = await api.put(`/sector/${sector.sector_id}`, { sector_name: sectorName });
+      const response = await api.put(`/sector/${sector.sector_id}`, {
+        sector_name: sectorName
+      });
+      
       onSectorUpdated(response.data);
-      showFlashMessage('Setor atualizado com sucesso!', 'success');
       onClose();
-    } catch (err) {
-      console.error(err);
-      showFlashMessage('Erro ao atualizar o setor', 'error');
+    } catch (error) {
+      console.error('Erro ao atualizar o setor:', error);
+      setNameError('Erro ao atualizar o setor');
     }
   };
 
   return (
-    <div className="modal modal-open">
-      <div className="modal-box">
-        <h3 className="font-bold text-lg">Editar Setor</h3>
-
-        {flash && <FlashMessage message={flash.message} type={flash.type} />}
-
-        <form onSubmit={handleSubmit}>
-          <div className="form-control mb-4">
-            <label className="label">Nome do Setor</label>
-            <input
-              type="text"
-              className="input input-bordered"
-              value={sectorName}
-              onChange={(e) => setSectorName(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="modal-action">
-            <button type="button" className="btn" onClick={onClose}>
-              Cancelar
-            </button>
-            <button type="submit" className="btn btn-primary">
-              Salvar
-            </button>
-          </div>
-        </form>
+    <ShortModal
+      title="Editar Setor"
+      handleSubmit={handleSectorUpdate}
+      closeModal={onClose}
+    >
+      <div className="form-control mb-4">
+        <label className="label">Nome do Setor</label>
+        <input
+          type="text"
+          className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
+          value={sectorName}
+          onChange={(e) => setSectorName(e.target.value)}
+          required
+        />
+        {nameError && <p className="text-red-500 mt-1 text-xl font-pixel">{nameError}</p>}
       </div>
-    </div>
+    </ShortModal>
   );
 }
 

@@ -100,33 +100,22 @@ function MainPageRender() {
      ))
     }
 
-  /**
-   * Funcionalidade para checar se há algum usuário no banco de dados, se sim,
-   * exibirá a tela de login, senão o usuário será redirecionado para a tela
-   * de primeiro cadastro
-   */
-  // const [adminExists, setAdminExists] = useState({});
-  // useEffect(() => {
-  //   api
-  //     .get("/users")
-  //     .then(response => setAdminExists(response.data))
-  //     .catch((err) => {
-  //       console.log(err)
-  //     })
-  // }, [])
-    return (
-      <MainPage title="Categorias de Produtos">
-        {loading ? (
-          <Loading />
+  return (
+    <MainPage title="Categorias de Produtos">
+      {loading ? (
+        <Loading />
 
-        ) : (
-          <div className="flex justify-between gap-4 grid mt-6 overflow-y-scroll grid-cols-2 lg:grid-cols-4  md:grid-cols-3 sm:grid-cols-3 ">
-            {categories.map((category) => {
-              const categoryProducts = products.filter(
-                (product) => product.category_id === category.category_id
-              );
-              return (
-                <ProductCategory
+      ) : (
+        <div className="flex justify-between gap-4 grid mt-6 overflow-y-scroll grid-cols-2 lg:grid-cols-4  md:grid-cols-3 sm:grid-cols-3">
+          {categories.map((category) => {
+            // const shouldAnimate = category.category_id === newCategoryId && categoryVisible;
+            let shouldAnimate
+            const categoryProducts = products.filter(
+              (product) => product.category_id === category.category_id
+            );
+            return (
+              <div key={category.category_id} className={`${shouldAnimate ? 'pulse' : ''} w-full`}>
+                  <ProductCategory
                   key={category.category_id}
                   categoryKey={category.category_id}
                   products={categoryProducts}
@@ -138,14 +127,15 @@ function MainPageRender() {
                   onProductUpdated={updateProduct}
                   categoryImage={category.category_image}
                 />
-              );
-            })}
-          </div>
-        )}
-        <Category onCategoryAdded={addCategory} />
-      </MainPage>
-    );  
+              </div>
+            );
+          })}
+        </div>
+      )}
+      <Category onCategoryAdded={addCategory} />
+    </MainPage>
+  );  
 
-  }
+}
   
-  export default MainPageRender
+export default MainPageRender
