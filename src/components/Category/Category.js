@@ -101,8 +101,8 @@ function Category(props) {
 
     return (
         <>
-            <div onClick={openModal} className='w-full alt-color-6-bg rounded shadow-md mt-4 mb-[40px] cursor-pointer'>
-                <div className='p-[1rem] h-[200px] flex flex-col items-center justify-center'>
+            <div onClick={openModal} className='  transition-opacity duration-200 rounded-md p-[5.25px] px-4 w-full  flex justify-center  items-center justify-center opacity-100'>
+                <div className='  flex flex-col text-center alt-color-6-bg opacity-90  w-full h-full shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)]  rounded-md items-center justify-center'>
                     <i className="fa-solid fa-plus text-4xl"></i>
                     <p className='mt-4'>Adicionar categoria</p>
                 </div>

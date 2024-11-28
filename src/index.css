@@ -210,13 +210,36 @@ code {
   margin: 10px!important;
   padding: 10px !important; ;
 }
-
+.ps-menu-icon{
+  display: flex!important;
+  align-content: center!important;
+  text-align: center!important;
+  justify-content: center!important;
+  margin: 20px!important;
+ 
+  text-align: center!important;
+  
+}
+.ps-submenu-expand-icon {
+  margin: 0px!important;
+  padding-right: 4px!important;
+  ;
+  
+}
 .ps-menu-button {
 
   color: var(--secondary-color);
-  margin-bottom: 20px;
+  margin-bottom: 20px!important;
   width: 100%!important;
   max-width: 16rem!important;
+ 
+  padding: 0ch!important;
+  display: flex!important;
+  align-content: center!important;
+  text-align: center!important;
+  justify-content: center!important;
+  align-items: center!important;
+  align-self: center!important;
    
  }
 

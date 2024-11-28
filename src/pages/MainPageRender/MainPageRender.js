@@ -100,9 +100,8 @@ function MainPageRender() {
      ))
     }
 
-
     
-    return (<div className='flex '>
+    return (<div className=' '>
       <MainPage title="Categorias de Produtos">
         
         {loading ? (
@@ -110,7 +109,7 @@ function MainPageRender() {
 
         ) : (<> 
                
-          <div className="flex justify-between gap-4 grid mt-6 overflow-y-scroll grid-cols-2  md:grid-cols-4 sm:grid-cols-3 ">
+          <div className=" w-full flex justify-between gap-4 grid mt-6 overflow-y-scroll grid-cols-2  md:grid-cols-4 sm:grid-cols-3 ">
           
           <Category onCategoryAdded={addCategory} />
             {categories.map((category) => {
@@ -145,6 +144,6 @@ function MainPageRender() {
     );  
 
 
-}
+  }
   
-export default MainPageRender
+  export default MainPageRender
