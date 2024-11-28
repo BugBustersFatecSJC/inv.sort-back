@@ -7,6 +7,7 @@ import SearchBarAlt from '../../components/SearchBarAlt/SearchBarAlt';
 import './Supplier.css'
 import FlashMessage from '../../components/FlashMessage/FlashMessage';
 import ShortModal from '../../components/ShortModal/ShortModal';
+import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
 
 function SupplierPage() {
   const [loading, setLoading] = useState(true);
@@ -117,6 +118,9 @@ function SupplierPage() {
     }
   };
 
+  /**
+   * Barra de pesquisa
+   */
   const handleSearch = (query) => {
     setSearchQuery(query);
     setCurrentPage(1);
@@ -126,6 +130,9 @@ function SupplierPage() {
     supplier.supplier_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  /**
+   * Paginação
+   */
   const indexOfLastSupplier = currentPage * suppliersPerPage;
   const indexOfFirstSupplier = indexOfLastSupplier - suppliersPerPage;
   const currentSuppliers = filteredSuppliers.slice(indexOfFirstSupplier, indexOfLastSupplier);
@@ -134,6 +141,39 @@ function SupplierPage() {
 
   const goToNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const goToPreviousPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+  
+  /**
+   * Deletar fornecedor
+   */
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [supplierToDelete, setSupplierToDelete] = useState(null);
+  const confirmDeleteSupplier = (supplierId) => {
+    setSupplierToDelete(supplierId);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!supplierToDelete) return;
+
+    try {
+      await api.delete(`/supplier/${supplierToDelete}`);
+      setSuppliers((prevSuppliers) =>
+        prevSuppliers.filter((supplier) => supplier.supplier_id !== supplierToDelete)
+      );
+      showFlashMessage('Fornecedor excluído com sucesso!', 'success');
+    } catch (err) {
+      console.error(err);
+      showFlashMessage('Erro ao excluir fornecedor.', 'error');
+    } finally {
+      setShowDeleteModal(false);
+      setSupplierToDelete(null);
+    }
+  };
+  
+    const handleDeleteCancel = () => {
+      setShowDeleteModal(false);
+      setSupplierToDelete(null);
+    };
 
   return (
     <MainPage title="Gestão de Fornecedores">
@@ -201,9 +241,9 @@ function SupplierPage() {
                                 <i className="fa-solid fa-pencil"></i>
                               </button> 
 
-                              <button 
-                                onClick={() => removeSupplier(supplier.supplier_id)} 
-                                className="flex space-x-3 font-pixel p-2 justify-center items-center btn-3d" 
+                              <button
+                                onClick={() => confirmDeleteSupplier(supplier.supplier_id)}
+                                className="flex space-x-3 font-pixel p-2 justify-center items-center btn-3d"
                                 style={{ backgroundColor: buttonBgColor }}
                               >
                                 <i className="fa-solid fa-trash"></i>
@@ -277,6 +317,15 @@ function SupplierPage() {
             />
           </div>
         </ShortModal>
+      )}
+
+      {showDeleteModal && (
+        <DeleteConfirmationModal
+          title="Confirmar Exclusão"
+          message="Você tem certeza que deseja excluir este fornecedor? Esta ação não pode ser desfeita."
+          onConfirm={handleDeleteConfirm}
+          onCancel={handleDeleteCancel}
+        />
       )}
 
       {flash && <FlashMessage  message={flash.message} type={flash.type} duration={3000} onClose={() => setFlash(null)}  />}
