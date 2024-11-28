@@ -1,6 +1,5 @@
 .mainContainer {
-    background: url("../../../public/img/wallpaper.jpg") no-repeat;
-    background-size: cover;
+    position: relative;
     height: 100vh;
     display: flex;
     flex-direction: column;
