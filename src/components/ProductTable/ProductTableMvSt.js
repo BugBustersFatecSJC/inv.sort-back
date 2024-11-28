@@ -208,13 +208,14 @@ function ProductTableMvSt() {
               <div><strong>Estoque Mínimo:</strong> {selectedMovement.product_stock_min ?? 'N/A'}</div>
             </div>
             <div className="mt-4 flex justify-end">
-              <button onClick={closeModal} className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-[#C17B46]">Fechar</button>
+              <button onClick={closeModal} className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-[#C17B46]">
+                Fechar
+              </button>
             </div>
           </div>
         </div>
       )}
     </div>
-
   );
 }
 
