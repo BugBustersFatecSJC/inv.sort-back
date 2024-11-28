@@ -34,28 +34,55 @@ const AnimatedBackground = () => {
       "/img/cloud6.png",
     ];
 
-    const clouds = [];
-    for (let i = 0; i < 5; i++) {
-      const randomTexture = cloudTextures[Math.floor(Math.random() * cloudTextures.length)];
-      const cloudMaterial = new THREE.MeshBasicMaterial({
-        map: loader.load(randomTexture),
-        transparent: true,
-      });
+    let clouds = [];
 
-      const cloud = new THREE.Mesh(
-        new THREE.PlaneGeometry(3, 1.5),
-        cloudMaterial
-      );
+    const createClouds = () => {
+      // Remove existing clouds
+      clouds.forEach((cloud) => scene.remove(cloud));
+      clouds = [];
 
-      cloud.position.set(
-        Math.random() * 30 - 15,
-        Math.random() * 5 - 2.5,
-        -5
-      );
+      // Breakpoint sizes
+      let cloudWidth, cloudHeight;
 
-      scene.add(cloud);
-      clouds.push(cloud);
-    }
+      if (window.innerWidth > 1200) {
+        cloudWidth = 3;
+        cloudHeight = 1.5;
+      } else if (window.innerWidth > 500) {
+        cloudWidth = 2;
+        cloudHeight = 1;
+      } else if (window.innerWidth > 360) {
+        cloudWidth = 1.5;
+        cloudHeight = 0.75;
+      } else {
+        return; // No clouds for screens smaller than 360px
+      }
+
+      // Add clouds with new dimensions
+      for (let i = 0; i < 5; i++) {
+        const randomTexture = cloudTextures[Math.floor(Math.random() * cloudTextures.length)];
+        const cloudMaterial = new THREE.MeshBasicMaterial({
+          map: loader.load(randomTexture),
+          transparent: true,
+        });
+
+        const cloud = new THREE.Mesh(
+          new THREE.PlaneGeometry(cloudWidth, cloudHeight),
+          cloudMaterial
+        );
+
+        cloud.position.set(
+          Math.random() * 30 - 15,
+          Math.random() * 5 + 1,
+          -5
+        );
+
+        scene.add(cloud);
+        clouds.push(cloud);
+      }
+    };
+
+    // Initial cloud creation
+    createClouds();
 
     camera.position.z = 5;
 
@@ -81,6 +108,8 @@ const AnimatedBackground = () => {
 
       forest.geometry.dispose();
       forest.geometry = new THREE.PlaneGeometry(window.innerWidth / 40, window.innerHeight / 40);
+
+      createClouds(); // Update clouds on resize
     };
 
     window.addEventListener("resize", handleResize);
@@ -91,7 +120,19 @@ const AnimatedBackground = () => {
     };
   }, []);
 
-  return <div ref={mountRef} style={{ position: "absolute", top: 0, left: 0, zIndex: -1, width: "100%", height: "100%" }} />;
+  return (
+    <div
+      ref={mountRef}
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        zIndex: -1,
+        width: "100%",
+        height: "100%",
+      }}
+    />
+  );
 };
 
 export default AnimatedBackground;

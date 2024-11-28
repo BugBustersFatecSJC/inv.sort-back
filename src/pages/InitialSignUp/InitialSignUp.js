@@ -50,12 +50,12 @@ function InitialSignUp() {
   return (
     <div className={styles.mainContainer}>
         <AnimatedBackground/>
-        <form onSubmit={handleSubmit} className=' w-[32%] flex justify-center h-[550px] items-center rounded'>
+        <form onSubmit={handleSubmit} className={`w-[32%] flex justify-center h-[550px] items-center rounded ${styles.formContainer}`}>
           <div className='w-[80%] flex flex-col items-center'>
             <div className='mb-[50px]'>
               <MainLogo/>
             </div>
-            <h2 className='text-center'>Este é o primeiro acesso ao sistema, crie um usuário administrador para começar</h2>
+            <h2 className='text-center'>Este é o primeiro acesso ao sistema, crie o administrador para começar</h2>
             <Field name="name" type="text" placeholder="Nome" value={userName} onChange={(e) => setUserName(e.target.value)}/>
             <Field name="email" type="email" placeholder="Email" value={userEmail} onChange={(e) => setUserEmail(e.target.value)}/>
             <Field name="password" type="password" placeholder="Senha" value={userPassword} onChange={(e) => setUserPassword(e.target.value)}/>
