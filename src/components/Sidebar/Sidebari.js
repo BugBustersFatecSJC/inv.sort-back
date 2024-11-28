@@ -38,7 +38,7 @@ function Sidebari({ content }) {
           <div className="text-center mx-auto self-center align-middle flex justify-center z-20   ">
             {windowWidth > 450 ? (
               <img
-                src={'/img/logo_invsort.png'}
+                src={'/img/logo_invsort.svg'}
                 className={`w-[50%] mx-auto sm:w-[40%] h-full mt-4 sb-button `}
                 onClick={() => {
                   if (windowWidth > 640) {
