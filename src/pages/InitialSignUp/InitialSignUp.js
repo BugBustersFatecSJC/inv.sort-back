@@ -40,8 +40,8 @@ function InitialSignUp() {
         setUserEmail('')
         setUserPassword('')
         setUserPasswordConfirmation('')
-        
-        navigate('/login')
+                
+        navigate('/')
     } catch(err) {
       console.log(err)
     }

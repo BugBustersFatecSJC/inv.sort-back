@@ -5,6 +5,8 @@ const AnimatedBackground = () => {
   const mountRef = useRef(null);
 
   useEffect(() => {
+    const mount = mountRef.current;
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       75,
@@ -14,7 +16,7 @@ const AnimatedBackground = () => {
     );
     const renderer = new THREE.WebGLRenderer({ alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    mountRef.current.appendChild(renderer.domElement);
+    mount.appendChild(renderer.domElement);
 
     const loader = new THREE.TextureLoader();
     const forestTexture = loader.load("/img/forest_background.png");
@@ -37,11 +39,9 @@ const AnimatedBackground = () => {
     let clouds = [];
 
     const createClouds = () => {
-      // Remove existing clouds
       clouds.forEach((cloud) => scene.remove(cloud));
       clouds = [];
 
-      // Breakpoint sizes
       let cloudWidth, cloudHeight;
 
       if (window.innerWidth > 1200) {
@@ -54,10 +54,9 @@ const AnimatedBackground = () => {
         cloudWidth = 1.5;
         cloudHeight = 0.75;
       } else {
-        return; // No clouds for screens smaller than 360px
+        return;
       }
 
-      // Add clouds with new dimensions
       for (let i = 0; i < 5; i++) {
         const randomTexture = cloudTextures[Math.floor(Math.random() * cloudTextures.length)];
         const cloudMaterial = new THREE.MeshBasicMaterial({
@@ -81,7 +80,6 @@ const AnimatedBackground = () => {
       }
     };
 
-    // Initial cloud creation
     createClouds();
 
     camera.position.z = 5;
@@ -109,14 +107,14 @@ const AnimatedBackground = () => {
       forest.geometry.dispose();
       forest.geometry = new THREE.PlaneGeometry(window.innerWidth / 40, window.innerHeight / 40);
 
-      createClouds(); // Update clouds on resize
+      createClouds();
     };
 
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
-      mountRef.current.removeChild(renderer.domElement);
+      mount.removeChild(renderer.domElement);
     };
   }, []);
 
