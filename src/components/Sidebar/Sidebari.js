@@ -38,7 +38,7 @@ function Sidebari({ content }) {
           <div className="text-center mx-auto self-center align-middle flex justify-center z-20   ">
             {windowWidth > 450 ? (
               <img
-                src={'img/logo_invsort.svg'}
+                src={'img/logo_invsort.png'}
                 className={`w-[50%] sm:w-[30%] mt-4 sb-button z-10`}
                 onClick={() => {
                   if (windowWidth > 640) {
@@ -63,6 +63,7 @@ function Sidebari({ content }) {
             >
               <Menu
                 menuItemStyles={{
+                  
                   button: ({ level, active, disabled }) => {
                     if (level === 0)
                       return {
@@ -77,14 +78,14 @@ function Sidebari({ content }) {
                       };
                   },
                 }}
-                className="mb-12"
+                className="mt-4"
               >
                 <MenuItem
                   className="MenuItem w-full poppins-semibold"
                   icon={<img id="carrinho" src="/images/grocery-store.png" />}
                   component={<Link to="/products" />}
                 >
-                  {collapsed }
+                  Categorias
                 </MenuItem>
                 <MenuItem
                   className="MenuItem poppins-semibold"
@@ -179,11 +180,11 @@ function Sidebari({ content }) {
                 >
                   <MenuItem
                     className="MenuItem  w-full poppins-semibold"
-                    title="Produtos"
-                    icon={<img id="carrinho" alt="produtos" src="/images/grocery-store.png" />}
+                    title="Categorias"
+                    icon={<img id="carrinho" alt="Categorias" src="/images/grocery-store.png" />}
                     component={<Link to="/products" />}
                   >
-                    {collapsed ? 'Produtos' : ''}
+                    {collapsed ? 'Categorias' : ''}
                   </MenuItem>
                   <MenuItem
                     className="MenuItem  poppins-semibold"
