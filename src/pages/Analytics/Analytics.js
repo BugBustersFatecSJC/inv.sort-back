@@ -48,10 +48,10 @@ function Analytics() {
   return (
     <div className='main-color-bg h-[100%] flex'>
       
+      
       <Sidebar />
-     
       <div id='main' className='w-[100%] min-h-[100vh] px-4 h-[100%] grid-col-2 flex overflow-scroll overflow-x-hidden flex-wrap flex-col  text-center justify-start items-center'>
-
+      
         <div className='flex flex-col w-full items-end justify-start p-4'>
         <UserProfileIcon/>
 

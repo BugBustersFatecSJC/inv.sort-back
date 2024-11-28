@@ -38,8 +38,8 @@ function Sidebari({ content }) {
           <div className="text-center mx-auto self-center align-middle flex justify-center z-20   ">
             {windowWidth > 450 ? (
               <img
-                src={'/img/logo_invsort.svg'}
-                className={`w-[30%] mx-auto sm:w-[30%] h-full mt-4 sb-button `}
+                src={'img/logo_invsort.svg'}
+                className={`w-[50%] sm:w-[30%] mt-4 sb-button z-10`}
                 onClick={() => {
                   if (windowWidth > 640) {
                     setCollapsed(!collapsed);
@@ -179,8 +179,7 @@ function Sidebari({ content }) {
                 >
                   <MenuItem
                     className="MenuItem  w-full poppins-semibold"
-                    title="
-                    "
+                    title="Produtos"
                     icon={<img id="carrinho" alt="produtos" src="/images/grocery-store.png" />}
                     component={<Link to="/products" />}
                   >

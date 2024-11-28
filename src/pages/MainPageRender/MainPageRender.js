@@ -119,6 +119,7 @@ function MainPageRender() {
               return (
                    
                 <ProductCategory
+
                   key={category.category_id}
                   categoryKey={category.category_id}
                   products={categoryProducts}
@@ -130,6 +131,7 @@ function MainPageRender() {
                   onProductUpdated={updateProduct}
                   categoryImage={category.category_image}
                 />
+
               );
             })}
              
@@ -140,6 +142,7 @@ function MainPageRender() {
       </MainPage>
       </div>
     );  
+
 
   }
   
