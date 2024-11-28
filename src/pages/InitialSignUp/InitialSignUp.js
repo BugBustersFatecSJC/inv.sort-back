@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './InitialSignUp.module.css';
 import MainLogo from '../../components/MainLogo/MainLogo';
@@ -11,7 +11,13 @@ import { UserContext } from '../../context/userContext';
 
 function InitialSignUp() {
   const navigate = useNavigate();
-  const { setNeedsRegistration } = useContext(UserContext);
+  const { needsRegistration, setNeedsRegistration } = useContext(UserContext);
+
+  useEffect(() => {
+    if (!needsRegistration) {
+      navigate('/');
+    }
+  }, [needsRegistration, navigate]);
 
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
