@@ -39,7 +39,7 @@ function Sidebari({ content }) {
             {windowWidth > 450 ? (
               <img
                 src={'/img/logo_invsort.svg'}
-                className={`w-[50%] mx-auto sm:w-[40%] h-full mt-4 sb-button `}
+                className={`w-[30%] mx-auto sm:w-[30%] h-full mt-4 sb-button `}
                 onClick={() => {
                   if (windowWidth > 640) {
                     setCollapsed(!collapsed);
@@ -59,6 +59,7 @@ function Sidebari({ content }) {
               onBackdropClick={() => setToggled(false)}
               toggled={toggled}
               breakPoint="always"
+              collapsedWidth='4rem'
             >
               <Menu
                 menuItemStyles={{
@@ -157,7 +158,7 @@ function Sidebari({ content }) {
             </Sidebar>
 
             {windowWidth > 450 ? (
-              <Sidebar id="collapse" width="13.85rem" collapsedWidth="4rem" collapsed={!collapsed}>
+              <Sidebar id="collapse" width="14rem" className='p-2' collapsedWidth="4rem" collapsed={!collapsed}>
                 <Menu
                   menuItemStyles={{
                     button: ({ level, active, disabled }) => {
@@ -178,11 +179,12 @@ function Sidebari({ content }) {
                 >
                   <MenuItem
                     className="MenuItem  w-full poppins-semibold"
-                    title=""
+                    title="
+                    "
                     icon={<img id="carrinho" alt="produtos" src="/images/grocery-store.png" />}
                     component={<Link to="/products" />}
                   >
-                    {windowWidth > 640 ? 'Produtos' : ''}
+                    {collapsed ? 'Produtos' : ''}
                   </MenuItem>
                   <MenuItem
                     className="MenuItem  poppins-semibold"
@@ -190,7 +192,7 @@ function Sidebari({ content }) {
                     icon={<img id="chart" className="" src="/images/pie-chart.png" />}
                     component={<Link to="/analytics" />}
                   >
-                    {windowWidth > 640 ? 'Analise' : ''}
+                    {collapsed? 'Analise' : ''}
                   </MenuItem>
                   <MenuItem
                     className="MenuItem poppins-semibold"
@@ -198,7 +200,7 @@ function Sidebari({ content }) {
                     icon={<img id="chart" src="/images/arrows.png" />}
                     component={<Link to="/stockmovements" />}
                   >
-                    {windowWidth > 640 ? 'Movimentações' : ''}
+                    {collapsed ? 'Movimentações' : ''}
                   </MenuItem>
                   
 
