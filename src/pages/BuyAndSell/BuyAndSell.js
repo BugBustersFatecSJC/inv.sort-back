@@ -30,7 +30,7 @@ function BuyAndSell() {
     fetchProducts();
   }, []);
 
-  return (<div className='flex'>
+  return (<div className=''>
     
     <MainPage title="Compra e Venda">
       
