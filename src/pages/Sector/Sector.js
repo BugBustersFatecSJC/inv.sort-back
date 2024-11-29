@@ -3,12 +3,12 @@ import api from '../../services/api';
 import { motion } from 'framer-motion';
 import MainPage from '../MainPage/MainPage';
 import LocalModal from '../../components/SectorModal/LocalModal';
-// import SectorModal from '../../components/SectorModal/SectorModal';
 import EditSectorModal from '../../components/SectorModal/EditSectorModal';
 import EditLocalModal from '../../components/SectorModal/EditLocalModal';
 import Loading from '../../components/Loading/Loading';
 import ModalDelete from '../../components/ModalDelete/ModalDelete';
 import SearchBarAlt from '../../components/SearchBarAlt/SearchBarAlt';
+import SectorModal from '../../components/SectorModal/SectorModal';
 
 function LocalPage() {
   const [loading, setLoading] = useState(true);
@@ -18,13 +18,16 @@ function LocalPage() {
   const [showSectorModal, setShowSectorModal] = useState(false);
   const [showEditSectorModal, setShowEditSectorModal] = useState(false);
   const [showEditLocalModal, setShowEditLocalModal] = useState(false);
-  const [currentLocalId, setCurrentLocalId] = useState(null);
+  const [currentLocal, setCurrentLocal] = useState(null);
   const [currentSector, setCurrentSector] = useState(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const localsPerPage = 15;
   const [lastAddedId, setLastAddedId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [openDeleteModalSector, setOpenDeleteModalSector] = useState(false);
+  const [currentSectorForDelete, setCurrentSectorForDelete] = useState(null);
+
 
   const fetchLocals = async () => {
     try {
@@ -77,17 +80,24 @@ function LocalPage() {
     );
   };
 
-  const deleteSector = async (sectorId) => {
+  const openModalDeleteSector = (sector) => {
+    setCurrentSectorForDelete(sector);
+    setOpenDeleteModalSector(true);
+  };  
+
+  const handleDeleteSector = async (e) => {
+    e.preventDefault();
     try {
-      await api.delete(`/sector/${sectorId}`);
-      setSectors((prevSectors) => prevSectors.filter((sector) => sector.sector_id !== sectorId));
+      await api.delete(`/sector/${currentSectorForDelete.sector_id}`);
+      setSectors((prevSectors) => prevSectors.filter((sector) => sector.sector_id !== currentSectorForDelete.sector_id));
+      setOpenDeleteModalSector(false);
     } catch (err) {
       console.error(err);
     }
   };
 
   const openSectorModal = (localId) => {
-    setCurrentLocalId(localId);
+    setCurrentLocal(localId);
     setShowSectorModal(true);
   };
 
@@ -97,15 +107,15 @@ function LocalPage() {
   };
 
   const openEditLocalModal = (local) => {
-    setCurrentLocalId(local.local_id);
+    setCurrentLocal(local);
     setShowEditLocalModal(true);
   };
 
   const handleLocalDelete = async (e) => {
     e.preventDefault();
     try {
-      await api.delete(`/local/${currentLocalId}`);
-      deleteLocal(currentLocalId);
+      await api.delete(`/local/${currentLocal.local_id}`);
+      deleteLocal(currentLocal.local_id);
       setOpenDeleteModal(false);
     } catch (err) {
       console.error(err);
@@ -113,12 +123,12 @@ function LocalPage() {
   };
 
   const openDeleteModalLocal = (local) => {
-    setCurrentLocalId(local.local_id);
+    setCurrentLocal(local);
     setOpenDeleteModal(true);
   };
 
   const deleteLocal = (localId) => {
-    setLocals((prevLocals) => prevLocals.filter(local => local.local_id !== localId));
+    setLocals((prevLocals) => prevLocals.filter((local) => local.local_id !== localId));
   };
 
   const handleSearch = (query) => {
@@ -205,7 +215,7 @@ function LocalPage() {
                                       Editar
                                     </button>
                                     <button
-                                      onClick={() => deleteSector(sector.sector_id)}
+                                      onClick={() => openModalDeleteSector(sector)}
                                       className="font-pixel p-1 btn-3d text-[#F4BD76] ml-2"
                                       style={{
                                         backgroundColor: buttonBgColor,
@@ -274,10 +284,17 @@ function LocalPage() {
       )}
 
       {showLocalModal && <LocalModal onLocalAdded={addLocal} onClose={() => setShowLocalModal(false)} />}
-      {/* {showSectorModal && <SectorModal localId={currentLocalId} onSectorAdded={addSector} onClose={() => setShowSectorModal(false)} />} */}
       {showEditSectorModal && <EditSectorModal sector={currentSector} onSectorUpdated={updateSector} onClose={() => setShowEditSectorModal(false)} />}
-      {showEditLocalModal && <EditLocalModal localId={currentLocalId} onLocalUpdated={updateLocal} onClose={() => setShowEditLocalModal(false)} />}
+      {showEditLocalModal && <EditLocalModal local={currentLocal} onLocalUpdated={updateLocal} onClose={() => setShowEditLocalModal(false)} />}
       {openDeleteModal && <ModalDelete title="Deseja excluir o local?" handleSubmit={handleLocalDelete} closeModal={() => setOpenDeleteModal(false)} />}
+      {showSectorModal && <SectorModal localId={currentLocal} onSectorAdded={addSector} onClose={() => setShowSectorModal(false)} />}
+      {openDeleteModalSector && (
+        <ModalDelete
+          title="Deseja excluir o setor?"
+          handleSubmit={handleDeleteSector}
+          closeModal={() => setOpenDeleteModalSector(false)}
+        />
+      )}
     </MainPage>
   );
 }
