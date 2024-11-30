@@ -139,8 +139,24 @@ function MainPageRender() {
     }
   }
 
+  /**
+   * Paginação
+   */
+
+  const categoriesPerPage = 11
+  const [currentPage, setCurrentPage] = useState(1)
+
+  const indexOfLastCategory = currentPage * categoriesPerPage
+  const indexOfFirstCategory = indexOfLastCategory - categoriesPerPage
+  const currentCategories = categories.slice(indexOfFirstCategory, indexOfLastCategory)
+
+  const totalPages = Math.ceil(categories.length / categoriesPerPage)
+
+  const goToNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+  const goToPreviousPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1))
+
   const sortedAndFilteredCategories = sortCategories(
-    categories.filter((category) =>
+    currentCategories.filter((category) =>
       category.category_name.toLowerCase().includes(searchQuery.toLowerCase())
     )
   )
@@ -180,7 +196,16 @@ function MainPageRender() {
               />
             );
           })}
-            
+        </div>
+
+        <div className="flex justify-center items-center space-x-4 mt-4">
+              <button onClick={goToPreviousPage} disabled={currentPage === 1} className="shadow-none w-[2rem]">
+                <img src="/img/pointer-2.svg" alt="Previous" />
+              </button>
+              <span>Página {currentPage} de {totalPages}</span>
+              <button onClick={goToNextPage} disabled={currentPage === totalPages} className="shadow-none w-[2rem]">
+                <img src="/img/pointer-1.svg" alt="Next" />
+              </button>
         </div>
         </>
       )}

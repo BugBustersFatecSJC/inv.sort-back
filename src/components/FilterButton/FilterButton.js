@@ -24,4 +24,4 @@ const FilterButton = ({ onFilterChange }) => {
   )
 }
 
-export default FilterButton;
+export default FilterButton
