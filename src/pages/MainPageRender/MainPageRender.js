@@ -6,6 +6,7 @@ import Category from '../../components/Category/Category'
 import Loading from '../../components/Loading/Loading'
 import SearchBar from '../../components/SearchBarAlt/SearchBarAlt'
 import FilterButton from '../../components/FilterButton/FilterButton'
+import { motion } from 'framer-motion'
 
 function MainPageRender() {
   /**
@@ -54,6 +55,8 @@ function MainPageRender() {
   const addCategory = (newCategory) => {
     setCategories((prevCategories) => [...prevCategories, newCategory])
   }
+
+  const [lastAddedId, setLastAddedId] = useState(null)
 
   /**
    * Função para dinamicamente adicionar o novo produto após ele ser criado
@@ -175,25 +178,39 @@ function MainPageRender() {
               
         <div className="flex justify-between gap-4 grid mt-6 grid-cols-2 md:grid-cols-4 sm:grid-cols-3 ">
         
-        <Category onCategoryAdded={addCategory} />
+        <Category onCategoryAdded={(newCategory) => {
+                addCategory(newCategory)
+                setLastAddedId(newCategory.category_id)
+              }} />
           {sortedAndFilteredCategories.map((category) => {
             const categoryProducts = products.filter(
               (product) => product.category_id === category.category_id
             );
             return (
-                  
-              <ProductCategory
+              <motion.div
                 key={category.category_id}
-                categoryKey={category.category_id}
-                products={categoryProducts}
-                onProductAdded={addProduct}
-                onProductDeleted={removeProduct}
-                categoryName={category.category_name}
-                onCategoryUpdated={updateCategory}
-                onCategoryDeleted={removeCategory}
-                onProductUpdated={updateProduct}
-                categoryImage={category.category_image}
-              />
+                initial={lastAddedId === category.category_id ? { scale: 0.8, opacity: 0 } : {}}
+                animate={lastAddedId === category.category_id ? { scale: 1, opacity: 1 } : {}}
+                transition={{
+                  type: 'spring',
+                  stiffness: 260,
+                  damping: 20,
+                  duration: 0.5,
+                }}
+              > 
+                <ProductCategory
+                  key={category.category_id}
+                  categoryKey={category.category_id}
+                  products={categoryProducts}
+                  onProductAdded={addProduct}
+                  onProductDeleted={removeProduct}
+                  categoryName={category.category_name}
+                  onCategoryUpdated={updateCategory}
+                  onCategoryDeleted={removeCategory}
+                  onProductUpdated={updateProduct}
+                  categoryImage={category.category_image}
+                />
+            </motion.div>
             );
           })}
         </div>
