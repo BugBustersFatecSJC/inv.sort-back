@@ -5,6 +5,7 @@ import ProductCategory from '../../components/ProductCategory/ProductCategory'
 import Category from '../../components/Category/Category'
 import Loading from '../../components/Loading/Loading'
 import SearchBar from '../../components/SearchBarAlt/SearchBarAlt'
+import FilterButton from '../../components/FilterButton/FilterButton'
 
 function MainPageRender() {
   /**
@@ -106,14 +107,51 @@ function MainPageRender() {
    */
   const [searchQuery, setSearchQuery] = useState('')
 
-  const filteredCategories = categories.filter((category) =>
-    category.category_name.toLowerCase().includes(searchQuery.toLowerCase())
+  /**
+   * Filtra as categorias
+   */
+  const [filter, setFilter] = useState('alphabetical')
+  const handleFilterChange = (selectedFilter) => {
+    setFilter(selectedFilter)
+  }
+
+  const sortCategories = (categories) => {
+    const sortedCategories = [...categories]
+    switch (filter) {
+      case 'alphabetical':
+        return sortedCategories.sort((a, b) =>
+          a.category_name.localeCompare(b.category_name)
+        )
+      case 'reverse-alphabetical':
+        return sortedCategories.sort((a, b) =>
+          b.category_name.localeCompare(a.category_name)
+        )
+      case 'newest':
+        return sortedCategories.sort((a, b) =>
+          new Date(b.created_at) - new Date(a.created_at)
+        )
+      case 'oldest':
+        return sortedCategories.sort((a, b) =>
+          new Date(a.created_at) - new Date(b.created_at)
+        )
+      default:
+        return sortedCategories
+    }
+  }
+
+  const sortedAndFilteredCategories = sortCategories(
+    categories.filter((category) =>
+      category.category_name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
   )
   
   return (<div className='flex '>
     <MainPage title="Categorias de Produtos">
-      <SearchBar onSearch={setSearchQuery}/>
-      
+    <div className="flex justify-between items-center mb-4">
+          <SearchBar onSearch={setSearchQuery} />
+          <FilterButton onFilterChange={handleFilterChange} />
+    </div>
+
       {loading ? (
         <Loading />
 
@@ -122,7 +160,7 @@ function MainPageRender() {
         <div className="flex justify-between gap-4 grid mt-6 grid-cols-2 md:grid-cols-4 sm:grid-cols-3 ">
         
         <Category onCategoryAdded={addCategory} />
-          {filteredCategories.map((category) => {
+          {sortedAndFilteredCategories.map((category) => {
             const categoryProducts = products.filter(
               (product) => product.category_id === category.category_id
             );
