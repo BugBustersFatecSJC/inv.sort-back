@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
+import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses } from 'react-pro-sidebar';
 import Watermark from '../Watermark/Watermark';
 import { UserContext } from '../../context/userContext';
+import './Sidebar.css'
 
 function Sidebari({ content }) {
   const { role } = useContext(UserContext);
@@ -60,6 +61,11 @@ function Sidebari({ content }) {
               toggled={toggled}
               breakPoint="always"
               collapsedWidth='4rem'
+              rootStyles={{
+                [`.${sidebarClasses.container}`]: {
+                  backgroundColor: 'red',
+                }
+              }}
             >
               <Menu
                 menuItemStyles={{
@@ -67,6 +73,7 @@ function Sidebari({ content }) {
                   button: ({ level, active, disabled }) => {
                     if (level === 0)
                       return {
+                        marginBottom: '0',
                         color: 'rgb(255,195,118)',
                         [`&.active`]: {
                           backgroundColor: '#B45105',
@@ -106,14 +113,17 @@ function Sidebari({ content }) {
                 
                 {(role === 'admin' || role === 'gerente') && (
                   <SubMenu
-                    icon={<img id="chart" src="/images/profile.png" />}
+                    icon={<img id="person" src="/images/profile.png" />}
                     label="Gerenciar"
                     className="poppins-semibold"
+                    
                     style={{
                       textAlign: 'center',
+                      backgroundColor: '#6b3710'
                     }}
                   >
                     <MenuItem
+                      icon={<img id="person" src="/images/userpage.png" />}
                       className="poppins-semibold"
                       component={<Link to="/userpage" />}
                       onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3E1900'}
@@ -132,6 +142,7 @@ function Sidebari({ content }) {
                       {collapsed ? 'Usuários' : 'Gerenciar Usuários'}
                     </MenuItem>
                     <MenuItem
+                      icon={<img id="person" src="/images/config.png" />}
                       className="poppins-semibold"
                       component={<Link to="/settings" />}
                       onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3E1900'}
@@ -150,7 +161,46 @@ function Sidebari({ content }) {
                     >
                       {collapsed ? 'Config' : 'Configurações'}
                     </MenuItem>
-                    {/* Adicione outros subitens de gerenciar conforme necessário */}
+                    <MenuItem
+                        icon={<img id="person" src="/images/supplier.png" />}
+                        className="poppins-semibold"
+                        component={<Link to="/suppliers" />}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3E1900'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#6b3710'}
+                        style={{
+                          width:'100%',
+                          backgroundColor: '#6b3710',
+                          color: 'rgb(255,195,118)',
+                          margin: '0',
+                          border: 'none',
+                          padding: '10px',
+                          transition: 'background-color 0.3s ease',
+                          width: collapsed ? '200px' : '40px', 
+                          height: '40px',
+                        }}
+                      >
+                        {collapsed ? 'Fornecedores' : 'Fornecedores'}
+                      </MenuItem>
+                      <MenuItem
+                        icon={<img id="person" src="/images/sector.png" />}
+                        className="poppins-semibold"
+                        component={<Link to="/sectors" />}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3E1900'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#6b3710'}
+                        style={{
+                          width:'100%',
+                          backgroundColor: '#6b3710',
+                          color: 'rgb(255,195,118)',
+                          margin: '0',
+                          border: 'none',
+                          padding: '10px',
+                          transition: 'background-color 0.3s ease',
+                          width: collapsed ? '200px' : '40px', 
+                          height: '40px',
+                        }}
+                      >
+                        {collapsed ? 'Setores' : 'Setores'}
+                      </MenuItem>
                   </SubMenu>
                 )}
               </Menu>
@@ -210,8 +260,13 @@ function Sidebari({ content }) {
                       icon={<img id="chart" src="/images/profile.png" />}
                       label={!collapsed ? '' : 'Gerenciar'}
                       className="poppins-semibold"
+                      style={{
+                        backgroundColor: '#6b3710',
+                      }}
+                      
                     >
                       <MenuItem
+                        icon={<img id="person" src="/images/userpage.png" />}
                         className="poppins-semibold"
                         component={<Link to="/userpage" />}
                         onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3E1900'}
@@ -227,19 +282,10 @@ function Sidebari({ content }) {
                           height: '40px',
                         }}
                       >
-                        {collapsed ? 'Gerenciar Usuários' : (
-                          <img
-                            id="user-icon"
-                            src="/images/profile.png"
-                            alt="gerenciar usuários"
-                            style={{
-                              width: '24px',
-                              height: '24px',
-                            }}
-                          />
-                        )}
+                        {collapsed ? 'Gerenciar Usuários' : "Gerenciar usuários"}
                       </MenuItem>
                       <MenuItem
+                        icon={<img id="person" src="/images/config.png" />}
                         className="poppins-semibold"
                         component={<Link to="/settings" />}
                         onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3E1900'}
@@ -256,17 +302,49 @@ function Sidebari({ content }) {
                           height: '40px',
                         }}
                       >
-                        {collapsed ? 'Configurações' : (
-                          <img
-                            id="settings-icon"
-                            src="/images/settings.png"
-                            alt="configurações"
-                            style={{
-                              width: '24px',
-                              height: '24px',
-                            }}
-                          />
-                        )}
+                        {collapsed ? 'Configurações' : 'Configura...'}
+                      </MenuItem>
+                      <MenuItem
+                        icon={<img id="person" src="/images/supplier.png" />}
+                      
+                        className="poppins-semibold"
+                        component={<Link to="/suppliers" />}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3E1900'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#6b3710'}
+                        style={{
+                          width:'100%',
+                          backgroundColor: '#6b3710',
+                          color: 'rgb(255,195,118)',
+                          margin: '',
+                          marginBottom: '0',
+                          border: 'none',
+                          padding: '10px',
+                          transition: 'background-color 0.3s ease',
+                          width: collapsed ? '200px' : '40px', 
+                          height: '40px',
+                        }}
+                      >
+                        {collapsed ? 'Fornecedores' : 'Fornecedo...'}
+                      </MenuItem>
+                      <MenuItem
+                        icon={<img id="person" src="/images/sector.png" />}
+                        className="poppins-semibold"
+                        component={<Link to="/sectors" />}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3E1900'}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#6b3710'}
+                        style={{
+                          width:'100%',
+                          backgroundColor: '#6b3710',
+                          color: 'rgb(255,195,118)',
+                          margin: '0',
+                          border: 'none',
+                          padding: '10px',
+                          transition: 'background-color 0.3s ease',
+                          width: collapsed ? '200px' : '40px', 
+                          height: '40px',
+                        }}
+                      >
+                        {collapsed ? 'Setores' : 'Setores'}
                       </MenuItem>
                       
                     </SubMenu>
