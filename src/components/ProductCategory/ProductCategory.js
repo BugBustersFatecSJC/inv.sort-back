@@ -403,7 +403,7 @@ function ProductCategory(props) {
     else {alert("Você não tem permissão para fazer isso")}
   }
 
-  const backgroundSizeOptions = ['100%', '100% 100%', '100% 100%'];
+  const backgroundSizeOptions = ['100%', '100% 100%'];
 
   const [backgroundSize] = useState(() => {
     const randomIndex = Math.floor(Math.random() * backgroundSizeOptions.length);
@@ -412,7 +412,7 @@ function ProductCategory(props) {
 
     return (
       // Container da categoria
-        <div className='w-[90%] my-2 mx-auto bg-[#5F2E09] rounded-md hover:bg-[#3E1900] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] mt-1 h-[200px] mx-4 flex relative'>
+        <div className='w-[90%] my-2 bg-[#5F2E09] rounded-md hover:bg-[#3E1900] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] mt-1 h-[200px] flex relative'>
           <div className={`transition-opacity duration-200 rounded-md  w-full bg-[#5F2E09] flex justify-center  items-center justify-center ${!showCategoryProducts ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
             style={{
               backgroundImage: `url('/img/texture.png')`,

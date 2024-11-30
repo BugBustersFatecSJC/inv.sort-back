@@ -4,7 +4,8 @@ import MainPage from '../MainPage/MainPage'
 import ProductCategory from '../../components/ProductCategory/ProductCategory'
 import Category from '../../components/Category/Category'
 import Loading from '../../components/Loading/Loading'
-import Sidebari from '../../components/Sidebar/Sidebari'
+import SearchBar from '../../components/SearchBarAlt/SearchBarAlt'
+
 function MainPageRender() {
   /**
    * Renderização do componente de loading
@@ -100,46 +101,55 @@ function MainPageRender() {
      ))
     }
 
-    
-    return (<div className='flex '>
-      <MainPage title="Categorias de Produtos">
-        
-        {loading ? (
-          <Loading />
+  /**
+   * Barra de pesquisa
+   */
+  const [searchQuery, setSearchQuery] = useState('')
 
-        ) : (<> 
-               
-          <div className="flex justify-between gap-4 grid mt-6 grid-cols-2  md:grid-cols-4 sm:grid-cols-3 ">
-          
-          <Category onCategoryAdded={addCategory} />
-            {categories.map((category) => {
-              const categoryProducts = products.filter(
-                (product) => product.category_id === category.category_id
-              );
-              return (
-                   
-                <ProductCategory
-                  key={category.category_id}
-                  categoryKey={category.category_id}
-                  products={categoryProducts}
-                  onProductAdded={addProduct}
-                  onProductDeleted={removeProduct}
-                  categoryName={category.category_name}
-                  onCategoryUpdated={updateCategory}
-                  onCategoryDeleted={removeCategory}
-                  onProductUpdated={updateProduct}
-                  categoryImage={category.category_image}
-                />
-              );
-            })}
-             
-          </div>
-          </>
-        )}
-       
-      </MainPage>
-      </div>
-    );  
+  const filteredCategories = categories.filter((category) =>
+    category.category_name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+  
+  return (<div className='flex '>
+    <MainPage title="Categorias de Produtos">
+      <SearchBar onSearch={setSearchQuery}/>
+      
+      {loading ? (
+        <Loading />
+
+      ) : (<> 
+              
+        <div className="flex justify-between gap-4 grid mt-6 grid-cols-2 md:grid-cols-4 sm:grid-cols-3 ">
+        
+        <Category onCategoryAdded={addCategory} />
+          {filteredCategories.map((category) => {
+            const categoryProducts = products.filter(
+              (product) => product.category_id === category.category_id
+            );
+            return (
+                  
+              <ProductCategory
+                key={category.category_id}
+                categoryKey={category.category_id}
+                products={categoryProducts}
+                onProductAdded={addProduct}
+                onProductDeleted={removeProduct}
+                categoryName={category.category_name}
+                onCategoryUpdated={updateCategory}
+                onCategoryDeleted={removeCategory}
+                onProductUpdated={updateProduct}
+                categoryImage={category.category_image}
+              />
+            );
+          })}
+            
+        </div>
+        </>
+      )}
+      
+    </MainPage>
+    </div>
+  );  
 
   }
   
