@@ -6,7 +6,7 @@ import { UserContext } from '../../context/userContext';
 
 function Sidebari({ content }) {
   const { role } = useContext(UserContext);
-  console.log('Current user role from context:', role);
+  
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [collapsed, setCollapsed] = useState(false);
@@ -33,13 +33,13 @@ function Sidebari({ content }) {
 
   return (
     <>
-      <div className={`flex bg-clip-border alt-color-bg`}>
+      <div className={`flex bg-clip-border alt-color-bg pr-1`}>
         <div className="mb-8  sm:w-full justify-center self-center flex-col flex-wrap h-full align-center text-center py-4">
-          <div className="text-center mx-auto self-center align-middle flex justify-center z-20   ">
+          <div className=" pl-1 sm:pl-2 text-center self-center align-middle flex justify-center z-20   ">
             {windowWidth > 450 ? (
               <img
-                src={'img/logo_invsort.png'}
-                className={`w-[50%] sm:w-[30%] mt-4 sb-button z-10`}
+                src={'/img/logo_invsort.png'}
+                className={`w-16 mx-6 mt-4 sb-button`}
                 onClick={() => {
                   if (windowWidth > 640) {
                     setCollapsed(!collapsed);
@@ -58,7 +58,7 @@ function Sidebari({ content }) {
               className="text-center m-auto w-full"
               onBackdropClick={() => setToggled(false)}
               toggled={toggled}
-              breakPoint="always"
+              breakPoint="all"
               collapsedWidth='4rem'
             >
               <Menu
@@ -165,7 +165,7 @@ function Sidebari({ content }) {
                     button: ({ level, active, disabled }) => {
                       if (level === 0)
                         return {
-                          color: 'rgb(255,195,118)',
+                          color: '#ffc376',
                           [`&.active`]: {
                             backgroundColor: '#B45105',
                             color: '#b6c8d9',
@@ -279,7 +279,7 @@ function Sidebari({ content }) {
       </div>
 
       {windowWidth < 450 ? (
-        <div className="w-[35px] h-[33px] rounded-md border-2 border-[#6B3710] bg-[#6B3710] absolute m-1">
+        <div className="w-[35px] h-[33px] rounded-md border-2 border-[#6B3710] bg-[#6B3710] absolute ">
           <img
             src={'/images/menu.png'}
             className="object-fit w-full h-full sb-button"

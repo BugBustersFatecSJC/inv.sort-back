@@ -41,11 +41,11 @@ function Analytics() {
   }, [])
   if (cards.length === 0) {
     return (
-      <>
-      <div className='h-full w-full text-center align-middle m-auto main-color-bg'>
+      
+      <div className='main-color-bg min-h-[100vh] flex align-middle'>
       <Loading/>
       </div>
-      </>
+      
     );
   }
   
