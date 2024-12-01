@@ -7,6 +7,8 @@ const formatarData = (data) => {
     return data
 }
 const getAllProducts = async (req, res) => {
+    console.log('bbbbb');
+    
     try {
         const prod = await prisma.product.findMany({
             include: {
@@ -24,6 +26,8 @@ const getAllProducts = async (req, res) => {
 }
 
 const getProductsbyId = async (req, res) => {
+    console.log('aaaa');
+    
     try{
         const id = parseInt(req.params.product_id)
         console.log('id',id);
@@ -35,7 +39,7 @@ const getProductsbyId = async (req, res) => {
             include: {
                 category: true,
                 supplier: true,
-                
+                batches: true,
                 productUnit: true
             }
         })
@@ -50,16 +54,6 @@ const getProductsbyId = async (req, res) => {
                 }
             }
         )
-        batches.forEach(batch => {
-            batch['expiration_date'] = formatarData(batch['expiration_date'])
-        })
-       
-            
-            const getLoc = await prisma.local.findUnique({
-                where: { product_id: id },
-            });
-            console.log('getLoc',getLoc);
-            
         
         if (findProduct.is_perishable === 1) {
             findProduct.is_perishable = '1'
@@ -67,11 +61,13 @@ const getProductsbyId = async (req, res) => {
             findProduct.is_perishable = '0'
         }
         findProduct['batch'] = batches  
-        findProduct['local'] = getLoc
+     
        
         
         
         res.status(201).json(findProduct)
+        console.log('retorno achar um produto');
+        
     }
     catch (error) {
         res.status(400).json({error: "Falha ao identificar produto por id"})
