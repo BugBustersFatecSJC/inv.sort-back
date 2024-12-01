@@ -21,7 +21,7 @@ const SearchBar = ({ onSearch }) => {
   return (
     <div className="flex rounded-lg w-56 alt-color-3-bg p-2 items-center">
       <input
-        className="h-6 w-full alt-color-3-bg text-[#3E1900] poppins-semibold outline-none px-2 shadow-none"
+        className="h-6 w-full alt-color-3-bg text-[#3E1900] poppins-regular outline-none px-2 shadow-none"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={handleKeyDown}
