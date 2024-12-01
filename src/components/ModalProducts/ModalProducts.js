@@ -34,17 +34,40 @@ function ModalProducts(props) {
           <p className='col-span-2 text-center'>Validade</p>
           <p className='col-span-2 text-center'>Quantidade</p>
         </div>
-        <div  className='flex py-[2px]'>
-        {productInfo.batch ? productInfo.batch.map((batch) => (
-            <div key={batch.batch_id} className={`py-2 w-full flex grid grid-cols-5 ${batch.batch_id % 2 === 0 ? "bg-[#F5A66D]" : "bg-[#EA9457]"}`}>
+        <div  className='flex py-[2px] flex-col'>
+        {productInfo.batches ? productInfo.batches.map((batch,index) => {
+            
+            return (
+              <div key={batch.batch_id} className={`py-2 w-full flex grid grid-cols-5 ${index % 2 === 0 ? "bg-[#F5A66D]" : "bg-[#EA9457]"}`}>
               <p className='col-span-1 text-center'>{batch.batch_id}</p>
               <p className='col-span-2 text-center'>{batch.expiration_date}</p>
               <p className='col-span-2 text-center'>{batch.quantity}</p>
             </div>
+            )
             
-          )): <Loading/>}
+          }): <Loading/>}
         
+        </div>
       </div>
+      <div  className='flex py-[2px] flex-col'>
+      <h1 className='text-xl my-2'>Fornecedores:</h1>
+        <div className=' flex grid grid-cols-6 bg-[#6B3710] text-white'>
+          <p className='col-span-2 text-center'>Nome</p>
+          <p className='col-span-2 text-center'>Contato</p>
+          <p className='col-span-2 text-center'>Endereço</p>
+        </div>
+        <div>
+        
+        <div key={productInfo.supplier.supplier_id} className={`py-2 bg-[#F5A66D] w-full flex grid grid-cols-6 `}>
+          <p className='col-span-2 text-center'>{productInfo.supplier.supplier_name}</p>
+          <p className='col-span-2 text-center'>{productInfo.supplier.contact_info}</p>
+          <p className='col-span-2 text-center'>{productInfo.supplier.address}</p>
+        </div>
+            
+        
+        
+        </div>
+
 
       
       

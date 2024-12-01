@@ -32,28 +32,28 @@ input::placeholder{
   font-style: normal;
 } 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 12px;
   height: 3px;}
-  ::-webkit-scrollbar-track {
-      background: #6B3710;
-      border: 4px solid transparent;
-      background-clip: content-box;
-      
-  }
-  ::-webkit-scrollbar-thumb {
-      background: #6B3710;
-      margin-top:50px;
-      margin-bottom: 50px;
-      border: 1.5px solid #F4BD76;
-      border-radius: 1px;}
-  
-  
-      ::-webkit-scrollbar-thumb:horizontal {
-          background: #6B3710;
-          margin-top:50px;
-          margin-bottom: 50px;
-          border: 0.5px solid #F4BD76;
-          border-radius: 1px;}
+::-webkit-scrollbar-track {
+    background: #6B3710;
+    border: 4px solid transparent;
+    background-clip: content-box;
+    
+}
+::-webkit-scrollbar-thumb {
+    background: #6B3710;
+    margin-top:50px;
+    margin-bottom: 50px;
+    border: 1.5px solid #F4BD76;
+    border-radius: 1px;}
+
+
+    ::-webkit-scrollbar-thumb:horizontal {
+        background: #6B3710;
+        margin-top:50px;
+        margin-bottom: 50px;
+        border: 0.5px solid #F4BD76;
+        border-radius: 1px;}
       
 :root {
   --main-color: rgb(255,195,118);
