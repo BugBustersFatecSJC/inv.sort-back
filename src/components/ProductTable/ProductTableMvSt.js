@@ -74,9 +74,7 @@ function ProductTableMvSt() {
     }
   };
 
-  useEffect(() => {
-    fetchStockMovements();
-  }, []);
+
 
   const applyFilters = (newFilters) => {
     setFilters(newFilters);
@@ -148,6 +146,7 @@ function ProductTableMvSt() {
 
   const toggleOrder = () => {
     setOrder((prevOrder) => (prevOrder === 'desc' ? 'asc' : 'desc'));
+    setOrder((prevOrder) => (prevOrder === 'desc' ? 'asc' : 'desc'));
   };
 
   if (loading) {
@@ -179,6 +178,13 @@ function ProductTableMvSt() {
               <span className="text-sm sm:text-base">Mais antigos</span>
             </>
           )}
+        </button>
+
+        <button
+          onClick={downloadPDF}
+          className="bg-[#6B3710] text-[#FFC376] px-4 py-2 rounded-lg hover:bg-[#C17B46]"
+        >
+          Baixar PDF
         </button>
 
         <button
@@ -284,5 +290,6 @@ function ProductTableMvSt() {
     </div>
   );
 }
-
+}
 export default ProductTableMvSt;
+
