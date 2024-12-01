@@ -53,6 +53,13 @@ const getProductsbyId = async (req, res) => {
         batches.forEach(batch => {
             batch['expiration_date'] = formatarData(batch['expiration_date'])
         })
+       
+            
+            const getLoc = await prisma.local.findUnique({
+                where: { product_id: id },
+            });
+            console.log('getLoc',getLoc);
+            
         
         if (findProduct.is_perishable === 1) {
             findProduct.is_perishable = '1'
@@ -60,7 +67,8 @@ const getProductsbyId = async (req, res) => {
             findProduct.is_perishable = '0'
         }
         findProduct['batch'] = batches  
-        
+        findProduct['local'] = getLoc
+       
         
         
         res.status(201).json(findProduct)

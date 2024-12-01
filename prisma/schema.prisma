@@ -57,6 +57,7 @@
     quantity_max        Int
     category_id         Int
     supplier_id         Int
+    sector_id           Int
     unit_id             Int
     is_perishable       Boolean         @default(false)
     created_at          DateTime        @default(now())
@@ -97,8 +98,8 @@
     batch_id          Int             @id @default(autoincrement())
     product_id        Int
     quantity          Int 
-    expiration_date   Date?
-    manufacture_date  Date?
+    expiration_date   DateTime 
+    manufacture_date  DateTime
     batch_value_total Float?
     created_at        DateTime        @default(now())
     product           Product         @relation(fields: [product_id], references: [product_id])

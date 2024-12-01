@@ -5,7 +5,12 @@ const valorAntigo = async (req, res) => {
   const data = new Date();
   const ano = data.getFullYear();
   const result = await prisma.$queryRaw`select min(year(movement_date)) as ano from db.StockMovement where movement_type = 'venda' group by year(movement_date) limit 1;`;
+  if (result.length === 0) {
+    return res.status(404).json({ message: 'Nenhum registro encontrado' });
+  }
+  
   const anos =[]
+  
   for (let i = result[0].ano; i <= ano; i++) {
     anos.push(i.toString());
   }

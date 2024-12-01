@@ -50,6 +50,7 @@ router.post('/local', localController.createLocal);
 router.get('/local', localController.getAllLocals); 
 router.put('/local/:local_id', localController.updateLocal); 
 router.delete('/local/:local_id', localController.deleteLocal); 
+router.get('/local/:prod_id', localController.getLocalByProdId); 
 
 // Rotas de Setores
 router.post('/sector', sectorController.createSector); 
