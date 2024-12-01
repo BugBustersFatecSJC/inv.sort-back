@@ -9,6 +9,7 @@ import EditLocalModal from '../../components/SectorModal/EditLocalModal';
 import Loading from '../../components/Loading/Loading';
 import ModalDelete from '../../components/ModalDelete/ModalDelete';
 import SearchBarAlt from '../../components/SearchBarAlt/SearchBarAlt';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'; // Ícones para navegação
 
 function LocalPage() {
   const [loading, setLoading] = useState(true);
@@ -22,7 +23,7 @@ function LocalPage() {
   const [currentSector, setCurrentSector] = useState(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const localsPerPage = 15;
+  const localsPerPage = 10;
   const [lastAddedId, setLastAddedId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -136,6 +137,35 @@ function LocalPage() {
 
   const totalPages = Math.ceil(filteredLocals.length / localsPerPage);
 
+  const paginationRange = () => {
+    const currentPageNumber = currentPage;
+    let pages = [];
+
+    if (totalPages <= 5) {
+      pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+    } else {
+      if (currentPageNumber <= 3) {
+        pages = [1, 2, 3, '...', totalPages];
+      } else if (currentPageNumber >= totalPages - 2) {
+        pages = [1, '...', totalPages - 2, totalPages - 1, totalPages];
+      } else {
+        pages = [
+          1,
+          '...',
+          currentPageNumber - 1,
+          currentPageNumber,
+          currentPageNumber + 1,
+          '...',
+          totalPages,
+        ];
+      }
+    }
+
+    return pages;
+  };
+  const goToPage = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
   const goToNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const goToPreviousPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
@@ -148,23 +178,23 @@ function LocalPage() {
           <div className="product-table w-full bg-[#FFC376]">
             <div className=''>
               <div className='flex justify-between w-full items-end mb-6 table-header-container'>
-                <div className='flex items-end'>
-                  <p className="font-pixel text-2xl cursor-pointer" onClick={() => setShowLocalModal(true)}>
+                <div className='flex items-end alt-color-6-bg shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] rounded-md p-2 mb-2 md:mb-0'>
+                  <p className="font-poppins cursor-pointer" onClick={() => setShowLocalModal(true)}>
                     Adicionar novo local
                   </p>
-                  <i className="fa-solid fa-plus ml-2 text-lg text-bold text-green-500"></i>
+                  <i className="fa-solid fa-plus ml-2 text-lg"></i>
                 </div>
                 <SearchBarAlt onSearch={handleSearch} />
               </div>
 
               <div className='overflow-x-auto w-full'>
-                <table className='min-w-[600px] w-full border-collapse main-table'>
+                <table className='w-full mx-auto mt-4 b-4 table-auto border-collapse bg-[#6B3710] text-[#6B3710] md:whitespace-normal whitespace-nowrap'>
                   <thead>
-                    <tr>
-                      <th className="text-2xl font-pixel py-2 w-1/2 text-left">Local</th>
-                      <th className="text-2xl font-pixel py-2 w-1/6 text-left">Endereço</th>
-                      <th className="text-2xl font-pixel py-2 w-1/4 text-left">Setor</th>
-                      <th className="text-2xl font-pixel py-2 w-[10%]"></th>
+                    <tr className="bg-[#6B3710] text-white">
+                      <th className="px-4 py-2 border text-xs sm:text-sm">Local</th>
+                      <th className="px-4 py-2 border text-xs sm:text-sm">Endereço</th>
+                      <th className="px-4 py-2 border text-xs sm:text-sm">Setor</th>
+                      <th className="px-4 py-2 border text-xs sm:text-sm w-[10%]"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -197,50 +227,40 @@ function LocalPage() {
                                     {sector.sector_name}
                                     <button
                                       onClick={() => openEditSectorModal(sector)}
-                                      className="font-pixel p-1 btn-3d text-[#F4BD76] ml-2"
-                                      style={{
-                                        backgroundColor: buttonBgColor,
-                                      }}
+                                      className="px-4 py-2 bg-[#6B3710] text-[#ffc376] rounded-md ml-2"
                                     >
-                                      Editar
+                                      <i className="fa-solid fa-pencil"></i>
                                     </button>
                                     <button
                                       onClick={() => deleteSector(sector.sector_id)}
-                                      className="font-pixel p-1 btn-3d text-[#F4BD76] ml-2"
-                                      style={{
-                                        backgroundColor: buttonBgColor,
-                                      }}
+                                      className="px-4 py-2 bg-[#B51C08] text-[#ffc376] rounded-md mt-1 ml-2"
                                     >
-                                      Excluir
+                                      <i className="fa-solid fa-trash"></i>
                                     </button>
                                   </li>
                                 ))}
                             </ul>
                           </td>
-                          <td className="flex items-center justify-center space-x-4 w-full">
-                            <div className="w-full flex justify-evenly items-center my-2">
+                          <td className="text-xs sm:text-sm">
                               <button
                                 onClick={() => openEditLocalModal(local)}
-                                className="font-pixel p-2 justify-center items-center btn-3d"
-                                style={{ backgroundColor: buttonBgColor }}
+                                className="block w-full px-4 py-2 bg-[#6B3710] text-[#ffc376] rounded-md md:inline-block"
                               >
                                 <i className="fa-solid fa-pencil"></i>
                               </button>
                               <button
                                 onClick={() => openDeleteModalLocal(local)}
-                                className="font-pixel p-2 justify-center items-center btn-3d"
-                                style={{ backgroundColor: buttonBgColor }}
+                                className="block w-full px-4 py-2 bg-[#B51C08] text-[#ffc376] rounded-md mt-2 md:inline-block"
                               >
                                 <i className="fa-solid fa-trash"></i>
                               </button>
                               <button
                                 onClick={() => openSectorModal(local.local_id)}
-                                className="font-pixel p-2 justify-center items-center btn-3d"
-                                style={{ backgroundColor: buttonBgColor }}
+                                className="block w-full px-4 py-2 bg-[#369B08] text-[#ffc376] rounded-md mt-2 md:inline-block"
                               >
                                 <i className="fa-solid fa-plus"></i>
                               </button>
-                            </div>
+                            
                           </td>
                         </motion.tr>
                       );
@@ -249,23 +269,35 @@ function LocalPage() {
                 </table>
               </div>
 
-              <div className="flex justify-center items-center space-x-4 mt-4">
+              <div className="flex justify-center mt-8">
                 <button
                   onClick={goToPreviousPage}
-                  className="shadow-none w-[2rem]"
+                  className="bg-[#6B3710] text-[#FFC376] font-medium px-4 py-2 rounded-lg mr-2 hover:bg-[#4e2d19] disabled:bg-[#4c2a17] disabled:text-[#ccc] disabled:cursor-not-allowed"
                   disabled={currentPage === 1}
                 >
-                  <img src="/img/pointer-2.svg" alt="" />
+                  <ChevronLeftIcon className="h-5 w-5 text-[#FFC376]" />
                 </button>
-                <span className="font-pixel">
-                  Página {currentPage} de {totalPages}
-                </span>
+
+                {paginationRange().map((page, index) =>
+                  page === '...' ? (
+                    <span key={index} className="px-4 py-2">...</span>
+                  ) : (
+                    <button
+                      key={index}
+                      onClick={() => goToPage(page)}
+                      className={`px-4 py-2 rounded-lg ${currentPage === page ? 'bg-[#4e2d19] text-[#FFC376]' : 'text-[#6B3710] hover:bg-[#C17B46]'}`}
+                    >
+                      {page}
+                    </button>
+                  )
+                )}
+
                 <button
                   onClick={goToNextPage}
-                  className="shadow-none w-[2rem]"
+                  className="bg-[#6B3710] text-[#FFC376] font-medium px-4 py-2 rounded-lg ml-2 hover:bg-[#4e2d19] disabled:bg-[#4c2a17] disabled:text-[#ccc] disabled:cursor-not-allowed"
                   disabled={currentPage === totalPages}
                 >
-                  <img src="/img/pointer-1.svg" alt="" />
+                  <ChevronRightIcon className="h-5 w-5 text-[#FFC376]" />
                 </button>
               </div>
             </div>
