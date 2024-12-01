@@ -1,0 +1,84 @@
+import React from 'react'
+import Loading from '../Loading/Loading'
+
+function ModalProducts(props) {
+    const { productInfo } = props
+    const inputmodal = 'p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded poppins-medium my-1 transition-all duration-[100ms] ease-in-out alt-color-5'
+
+  return (
+    
+    <div className='flex w-full flex-wrap   ' >
+    <div className='flex mx-auto   w-32 h-32 sm:w-38 sm:h-38'>
+      <img src={productInfo.product_img || '../../images/default.png'} alt={'image do produto:' + productInfo.product_name} className={`   ${productInfo.product_img===null?'rounded-full':' rounded-full border-[0.25rem] border-[#D87B26]'} text-start  bg-[#3E1900]   m-auto object-fill `} />
+      
+    </div>
+    <div className='w-full mt-10 sm:mt-0  '>
+      
+     
+      
+      
+      <div>
+      <p> Estoque : </p>
+      <p className={inputmodal}>{productInfo.product_stock} Un.</p>
+      <p> Estoque Mínimo : </p>
+      <p className={inputmodal}>{productInfo.product_stock_min} Un.</p>
+      <p> Valor de custo : </p>
+      <p className={inputmodal}>R$ {productInfo.prod_cost_value}</p>
+      <p> Valor de venda : </p>
+      <p className={inputmodal}> R$ {productInfo.prod_sell_value}</p>
+      </div>
+      <div>
+        <h1 className='text-xl my-2'>Lotes:</h1>
+        <div className='mt-4 flex grid grid-cols-5 bg-[#6B3710] text-white'>
+          <p className='col-span-1 text-center'>Id</p>
+          <p className='col-span-2 text-center'>Validade</p>
+          <p className='col-span-2 text-center'>Quantidade</p>
+        </div>
+        <div  className='flex py-[2px] flex-col'>
+        {productInfo.batches ? productInfo.batches.map((batch,index) => {
+            
+            return (
+              <div key={batch.batch_id} className={`py-2 w-full flex grid grid-cols-5 ${index % 2 === 0 ? "bg-[#F5A66D]" : "bg-[#EA9457]"}`}>
+              <p className='col-span-1 text-center'>{batch.batch_id}</p>
+              <p className='col-span-2 text-center'>{batch.expiration_date}</p>
+              <p className='col-span-2 text-center'>{batch.quantity}</p>
+            </div>
+            )
+            
+          }): <Loading/>}
+        
+        </div>
+      </div>
+      <div  className='flex py-[2px] flex-col'>
+      <h1 className='text-xl my-2'>Fornecedores:</h1>
+        <div className=' flex grid grid-cols-6 bg-[#6B3710] text-white'>
+          <p className='col-span-2 text-center'>Nome</p>
+          <p className='col-span-2 text-center'>Contato</p>
+          <p className='col-span-2 text-center'>Endereço</p>
+        </div>
+        <div>
+        
+        <div key={productInfo.supplier.supplier_id} className={`py-2 bg-[#F5A66D] w-full flex grid grid-cols-6 `}>
+          <p className='col-span-2 text-center'>{productInfo.supplier.supplier_name}</p>
+          <p className='col-span-2 text-center'>{productInfo.supplier.contact_info}</p>
+          <p className='col-span-2 text-center'>{productInfo.supplier.address}</p>
+        </div>
+            
+        
+        
+        </div>
+
+
+      
+      
+      <p className='mt-2'> É perecível :</p>
+      <p className={inputmodal}>{productInfo.product_perishable ? 'Sim' : 'Não'}</p>
+  </div>
+  </div>
+
+    
+</div>
+  )
+}
+
+export default ModalProducts
