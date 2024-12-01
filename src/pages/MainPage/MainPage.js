@@ -18,7 +18,7 @@ function MainPage(props) {
       <Sidebari />
 
       <div className="w-[100%] flex flex-col items-center">
-        <div className="flex flex-col w-full items-end justify-start p-4">
+        <div className="flex flex-col w-full items-end justify-start px-4 py-2 quinteral-color-bg mb-8">
           <UserProfileIcon />
         </div>
 
