@@ -39,35 +39,26 @@ const getProductsbyId = async (req, res) => {
             include: {
                 category: true,
                 supplier: true,
-                batches: true,
+                batches:true,
                 productUnit: true
             }
         })
-        const batches = await prisma.batch.findMany(
-            {
-                where: {
-                    product_id: id
-                },
-                
-                orderBy: {
-                    batch_id: 'asc'
-                }
-            }
-        )
+        console.log(findProduct);
         
-        if (findProduct.is_perishable === 1) {
+        
+        
+        
+        if (findProduct.is_perishable === true) {
             findProduct.is_perishable = '1'
         } else {
             findProduct.is_perishable = '0'
         }
-        findProduct['batch'] = batches  
-     
-       
+        findProduct.batches.map((batch) => {
+            batch.expiration_date = formatarData(batch.expiration_date)
+        })
         
         
         res.status(201).json(findProduct)
-        console.log('retorno achar um produto');
-        
     }
     catch (error) {
         res.status(400).json({error: "Falha ao identificar produto por id"})

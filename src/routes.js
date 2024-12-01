@@ -40,7 +40,7 @@ router.delete('/users/:user_id', userController.deleteUser);
 //Rotas de Produtos
 router.post('/products', upload.single('product_img'), productController.createProduct, auditLogMiddleware);
 router.get('/products', productController.getAllProducts);
-router.get('/products/:product_id', productController.getProductsbyId);
+router.get('/product/:product_id', productController.getProductsbyId);
 router.put('/products/:product_id', upload.single('product_img'), auditLogMiddleware, productController.updateProduct);
 router.delete('/products/:product_id',auditLogMiddleware, productController.deleteProduct);
 router.get('/products/category/:category_id', productController.getProductsByCategory);

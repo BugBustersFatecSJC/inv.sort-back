@@ -101,6 +101,7 @@
     expiration_date   DateTime 
     manufacture_date  DateTime
     batch_value_total Float?
+    local_id          Int
     created_at        DateTime        @default(now())
     product           Product         @relation(fields: [product_id], references: [product_id])
     stockMovements    StockMovement[]
