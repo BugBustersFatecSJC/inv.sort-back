@@ -4,9 +4,10 @@ import api from '../../services/api';
 import MainPage from '../MainPage/MainPage';
 import Loading from '../../components/Loading/Loading';
 import SearchBarAlt from '../../components/SearchBarAlt/SearchBarAlt';
-import './Supplier.css'
+import './Supplier.css';
 import FlashMessage from '../../components/FlashMessage/FlashMessage';
 import ShortModal from '../../components/ShortModal/ShortModal';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'; // Ícones para navegação
 
 function SupplierPage() {
   const [loading, setLoading] = useState(true);
@@ -14,15 +15,15 @@ function SupplierPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const suppliersPerPage = 15;
   const [lastAddedId, setLastAddedId] = useState(null);
   const [flash, setFlash] = useState(null);
   const [supplierName, setSupplierName] = useState('');
   const [contactInfo, setContactInfo] = useState('');
   const [address, setAddress] = useState('');
-  const [nameError, setNameError] = useState(null)
+  const [nameError, setNameError] = useState(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Número de fornecedores por página
 
   const fetchSuppliers = async () => {
     try {
@@ -80,7 +81,7 @@ function SupplierPage() {
       setSupplierName('');
       setContactInfo('');
       setAddress('');
-      setNameError(null)
+      setNameError(null);
     }
   };
 
@@ -109,9 +110,9 @@ function SupplierPage() {
       showFlashMessage('Fornecedor salvo com sucesso!', 'success');
       toggleModal();
     } catch (err) {
-      console.log(err)
+      console.log(err);
       if (err.response && err.response.status === 400 && err.response.data.error.code === 'P2002') {
-          setNameError("Já existe um fornecedor com o mesmo nome")
+        setNameError("Já existe um fornecedor com o mesmo nome");
       }
       showFlashMessage('Um erro aconteceu', 'error');
     }
@@ -119,21 +120,58 @@ function SupplierPage() {
 
   const handleSearch = (query) => {
     setSearchQuery(query);
-    setCurrentPage(1);
   };
 
   const filteredSuppliers = suppliers.filter((supplier) =>
     supplier.supplier_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const indexOfLastSupplier = currentPage * suppliersPerPage;
-  const indexOfFirstSupplier = indexOfLastSupplier - suppliersPerPage;
-  const currentSuppliers = filteredSuppliers.slice(indexOfFirstSupplier, indexOfLastSupplier);
+  const totalPages = Math.ceil(filteredSuppliers.length / itemsPerPage);
 
-  const totalPages = Math.ceil(filteredSuppliers.length / suppliersPerPage);
+  const paginationRange = () => {
+    const currentPageNumber = currentPage;
+    let pages = [];
 
-  const goToNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-  const goToPreviousPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+    if (totalPages <= 5) {
+      pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+    } else {
+      if (currentPageNumber <= 3) {
+        pages = [1, 2, 3, '...', totalPages];
+      } else if (currentPageNumber >= totalPages - 2) {
+        pages = [1, '...', totalPages - 2, totalPages - 1, totalPages];
+      } else {
+        pages = [
+          1,
+          '...',
+          currentPageNumber - 1,
+          currentPageNumber,
+          currentPageNumber + 1,
+          '...',
+          totalPages,
+        ];
+      }
+    }
+
+    return pages;
+  };
+
+  const currentSuppliers = filteredSuppliers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const goToPage = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   return (
     <MainPage title="Gestão de Fornecedores">
@@ -142,9 +180,9 @@ function SupplierPage() {
       ) : (
         <>
           <div className="product-table w-full bg-[#FFC376]">
-            <div className=''>
-              <div className='flex justify-between w-full items-end mb-6 table-header-container'>
-                <div className='flex items-end'>
+            <div>
+              <div className="flex justify-between w-full items-end mb-6 table-header-container">
+                <div className="flex items-end">
                   <p className="font-pixel text-2xl cursor-pointer" onClick={() => toggleModal()}>
                     Adicionar novo fornecedor
                   </p>
@@ -153,7 +191,7 @@ function SupplierPage() {
                 <SearchBarAlt onSearch={handleSearch} />
               </div>
 
-              <div className='overflow-x-auto w-full'>
+              <div className="overflow-x-auto w-full">
                 <table className="min-w-[600px] w-full border-collapse main-table">
                   <thead>
                     <tr>
@@ -191,22 +229,21 @@ function SupplierPage() {
                           <td className="border border-[#FFCB8F] p-2 w-1/4">
                             {supplier.address}
                           </td>
-                          <td className="flex items-center justify-center space-x-4 w-full">
-                            <div className='w-full flex justify-evenly my-2'>
-                              <button 
-                                onClick={() => toggleModal(supplier)} 
-                                className="flex space-x-3 font-pixel p-2 justify-center items-center btn-3d" 
+                          <td className="flex items-center justify-center w-[10%]">
+                            <div className="space-x-4">
+                              <button
+                                className="hover:bg-green-600 px-3 py-2 text-white rounded-md"
                                 style={{ backgroundColor: buttonBgColor }}
+                                onClick={() => toggleModal(supplier)}
                               >
-                                <i className="fa-solid fa-pencil"></i>
-                              </button> 
-
-                              <button 
-                                onClick={() => removeSupplier(supplier.supplier_id)} 
-                                className="flex space-x-3 font-pixel p-2 justify-center items-center btn-3d" 
+                                Editar
+                              </button>
+                              <button
+                                className="hover:bg-red-600 px-3 py-2 text-white rounded-md"
                                 style={{ backgroundColor: buttonBgColor }}
+                                onClick={() => removeSupplier(supplier.supplier_id)}
                               >
-                                <i className="fa-solid fa-trash"></i>
+                                Excluir
                               </button>
                             </div>
                           </td>
@@ -216,70 +253,58 @@ function SupplierPage() {
                   </tbody>
                 </table>
               </div>
-
-              <div className="flex justify-center items-center space-x-4 mt-4">
+              {/* Paginação */}
+              <div className="flex justify-center mt-8">
                 <button
                   onClick={goToPreviousPage}
-                  className="shadow-none w-[2rem]"
+                  className="bg-[#6B3710] text-[#FFC376] font-medium px-4 py-2 rounded-lg mr-2 hover:bg-[#4e2d19] disabled:bg-[#4c2a17] disabled:text-[#ccc] disabled:cursor-not-allowed"
                   disabled={currentPage === 1}
                 >
-                  <img src="/img/pointer-2.svg" alt="" />
+                  <ChevronLeftIcon className="h-5 w-5 text-[#FFC376]" />
                 </button>
-                <span className="font-pixel">
-                  Página {currentPage} de {totalPages}
-                </span>
+
+                {paginationRange().map((page, index) =>
+                  page === '...' ? (
+                    <span key={index} className="px-4 py-2">...</span>
+                  ) : (
+                    <button
+                      key={index}
+                      onClick={() => goToPage(page)}
+                      className={`px-4 py-2 rounded-lg ${currentPage === page ? 'bg-[#4e2d19] text-[#FFC376]' : 'text-[#6B3710] hover:bg-[#C17B46]'}`}
+                    >
+                      {page}
+                    </button>
+                  )
+                )}
+
                 <button
                   onClick={goToNextPage}
-                  className="shadow-none w-[2rem]"
+                  className="bg-[#6B3710] text-[#FFC376] font-medium px-4 py-2 rounded-lg ml-2 hover:bg-[#4e2d19] disabled:bg-[#4c2a17] disabled:text-[#ccc] disabled:cursor-not-allowed"
                   disabled={currentPage === totalPages}
                 >
-                  <img src="/img/pointer-1.svg" alt="" />
+                  <ChevronRightIcon className="h-5 w-5 text-[#FFC376]" />
                 </button>
               </div>
             </div>
           </div>
+
+          {/* Modal de Adicionar/Editar Fornecedor */}
+          {showModal && (
+            <ShortModal
+              show={showModal}
+              onClose={toggleModal}
+              onSubmit={handleSubmit}
+              nameError={nameError}
+              supplierName={supplierName}
+              setSupplierName={setSupplierName}
+              contactInfo={contactInfo}
+              setContactInfo={setContactInfo}
+              address={address}
+              setAddress={setAddress}
+            />
+          )}
         </>
       )}
-
-      {showModal && (
-        <ShortModal title={selectedSupplier ? 'Editar Fornecedor' : 'Adicionar Fornecedor'} handleSubmit={handleSubmit} modalName="fornecedor-modal" closeModal={() => toggleModal()}>
-          <div className="form-control mb-4">
-            <label className="label">Nome do Fornecedor</label>
-            <input
-              type="text"
-              value={supplierName}
-              onChange={(e) => setSupplierName(e.target.value)}
-              className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
-              required
-            />
-            {nameError && (
-              <p className="text-red-500 mt-1 text-xl font-pixel">{nameError}</p>
-            )}
-          </div>
-
-          <div className="form-control mb-4">
-            <label className="label">Informações de Contato</label>
-            <input
-              type="text"
-              value={contactInfo}
-              onChange={(e) => setContactInfo(e.target.value)}
-              className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
-            />
-          </div>
-
-          <div className="form-control mb-4">
-            <label className="label">Endereço</label>
-            <input
-              type="text"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
-            />
-          </div>
-        </ShortModal>
-      )}
-
-      {flash && <FlashMessage  message={flash.message} type={flash.type} duration={3000} onClose={() => setFlash(null)}  />}
     </MainPage>
   );
 }
