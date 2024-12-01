@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import ProductCell from '../ProductCell/ProductCell';
 import Modal from '../Modal/Modal';
 import Loading from '../Loading/Loading';
+import ModalProducts from '../ModalProducts/ModalProducts';
 const ProductTable = () => {
   const [modal,setIsModalOpen] = useState(false)
   const [productname, setProductName] = useState('');
@@ -30,7 +31,7 @@ const ProductTable = () => {
     try {
       const response = await api.get('/products/category/' + id);
       setProducts(Array.isArray(response.data) ? response.data : []);
-      console.log(response.data);
+      
     } catch (err) {
       console.log(err);
     }
@@ -71,7 +72,11 @@ const ProductTable = () => {
       window.removeEventListener('resize', updateItemsPerPage);
     };
   }, []);
-  const openModal = (product_id) => {setProductId(product_id);setIsModalOpen(true);
+  const openModal = (product_id) => {
+    setProductId(product_id);
+    
+    
+    setIsModalOpen(true);
     
   }
   
@@ -95,8 +100,10 @@ const ProductTable = () => {
     formData.append("product_name", productname);
     const exibirproduto = async () => {
       try {
+      
+        
         const response = await api.get(`/products/${productId}`);
-        console.log('response',response.data);
+       
         setProductInfo(response.data);
        
         flashSuccess();
@@ -111,7 +118,7 @@ const ProductTable = () => {
     exibirproduto()
    }, [productId]);
 
-
+   
   
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -164,27 +171,12 @@ const ProductTable = () => {
       </button>
       </div>
       {/* Modal para exibir informações do produto */}
-      {modal  ? <Modal   title={productInfo.product_name}
-                    
-                    modalName="cria-categoria"
-                    closeModal={closeModal} >
-                   {
-                        productInfo ?  
-                        <div className="flex flex-col  gap-4">
-                          <div className='flex justify-between ' >
-                          <img src={productInfo.product_img || '../../images/default.png'} alt={'image do produto:' + productInfo.product_name} className={`  sm:w-36 sm:h-36 ${productInfo.product_img===null?'rounded-full':'rounded-full border-[0.25rem] border-[#D87B26]'}  bg-[#3E1900]   m-auto object-fill `} />
-                          <div className='mx-4'>
-                              
-                              <p> Estoque : {productInfo.product_stock} Un.</p>
-                              <p> Valor de custo : R$ {productInfo.prod_cost_value}</p>
-                              <p> Valor de venda : R$ {productInfo.prod_sell_value}</p>
-                              <p> Estoque Mínimo : {productInfo.product_stock_min} Un.</p>
-                              <p> É perecível : {toString(productInfo.is_perishable)}</p>
-                             </div>
-                          </div>
-                        </div> : <Loading/>
-                   }
-                    </Modal>:''}
+      {modal  ? 
+      <Modal   title={productInfo.product_name} modalName="cria-categoria" closeModal={closeModal} >
+            {productInfo ?  
+    <ModalProducts productInfo={productInfo} />: <Loading/> }
+      
+        </Modal>: ''}
     </div>
   );
 };
