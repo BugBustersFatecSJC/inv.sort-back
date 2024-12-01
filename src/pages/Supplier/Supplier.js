@@ -182,29 +182,28 @@ function SupplierPage() {
           <div className="product-table w-full bg-[#FFC376]">
             <div>
               <div className="flex justify-between w-full items-end mb-6 table-header-container">
-                <div className="flex items-end">
-                  <p className="font-pixel text-2xl cursor-pointer" onClick={() => toggleModal()}>
+                <div className="flex items-end alt-color-6-bg shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] rounded-md p-2 mb-2 md:mb-0">
+                  <p className="font-poppins cursor-pointer" onClick={() => toggleModal()}>
                     Adicionar novo fornecedor
                   </p>
-                  <i className="fa-solid fa-plus ml-2 text-lg text-bold text-green-500"></i>
+                  <i className="fa-solid fa-plus ml-2 text-lg"></i>
                 </div>
                 <SearchBarAlt onSearch={handleSearch} />
               </div>
 
               <div className="overflow-x-auto w-full">
-                <table className="min-w-[600px] w-full border-collapse main-table">
+                <table className="w-full mx-auto mt-4 b-4 table-auto border-collapse bg-[#6B3710] text-[#6B3710]">
                   <thead>
-                    <tr>
-                      <th className="text-2xl font-pixel py-2 w-1/2 text-left">Nome</th>
-                      <th className="text-2xl font-pixel py-2 w-1/6 text-left">Contato</th>
-                      <th className="text-2xl font-pixel py-2 w-1/4 text-left">Endereço</th>
-                      <th className="text-2xl font-pixel py-2 w-[10%]"></th>
+                    <tr className="bg-[#6B3710] text-white">
+                      <th className="px-4 py-2 border text-xs sm:text-sm">Nome</th>
+                      <th className="px-4 py-2 border text-xs sm:text-sm">Contato</th>
+                      <th className="px-4 py-2 border text-xs sm:text-sm">Endereço</th>
+                      <th className="px-4 py-2 border text-xs sm:text-sm w-[10%]"></th>
                     </tr>
                   </thead>
                   <tbody>
                     {currentSuppliers.map((supplier, index) => {
                       const rowBgColor = index % 2 === 0 ? '#EA9457' : '#F5A66D';
-                      const buttonBgColor = index % 2 === 0 ? '#F2B080' : '#F7B687';
 
                       return (
                         <motion.tr
@@ -220,33 +219,29 @@ function SupplierPage() {
                           className={`${rowBgColor} border-b border-[#FFCB8F] hover:bg-orange-100`}
                           style={{ backgroundColor: rowBgColor }}
                         >
-                          <td className="border border-[#FFCB8F] p-2 py-3 w-1/2">
+                          <td className="text-xs sm:text-sm">
                             {supplier.supplier_name}
                           </td>
-                          <td className="border border-[#FFCB8F] p-2 w-1/6">
+                          <td className="text-xs sm:text-sm">
                             {supplier.contact_info}
                           </td>
-                          <td className="border border-[#FFCB8F] p-2 w-1/4">
+                          <td className="text-xs sm:text-sm">
                             {supplier.address}
                           </td>
-                          <td className="flex items-center justify-center w-[10%]">
-                            <div className="space-x-4">
-                              <button
-                                className="hover:bg-green-600 px-3 py-2 text-white rounded-md"
-                                style={{ backgroundColor: buttonBgColor }}
-                                onClick={() => toggleModal(supplier)}
-                              >
-                                Editar
-                              </button>
-                              <button
-                                className="hover:bg-red-600 px-3 py-2 text-white rounded-md"
-                                style={{ backgroundColor: buttonBgColor }}
-                                onClick={() => removeSupplier(supplier.supplier_id)}
-                              >
-                                Excluir
-                              </button>
-                            </div>
-                          </td>
+                          <td className="text-xs sm:text-sm">
+  <button
+    className="px-4 py-2 bg-[#6B3710] text-[#ffc376] w-full rounded-md"
+    onClick={() => toggleModal(supplier)}
+  >
+    Editar 
+  </button>
+  <button
+    className="px-4 py-2 bg-[#B51C08] text-[#ffc376] w-full rounded-md mt-1"
+    onClick={() => removeSupplier(supplier.supplier_id)}
+  >
+    Excluir
+  </button>
+</td>
                         </motion.tr>
                       );
                     })}
@@ -254,6 +249,7 @@ function SupplierPage() {
                 </table>
               </div>
               {/* Paginação */}
+              
               <div className="flex justify-center mt-8">
                 <button
                   onClick={goToPreviousPage}
