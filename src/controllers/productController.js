@@ -202,6 +202,34 @@ const getProductsByCategory = async (req, res) => {
     }
 }
 
+const checkStockLevels = async (req, res) => {
+    try {
+        const productsWithLowStock = await prisma.$queryRaw`
+            SELECT product_id, product_name, product_stock, product_stock_min
+            FROM Product
+            WHERE product_stock <= product_stock_min + (product_stock_min * 0.20)
+        `;
+
+        if (productsWithLowStock.length > 0) {
+            productsWithLowStock.forEach(product => {
+                console.log(`Notificação: Produto ${product.product_name} está com estoque baixo!`);
+            });
+
+            res.status(200).json({
+                message: "Produtos com estoque baixo",
+                produtos: productsWithLowStock
+            });
+        } else {
+            res.status(200).json({
+                message: "Nenhum produto com estoque baixo foi encontrado."
+            });
+        }
+    } catch (error) {
+        console.error("Erro ao verificar níveis de estoque:", error);
+        res.status(500).json({ error: "Erro ao verificar níveis de estoque." });
+    }
+};
+
 module.exports = {
     getAllProducts,
     createProduct,
@@ -209,5 +237,6 @@ module.exports = {
     deleteProduct,
     getProductsbyId,  
     getAllBatches,
-    getProductsByCategory
+    getProductsByCategory,
+    checkStockLevels
 };

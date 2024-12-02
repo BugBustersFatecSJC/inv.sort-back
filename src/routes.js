@@ -33,6 +33,7 @@ router.post('/login', userController.loginUser);
 //Rotas de Produtos
 router.post('/products', upload.single('product_img'), productController.createProduct, auditLogMiddleware);
 router.get('/products', productController.getAllProducts);
+router.get('/products/low-stock', productController.checkStockLevels);
 router.get('/products/:product_id', productController.getProductsbyId);
 router.put('/products/:product_id',auditLogMiddleware, productController.updateProduct);
 router.delete('/products/:product_id',auditLogMiddleware, productController.deleteProduct);
@@ -53,6 +54,7 @@ router.delete('/sector/:sector_id', sectorController.deleteSector);
 // Rotas de Lotes
 router.post('/batch', batchController.createBatch);
 router.get('/batch', batchController.getAllBatches);
+router.get('/batch/close-expire', batchController.checkExpiringBatches);
 router.put('/batch/:batch_id', batchController.updateBatch);
 router.delete('/batch/:batch_id', batchController.deleteBatch);
 
