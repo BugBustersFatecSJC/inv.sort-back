@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import ProductCell from '../ProductCell/ProductCell';
 import SearchBar from '../SearchBar/SearchBar';
 import { useParams } from 'react-router-dom';
-import Modal from '../Modal/Modal';
+import Modalsbtn from '../Modal/Modalsbtn';
 import Loading from '../Loading/Loading';
 import api from '../../services/api';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'; // Icones da Filtragem
@@ -199,9 +199,9 @@ const ProductTable = () => {
 
       {/* Modal to display product information */}
       {modal && (
-        <Modal title={productInfo.product_name} modalName="cria-categoria" closeModal={closeModal}>
-          {productInfo ? <ModalProducts productInfo={productInfo} /> : <Loading />}
-        </Modal>
+        <Modalsbtn closeModal={closeModal} title={productInfo.product_name} modalName="cria-categoria" >
+          {productInfo ? <ModalProducts closeModal={closeModal} productInfo={productInfo}  /> : <Loading />}
+        </Modalsbtn>
       )}
     </div>
   );
