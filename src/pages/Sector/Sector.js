@@ -159,10 +159,9 @@ function LocalPage() {
             <div className=''>
               <div className='flex justify-between w-full items-end mb-6 table-header-container'>
                 <div className='flex items-end'>
-                  <p className="font-pixel text-2xl cursor-pointer" onClick={() => setShowLocalModal(true)}>
-                    Adicionar novo local
+                  <p className="font-pixel text-2xl cursor-pointer p-2 bg-[#008148] rounded" onClick={() => setShowLocalModal(true)}>
+                    Adicionar local
                   </p>
-                  <i className="fa-solid fa-plus ml-2 text-lg text-bold text-green-500"></i>
                 </div>
                 <SearchBarAlt onSearch={handleSearch} />
               </div>
@@ -231,22 +230,19 @@ function LocalPage() {
                             <div className="w-full flex justify-evenly items-center my-2">
                               <button
                                 onClick={() => openEditLocalModal(local)}
-                                className="font-pixel p-2 justify-center items-center btn-3d"
-                                style={{ backgroundColor: buttonBgColor }}
+                                className="font-pixel p-2 justify-center items-center btn-3d bg-[#4162a8]"
                               >
                                 <i className="fa-solid fa-pencil"></i>
                               </button>
                               <button
                                 onClick={() => openDeleteModalLocal(local)}
-                                className="font-pixel p-2 justify-center items-center btn-3d"
-                                style={{ backgroundColor: buttonBgColor }}
+                                className="font-pixel p-2 justify-center items-center btn-3d bg-[#FF1B1C]"
                               >
                                 <i className="fa-solid fa-trash"></i>
                               </button>
                               <button
                                 onClick={() => openSectorModal(local.local_id)}
-                                className="font-pixel p-2 justify-center items-center btn-3d"
-                                style={{ backgroundColor: buttonBgColor }}
+                                className="font-pixel p-2 justify-center items-center btn-3d bg-[#008148]"
                               >
                                 <i className="fa-solid fa-plus"></i>
                               </button>

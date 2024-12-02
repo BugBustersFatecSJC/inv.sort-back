@@ -76,7 +76,7 @@ function UserProfileIcon() {
                   </span>
                 )}
               </p>
-              <p className="p-2 text-sm cursor-pointer">Configurações</p>
+              {/* <p className="p-2 text-sm cursor-pointer" onClick={navigateUserProfile}>Configurações</p> */}
             </div>
           )}
         </div>
@@ -130,7 +130,7 @@ function UserProfileIcon() {
               </div>
             )}
           </div>
-          <p className="poppins-regular text-sm mr-3 cursor-pointer">Configurações</p>
+          {/* <p className="poppins-regular text-sm mr-3 cursor-pointer" onClick={navigateUserProfile}>Configurações</p> */}
         </div>
       </div>
 
@@ -144,7 +144,6 @@ function UserProfileIcon() {
 
         <figure
           className="bg-white rounded-full w-[3rem] h-[3rem] flex items-center justify-center cursor-pointer"
-          onClick={navigateUserProfile}
         >
           {user.user_img ? (
             <img

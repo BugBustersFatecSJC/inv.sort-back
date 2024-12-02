@@ -185,10 +185,9 @@ function SupplierPage() {
             <div className=''>
               <div className='flex justify-between w-full items-end mb-6 table-header-container'>
                 <div className='flex items-end'>
-                  <p className="font-pixel text-2xl cursor-pointer" onClick={() => toggleModal()}>
-                    Adicionar novo fornecedor
+                  <p className="font-pixel text-2xl cursor-pointer p-2 bg-[#008148] rounded" onClick={() => toggleModal()}>
+                    Adicionar fornecedor
                   </p>
-                  <i className="fa-solid fa-plus ml-2 text-lg text-bold text-green-500"></i>
                 </div>
                 <SearchBarAlt onSearch={handleSearch} />
               </div>
@@ -235,16 +234,14 @@ function SupplierPage() {
                             <div className='w-full flex justify-evenly my-2'>
                               <button 
                                 onClick={() => toggleModal(supplier)} 
-                                className="flex space-x-3 font-pixel p-2 justify-center items-center btn-3d" 
-                                style={{ backgroundColor: buttonBgColor }}
+                                className="flex space-x-3 font-pixel p-2 justify-center items-center btn-3d bg-[#4162a8]" 
                               >
                                 <i className="fa-solid fa-pencil"></i>
                               </button> 
 
                               <button
                                 onClick={() => confirmDeleteSupplier(supplier.supplier_id)}
-                                className="flex space-x-3 font-pixel p-2 justify-center items-center btn-3d"
-                                style={{ backgroundColor: buttonBgColor }}
+                                className="flex space-x-3 font-pixel p-2 justify-center items-center btn-3d bg-[#FF1B1C]"
                               >
                                 <i className="fa-solid fa-trash"></i>
                               </button>
