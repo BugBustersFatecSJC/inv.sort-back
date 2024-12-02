@@ -153,7 +153,6 @@ const buyBatchByProductId = async (req, res) => {
     const productId = parseInt(req.params.product_id); // ID do produto
     const quantityToBuy = parseInt(req.body.quantity); // Quantidade a comprar
     const validadeLote = req.body.validade ? new Date(req.body.validade) : null; // Converte validade para Date se houver
-    const quantityMaxPerBatch = parseInt(req.body.maximo); // Quantidade máxima por lote
 
     try {
         // Verifica se productId é um número válido
@@ -164,13 +163,18 @@ const buyBatchByProductId = async (req, res) => {
         // Busca o produto pelo ID
         const product = await prisma.product.findUnique({
             where: { product_id: productId },
-            select: { is_perishable: true } // Seleciona apenas a propriedade de perecibilidade
+            select: { 
+                is_perishable: true, 
+                quantity_max:true
+            } // Seleciona apenas a propriedade de perecibilidade
         });
 
         // Verifica se o produto existe
         if (!product) {
             return res.status(404).json({ error: "Produto não encontrado." });
         }
+
+        const quantityMaxPerBatch = product.quantity_max
 
         let remainingQuantity = quantityToBuy;
 
@@ -229,7 +233,7 @@ const buyBatchByProductId = async (req, res) => {
 
 
 
-const sellBatchByProductId = async (req, res) => {
+const sellBatchByProductId = async (req, res) => { //Principal Rota de Venda
     const productId = parseInt(req.params.product_id); // ID do produto
     const quantityToSubtract = parseInt(Math.abs(req.body.quantity)); // Quantidade a ser subtraída
     let alertaEstoque = false; // Variável de alerta de estoque baixo

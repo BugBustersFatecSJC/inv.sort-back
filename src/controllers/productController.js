@@ -7,7 +7,7 @@ const formatarData = (data) => {
     return data
 }
 const getAllProducts = async (req, res) => {
-    console.log('bbbbb');
+   
     
     try {
         const prod = await prisma.product.findMany({
@@ -26,7 +26,7 @@ const getAllProducts = async (req, res) => {
 }
 
 const getProductsbyId = async (req, res) => {
-    console.log('aaaa');
+    
     
     try{
         const id = parseInt(req.params.product_id)

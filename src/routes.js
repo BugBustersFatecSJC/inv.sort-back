@@ -88,7 +88,7 @@ router.put('/buyandsell/:batch_id', batchController.sellBatch);
 
 router.get('/buyandsell/:product_id/batches', batchController.getBatchesByProductId);
 
-router.put('/buyandsell/sell/:product_id', batchController.sellBatchByProductId);
+router.post('/buyandsell/sell/:product_id', batchController.sellBatchByProductId);
 router.post('/buyandsell/buy/:product_id', batchController.buyBatchByProductId);
 
 
