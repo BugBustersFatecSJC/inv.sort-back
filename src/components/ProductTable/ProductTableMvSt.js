@@ -54,6 +54,24 @@ function ProductTableMvSt() {
     }
 
     return pages;
+
+  const downloadPDF = async () => {
+    try {
+      const response = await Axios.get('http://localhost:3001/stock-movements/pdf', {
+        responseType: 'blob', // Necessário para lidar com arquivos binários
+      });
+
+      // Cria um link para o arquivo e realiza o download
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'stock_movements.pdf');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error('Erro ao baixar o PDF:', error);
+    }
   };
 
   useEffect(() => {
@@ -129,7 +147,7 @@ function ProductTableMvSt() {
   };
 
   const toggleOrder = () => {
-    setOrder(prevOrder => prevOrder === 'desc' ? 'asc' : 'desc');
+    setOrder((prevOrder) => (prevOrder === 'desc' ? 'asc' : 'desc'));
   };
 
   if (loading) {
@@ -162,6 +180,13 @@ function ProductTableMvSt() {
             </>
           )}
         </button>
+
+        <button
+          onClick={downloadPDF}
+          className="bg-[#6B3710] text-[#FFC376] px-4 py-2 rounded-lg hover:bg-[#C17B46]"
+        >
+          Baixar PDF
+        </button>
       </div>
 
       <div className="overflow-x-auto max-h-[450px] sm:max-h-[500px]">
@@ -181,16 +206,16 @@ function ProductTableMvSt() {
             {currentMovements.map((movement, index) => (
               <tr
                 key={movement.movement_id}
-                className={index % 2 === 0 ? "bg-[#F5A66D]" : "bg-[#EA9457]"}
+                className={index % 2 === 0 ? 'bg-[#F5A66D]' : 'bg-[#EA9457]'}
                 onClick={() => openModal(movement)}
               >
-                <td className="text-xs sm:text-sm">{movement.product ? movement.product.product_name : "N/A"}</td>
+                <td className="text-xs sm:text-sm">{movement.product ? movement.product.product_name : 'N/A'}</td>
                 <td className="text-xs sm:text-sm">{movement.quantity}</td>
-                <td className="text-xs sm:text-sm">{movement.batch ? movement.batch.batch_id : "N/A"}</td>
+                <td className="text-xs sm:text-sm">{movement.batch ? movement.batch.batch_id : 'N/A'}</td>
                 <td className="text-xs sm:text-sm">{movement.movement_type}</td>
-                <td className="text-xs sm:text-sm">{movement.user ? movement.user.username : "N/A"}</td>
+                <td className="text-xs sm:text-sm">{movement.user ? movement.user.username : 'N/A'}</td>
                 <td className="text-xs sm:text-sm">{new Date(movement.movement_date).toLocaleString()}</td>
-                <td className="text-xs sm:text-sm">{movement.category ? movement.category.category_name : "N/A"}</td>
+                <td className="text-xs sm:text-sm">{movement.category ? movement.category.category_name : 'N/A'}</td>
               </tr>
             ))}
           </tbody>

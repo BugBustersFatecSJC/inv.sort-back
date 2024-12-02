@@ -15,42 +15,50 @@ function Login() {
   const { setUser, setRole } = useContext(UserContext);
 
   useEffect(() => {
+    // Recupera o usuário do storage (prioriza sessionStorage sobre localStorage)
     const storedRememberMe = localStorage.getItem("rememberMe") === 'true';
-    const storedUser = localStorage.getItem("user");
+    const storedUser = JSON.parse(sessionStorage.getItem("user") || localStorage.getItem("user"));
 
-    if (storedRememberMe && storedUser) {
-      const userData = JSON.parse(storedUser);
-      api.defaults.headers["X-User-Id"] = userData.user_id;
-      setUser(userData);
-      setRole(userData.role);
+    if (storedUser) {
+      api.defaults.headers["X-User-Id"] = storedUser.user_id;
+      setUser(storedUser);
+      setRole(storedUser.role);
+
+      if (storedRememberMe) {
+        // Reafirma o armazenamento no localStorage apenas se "Lembrar-me" estiver ativado
+        localStorage.setItem("user", JSON.stringify(storedUser));
+      }
       navigate('/products');
     } else {
+      // Limpa o estado e o storage se não houver usuário
+      sessionStorage.removeItem("user");
       localStorage.removeItem("user");
+      localStorage.removeItem("rememberMe");
       setUser(null);
     }
   }, [navigate, setRole, setUser]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting form with email: ", email);
     try {
       const data = { email, password };
       const response = await api.post('/login', data);
       const userData = response.data;
+
       setUser(userData);
       setRole(userData.role);
 
+      // Armazena os dados do usuário de acordo com o estado do "Lembrar-me"
       if (rememberMe) {
         localStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem("rememberMe", 'true');
       } else {
-        localStorage.removeItem("user");
+        sessionStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem("rememberMe", 'false');
       }
-      
+
       api.defaults.headers["X-User-Id"] = userData.user_id;
       navigate('/products');
-      
     } catch (error) {
       console.error('Erro na requisição:', error);
       alert("Usuário ou Senha Inválidos");
@@ -63,8 +71,20 @@ function Login() {
         <div className='mb-[50px]'>
           <MainLogo />
         </div>
-        <Field name="email" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <Field name="password" type="password" placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <Field
+          name="email"
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <Field
+          name="password"
+          type="password"
+          placeholder="Senha"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         <div className='font-pixel flex justify-between w-full secondary-color'>
           <a href='/cadastro'>Esqueceu sua senha?</a>
           <label>
