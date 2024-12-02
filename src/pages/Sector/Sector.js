@@ -3,13 +3,13 @@ import api from '../../services/api';
 import { motion } from 'framer-motion';
 import MainPage from '../MainPage/MainPage';
 import LocalModal from '../../components/SectorModal/LocalModal';
-// import SectorModal from '../../components/SectorModal/SectorModal';
 import EditSectorModal from '../../components/SectorModal/EditSectorModal';
 import EditLocalModal from '../../components/SectorModal/EditLocalModal';
 import Loading from '../../components/Loading/Loading';
 import ModalDelete from '../../components/ModalDelete/ModalDelete';
 import SearchBarAlt from '../../components/SearchBarAlt/SearchBarAlt';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'; // Ícones para navegação
+import SectorModal from '../../components/SectorModal/SectorModal';
 
 function LocalPage() {
   const [loading, setLoading] = useState(true);
@@ -19,13 +19,16 @@ function LocalPage() {
   const [showSectorModal, setShowSectorModal] = useState(false);
   const [showEditSectorModal, setShowEditSectorModal] = useState(false);
   const [showEditLocalModal, setShowEditLocalModal] = useState(false);
-  const [currentLocalId, setCurrentLocalId] = useState(null);
+  const [currentLocal, setCurrentLocal] = useState(null);
   const [currentSector, setCurrentSector] = useState(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const localsPerPage = 10;
   const [lastAddedId, setLastAddedId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [openDeleteModalSector, setOpenDeleteModalSector] = useState(false);
+  const [currentSectorForDelete, setCurrentSectorForDelete] = useState(null);
+
 
   const fetchLocals = async () => {
     try {
@@ -78,17 +81,24 @@ function LocalPage() {
     );
   };
 
-  const deleteSector = async (sectorId) => {
+  const openModalDeleteSector = (sector) => {
+    setCurrentSectorForDelete(sector);
+    setOpenDeleteModalSector(true);
+  };  
+
+  const handleDeleteSector = async (e) => {
+    e.preventDefault();
     try {
-      await api.delete(`/sector/${sectorId}`);
-      setSectors((prevSectors) => prevSectors.filter((sector) => sector.sector_id !== sectorId));
+      await api.delete(`/sector/${currentSectorForDelete.sector_id}`);
+      setSectors((prevSectors) => prevSectors.filter((sector) => sector.sector_id !== currentSectorForDelete.sector_id));
+      setOpenDeleteModalSector(false);
     } catch (err) {
       console.error(err);
     }
   };
 
   const openSectorModal = (localId) => {
-    setCurrentLocalId(localId);
+    setCurrentLocal(localId);
     setShowSectorModal(true);
   };
 
@@ -98,15 +108,15 @@ function LocalPage() {
   };
 
   const openEditLocalModal = (local) => {
-    setCurrentLocalId(local.local_id);
+    setCurrentLocal(local);
     setShowEditLocalModal(true);
   };
 
   const handleLocalDelete = async (e) => {
     e.preventDefault();
     try {
-      await api.delete(`/local/${currentLocalId}`);
-      deleteLocal(currentLocalId);
+      await api.delete(`/local/${currentLocal.local_id}`);
+      deleteLocal(currentLocal.local_id);
       setOpenDeleteModal(false);
     } catch (err) {
       console.error(err);
@@ -114,12 +124,12 @@ function LocalPage() {
   };
 
   const openDeleteModalLocal = (local) => {
-    setCurrentLocalId(local.local_id);
+    setCurrentLocal(local);
     setOpenDeleteModal(true);
   };
 
   const deleteLocal = (localId) => {
-    setLocals((prevLocals) => prevLocals.filter(local => local.local_id !== localId));
+    setLocals((prevLocals) => prevLocals.filter((local) => local.local_id !== localId));
   };
 
   const handleSearch = (query) => {
@@ -178,11 +188,10 @@ function LocalPage() {
           <div className="product-table w-full bg-[#FFC376]">
             <div className=''>
               <div className='flex justify-between w-full items-end mb-6 table-header-container'>
-                <div className='flex items-end alt-color-6-bg shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] rounded-md p-2 mb-2 md:mb-0'>
-                  <p className="font-poppins cursor-pointer" onClick={() => setShowLocalModal(true)}>
-                    Adicionar novo local
+                <div className='flex items-end'>
+                  <p className="font-pixel text-2xl cursor-pointer p-2 bg-[#008148] rounded" onClick={() => setShowLocalModal(true)}>
+                    Adicionar local
                   </p>
-                  <i className="fa-solid fa-plus ml-2 text-lg"></i>
                 </div>
                 <SearchBarAlt onSearch={handleSearch} />
               </div>
@@ -232,8 +241,11 @@ function LocalPage() {
                                       <i className="fa-solid fa-pencil"></i>
                                     </button>
                                     <button
-                                      onClick={() => deleteSector(sector.sector_id)}
-                                      className="px-4 py-2 bg-[#B51C08] text-[#ffc376] rounded-md mt-1 ml-2"
+                                      onClick={() => openModalDeleteSector(sector)}
+                                      className="font-pixel p-1 btn-3d text-[#F4BD76] ml-2"
+                                      style={{
+                                        backgroundColor: buttonBgColor,
+                                      }}
                                     >
                                       <i className="fa-solid fa-trash"></i>
                                     </button>
@@ -244,19 +256,21 @@ function LocalPage() {
                           <td className="text-xs sm:text-sm">
                               <button
                                 onClick={() => openEditLocalModal(local)}
-                                className="block w-full px-4 py-2 bg-[#6B3710] text-[#ffc376] rounded-md md:inline-block"
+
+                                className="font-pixel p-2 justify-center items-center btn-3d bg-[#4162a8]"
                               >
                                 <i className="fa-solid fa-pencil"></i>
                               </button>
                               <button
                                 onClick={() => openDeleteModalLocal(local)}
-                                className="block w-full px-4 py-2 bg-[#B51C08] text-[#ffc376] rounded-md mt-2 md:inline-block"
+
+                                className="font-pixel p-2 justify-center items-center btn-3d bg-[#FF1B1C]"
                               >
                                 <i className="fa-solid fa-trash"></i>
                               </button>
                               <button
                                 onClick={() => openSectorModal(local.local_id)}
-                                className="block w-full px-4 py-2 bg-[#369B08] text-[#ffc376] rounded-md mt-2 md:inline-block"
+                                className="font-pixel p-2 justify-center items-center btn-3d bg-[#008148]"
                               >
                                 <i className="fa-solid fa-plus"></i>
                               </button>
@@ -306,10 +320,17 @@ function LocalPage() {
       )}
 
       {showLocalModal && <LocalModal onLocalAdded={addLocal} onClose={() => setShowLocalModal(false)} />}
-      {/* {showSectorModal && <SectorModal localId={currentLocalId} onSectorAdded={addSector} onClose={() => setShowSectorModal(false)} />} */}
       {showEditSectorModal && <EditSectorModal sector={currentSector} onSectorUpdated={updateSector} onClose={() => setShowEditSectorModal(false)} />}
-      {showEditLocalModal && <EditLocalModal localId={currentLocalId} onLocalUpdated={updateLocal} onClose={() => setShowEditLocalModal(false)} />}
+      {showEditLocalModal && <EditLocalModal local={currentLocal} onLocalUpdated={updateLocal} onClose={() => setShowEditLocalModal(false)} />}
       {openDeleteModal && <ModalDelete title="Deseja excluir o local?" handleSubmit={handleLocalDelete} closeModal={() => setOpenDeleteModal(false)} />}
+      {showSectorModal && <SectorModal localId={currentLocal} onSectorAdded={addSector} onClose={() => setShowSectorModal(false)} />}
+      {openDeleteModalSector && (
+        <ModalDelete
+          title="Deseja excluir o setor?"
+          handleSubmit={handleDeleteSector}
+          closeModal={() => setOpenDeleteModalSector(false)}
+        />
+      )}
     </MainPage>
   );
 }

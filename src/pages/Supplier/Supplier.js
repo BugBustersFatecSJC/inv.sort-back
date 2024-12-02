@@ -7,7 +7,8 @@ import SearchBarAlt from '../../components/SearchBarAlt/SearchBarAlt';
 import './Supplier.css';
 import FlashMessage from '../../components/FlashMessage/FlashMessage';
 import ShortModal from '../../components/ShortModal/ShortModal';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'; // Ícones para navegação
+import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'; 
 
 function SupplierPage() {
   const [loading, setLoading] = useState(true);
@@ -54,21 +55,21 @@ function SupplierPage() {
     );
   };
 
-  const removeSupplier = async (supplierId) => {
-    const confirmDelete = window.confirm('Você tem certeza que deseja excluir este fornecedor?');
-    if (!confirmDelete) {
-      return;
-    }
+  // const removeSupplier = async (supplierId) => {
+  //   const confirmDelete = window.confirm('Você tem certeza que deseja excluir este fornecedor?');
+  //   if (!confirmDelete) {
+  //     return;
+  //   }
 
-    try {
-      await api.delete(`/supplier/${supplierId}`);
-      setSuppliers((prevSuppliers) =>
-        prevSuppliers.filter((supplier) => supplier.supplier_id !== supplierId)
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  //   try {
+  //     await api.delete(`/supplier/${supplierId}`);
+  //     setSuppliers((prevSuppliers) =>
+  //       prevSuppliers.filter((supplier) => supplier.supplier_id !== supplierId)
+  //     );
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
   const toggleModal = (supplier = null) => {
     setSelectedSupplier(supplier);
@@ -118,6 +119,9 @@ function SupplierPage() {
     }
   };
 
+  /**
+   * Barra de pesquisa
+   */
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
@@ -171,6 +175,39 @@ function SupplierPage() {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
     }
+  }
+  
+  /**
+   * Deletar fornecedor
+   */
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [supplierToDelete, setSupplierToDelete] = useState(null);
+  const confirmDeleteSupplier = (supplierId) => {
+    setSupplierToDelete(supplierId);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!supplierToDelete) return;
+
+    try {
+      await api.delete(`/supplier/${supplierToDelete}`);
+      setSuppliers((prevSuppliers) =>
+        prevSuppliers.filter((supplier) => supplier.supplier_id !== supplierToDelete)
+      );
+      showFlashMessage('Fornecedor excluído com sucesso!', 'success');
+    } catch (err) {
+      console.error(err);
+      showFlashMessage('Erro ao excluir fornecedor.', 'error');
+    } finally {
+      setShowDeleteModal(false);
+      setSupplierToDelete(null);
+    }
+  };
+  
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);
+    setSupplierToDelete(null);
   };
 
   return (
@@ -181,12 +218,11 @@ function SupplierPage() {
         <>
           <div className="product-table w-full bg-[#FFC376]">
             <div>
-              <div className="flex justify-between w-full items-end mb-6 table-header-container">
-                <div className="flex items-end alt-color-6-bg shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] rounded-md p-2 mb-2 md:mb-0">
-                  <p className="font-poppins cursor-pointer" onClick={() => toggleModal()}>
-                    Adicionar novo fornecedor
+              <div className='flex justify-between w-full items-end mb-6 table-header-container'>
+                <div className='flex items-end'>
+                  <p className="font-pixel text-2xl cursor-pointer p-2 bg-[#008148] rounded" onClick={() => toggleModal()}>
+                    Adicionar fornecedor
                   </p>
-                  <i className="fa-solid fa-plus ml-2 text-lg"></i>
                 </div>
                 <SearchBarAlt onSearch={handleSearch} />
               </div>
@@ -228,20 +264,23 @@ function SupplierPage() {
                           <td className="text-xs sm:text-sm">
                             {supplier.address}
                           </td>
-                          <td className="text-xs sm:text-sm">
-  <button
-    className="px-4 py-2 bg-[#6B3710] text-[#ffc376] w-full rounded-md"
-    onClick={() => toggleModal(supplier)}
-  >
-    Editar 
-  </button>
-  <button
-    className="px-4 py-2 bg-[#B51C08] text-[#ffc376] w-full rounded-md mt-1"
-    onClick={() => removeSupplier(supplier.supplier_id)}
-  >
-    Excluir
-  </button>
-</td>
+                          <td className="flex items-center justify-center space-x-4 w-full">
+                            <div className='w-full flex justify-evenly my-2'>
+                              <button 
+                                onClick={() => toggleModal(supplier)} 
+                                className="flex space-x-3 font-pixel p-2 justify-center items-center btn-3d bg-[#4162a8]" 
+                              >
+                                <i className="fa-solid fa-pencil"></i>
+                              </button> 
+
+                              <button
+                                onClick={() => confirmDeleteSupplier(supplier.supplier_id)}
+                                className="flex space-x-3 font-pixel p-2 justify-center items-center btn-3d bg-[#FF1B1C]"
+                              >
+                                <i className="fa-solid fa-trash"></i>
+                              </button>
+                            </div>
+                          </td>
                         </motion.tr>
                       );
                     })}
@@ -301,6 +340,54 @@ function SupplierPage() {
           )}
         </>
       )}
+      {showModal && (
+        <ShortModal title={selectedSupplier ? 'Editar Fornecedor' : 'Adicionar Fornecedor'} handleSubmit={handleSubmit} modalName="fornecedor-modal" closeModal={() => toggleModal()}>
+          <div className="form-control mb-4">
+            <label className="label">Nome do Fornecedor</label>
+            <input
+              type="text"
+              value={supplierName}
+              onChange={(e) => setSupplierName(e.target.value)}
+              className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
+              required
+            />
+            {nameError && (
+              <p className="text-red-500 mt-1 text-xl font-pixel">{nameError}</p>
+            )}
+          </div>
+
+          <div className="form-control mb-4">
+            <label className="label">Informações de Contato</label>
+            <input
+              type="text"
+              value={contactInfo}
+              onChange={(e) => setContactInfo(e.target.value)}
+              className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
+            />
+          </div>
+
+          <div className="form-control mb-4">
+            <label className="label">Endereço</label>
+            <input
+              type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              className="p-[4px] shadow-[0px_2px_2px_2px_rgba(0,0,0,0.25)] ring ring-2 ring-[#BF823C] focus:ring-[#3E1A00] outline-none quinteral-color-bg rounded font-pixel text-xl transition-all duration-[100ms] ease-in-out alt-color-5"
+            />
+          </div>
+        </ShortModal>
+      )}
+
+      {showDeleteModal && (
+        <DeleteConfirmationModal
+          title="Confirmar Exclusão"
+          message="Você tem certeza que deseja excluir este fornecedor? Esta ação não pode ser desfeita."
+          onConfirm={handleDeleteConfirm}
+          onCancel={handleDeleteCancel}
+        />
+      )}
+
+      {flash && <FlashMessage  message={flash.message} type={flash.type} duration={3000} onClose={() => setFlash(null)}  />}
     </MainPage>
   );
 }

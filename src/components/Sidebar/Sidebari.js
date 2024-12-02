@@ -109,7 +109,21 @@ function Sidebari({ content }) {
                   Movimentações
                 </MenuItem>
                 
+                <MenuItem
+                  className="MenuItem poppins-semibold"
+                  icon={<img id="chart" src="/images/arrows.png" />}
+                  component={<Link to="/suppliers" />}
+                >
+                  Fornecedores
+                </MenuItem>
 
+                <MenuItem
+                  className="MenuItem poppins-semibold"
+                  icon={<img id="chart" src="/images/arrows.png" />}
+                  component={<Link to="/sectors" />}
+                >
+                  Setores e locais
+                </MenuItem>
                 
                 {(role === 'admin' || role === 'gerente') && (
                   <SubMenu
@@ -201,6 +215,7 @@ function Sidebari({ content }) {
                       >
                         {collapsed ? 'Setores' : 'Setores'}
                       </MenuItem>
+
                   </SubMenu>
                 )}
               </Menu>
@@ -232,38 +247,52 @@ function Sidebari({ content }) {
                     className="MenuItem  w-full poppins-semibold"
                     title="Categorias"
                     icon={<img id="carrinho" alt="Categorias" src="/images/grocery-store.png" />}
+
                     component={<Link to="/products" />}
                   >
                     {collapsed ? 'Categorias' : ''}
                   </MenuItem>
                   <MenuItem
-                    className="MenuItem  poppins-semibold"
+                    className="MenuItem  poppins-semibold text-left"
                     title=""
-                    icon={<img id="chart" className="" src="/images/pie-chart.png" />}
+                    icon={<i class="fa-solid fa-chart-pie"></i>}
                     component={<Link to="/analytics" />}
                   >
                     {collapsed? 'Analise' : ''}
                   </MenuItem>
                   <MenuItem
-                    className="MenuItem poppins-semibold"
+                    className="MenuItem poppins-semibold text-left"
                     title=""
-                    icon={<img id="chart" src="/images/arrows.png" />}
+                    icon={<i class="fa-solid fa-arrow-right-arrow-left"></i>}
                     component={<Link to="/stockmovements" />}
                   >
                     {collapsed ? 'Movimentações' : ''}
                   </MenuItem>
-                  
-
+                  <MenuItem
+                    className="MenuItem poppins-semibold text-left"
+                    title=""
+                    icon={<i class="fa-solid fa-truck-fast"></i>}
+                    component={<Link to="/suppliers" />}
+                  >
+                    {windowWidth > 640 ? 'Fornecedores' : ''}
+                  </MenuItem>
+                  <MenuItem
+                    className="MenuItem poppins-semibold text-left"
+                    title=""
+                    icon={<i class="fa-solid fa-box"></i>}
+                    component={<Link to="/sectors" />}
+                  >
+                    {windowWidth > 640 ? 'Setores e locais' : ''}
+                  </MenuItem>
                   
                   {(role === 'admin' || role === 'gerente') && (
                     <SubMenu
-                      icon={<img id="chart" src="/images/profile.png" />}
+                      icon={<i class="fa-solid fa-user-gear"></i>}
                       label={!collapsed ? '' : 'Gerenciar'}
                       className="poppins-semibold"
                       style={{
                         backgroundColor: '#6b3710',
                       }}
-                      
                     >
                       <MenuItem
                         icon={<img id="person" src="/images/userpage.png" />}
