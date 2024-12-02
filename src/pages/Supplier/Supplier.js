@@ -220,7 +220,7 @@ function SupplierPage() {
             <div>
               <div className='flex justify-between w-full items-end mb-6 table-header-container'>
                 <div className='flex items-end'>
-                  <p className="font-pixel text-2xl cursor-pointer p-2 bg-[#008148] rounded" onClick={() => toggleModal()}>
+                  <p className="font-pixel text-2xl cursor-pointer p-2 bg-[#008148] rounded text-white" onClick={() => toggleModal()}>
                     Adicionar fornecedor
                   </p>
                 </div>
@@ -231,10 +231,10 @@ function SupplierPage() {
                 <table className="w-full mx-auto mt-4 b-4 table-auto border-collapse bg-[#6B3710] text-[#6B3710]">
                   <thead>
                     <tr className="bg-[#6B3710] text-white">
-                      <th className="px-4 py-2 border text-xs sm:text-sm">Nome</th>
-                      <th className="px-4 py-2 border text-xs sm:text-sm">Contato</th>
-                      <th className="px-4 py-2 border text-xs sm:text-sm">Endereço</th>
-                      <th className="px-4 py-2 border text-xs sm:text-sm w-[10%]"></th>
+                      <th className="px-4 py-2 border-b border-r border-[#FFCB8F] text-xs sm:text-sm text-left">Nome</th>
+                      <th className="px-4 py-2 border-b border-r border-[#FFCB8F] text-xs sm:text-sm text-left">Contato</th>
+                      <th className="px-4 py-2 border-b border-r border-[#FFCB8F] text-xs sm:text-sm text-left">Endereço</th>
+                      <th className="px-4 py-2 border-b border-[#FFCB8F] text-xs sm:text-sm w-[10%]"></th>
                     </tr>
                   </thead>
                   <tbody>

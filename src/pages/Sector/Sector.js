@@ -189,7 +189,7 @@ function LocalPage() {
             <div className=''>
               <div className='flex justify-between w-full items-end mb-6 table-header-container'>
                 <div className='flex items-end'>
-                  <p className="font-pixel text-2xl cursor-pointer p-2 bg-[#008148] rounded" onClick={() => setShowLocalModal(true)}>
+                  <p className="font-pixel text-2xl cursor-pointer p-2 bg-[#008148] rounded text-white" onClick={() => setShowLocalModal(true)}>
                     Adicionar local
                   </p>
                 </div>
@@ -200,10 +200,10 @@ function LocalPage() {
                 <table className='w-full mx-auto mt-4 b-4 table-auto border-collapse bg-[#6B3710] text-[#6B3710] md:whitespace-normal whitespace-nowrap'>
                   <thead>
                     <tr className="bg-[#6B3710] text-white">
-                      <th className="px-4 py-2 border text-xs sm:text-sm">Local</th>
-                      <th className="px-4 py-2 border text-xs sm:text-sm">Endereço</th>
-                      <th className="px-4 py-2 border text-xs sm:text-sm">Setor</th>
-                      <th className="px-4 py-2 border text-xs sm:text-sm w-[10%]"></th>
+                      <th className="px-4 py-2 border-b border-r border-[#FFCB8F] text-xs sm:text-sm text-left">Local</th>
+                      <th className="px-4 py-2 border-b border-r border-[#FFCB8F] text-xs sm:text-sm text-left">Endereço</th>
+                      <th className="px-4 py-2 border-b border-r border-[#FFCB8F] text-xs sm:text-sm text-left">Setor</th>
+                      <th className="px-4 py-2 border-b border-[#FFCB8F] text-xs sm:text-sm w-[10%]"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -236,16 +236,13 @@ function LocalPage() {
                                     {sector.sector_name}
                                     <button
                                       onClick={() => openEditSectorModal(sector)}
-                                      className="px-4 py-2 bg-[#6B3710] text-[#ffc376] rounded-md ml-2"
+                                      className="ml-2 font-pixel p-2 justify-center items-center btn-3d bg-[#4162a8]"
                                     >
                                       <i className="fa-solid fa-pencil"></i>
                                     </button>
                                     <button
                                       onClick={() => openModalDeleteSector(sector)}
-                                      className="font-pixel p-1 btn-3d text-[#F4BD76] ml-2"
-                                      style={{
-                                        backgroundColor: buttonBgColor,
-                                      }}
+                                      className="ml-2 font-pixel p-2 justify-center items-center btn-3d bg-[#FF1B1C]"
                                     >
                                       <i className="fa-solid fa-trash"></i>
                                     </button>
