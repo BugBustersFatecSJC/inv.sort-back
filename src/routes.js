@@ -13,13 +13,18 @@ const localController = require('./controllers/localController');
 const sectorController = require('./controllers/sectorController'); 
 const batchController = require('./controllers/batchController');
 const auditLogMiddleware = require('./controllers/auditController');
-const sectorchartController = require('./controllers/sectorchartController')
+const sectorchartController = require('./controllers/sectorchartController');
+const cardsController = require('./controllers/cardsController');
+const stockMoveController = require('./controllers/stockMoveController');
+
 
 //Inicio das Rotas
-
+// Rotas de Cards
+router.get('/cards', cardsController.cardsYear);
 // Rotas para login e filtros
 router.get('/check-login', userController.checkFirstLogin);
 router.get('/sectoranual', sectorchartController.sectorYear);
+router.get('/valorantigo',sectorchartController.valorAntigo);
 router.get('/mensal', filterController.filterMonth);
 router.get('/trimestral', filterController.filterTrimester);
 router.get('/check-first-login', userController.checkFirstLogin);
@@ -29,13 +34,15 @@ router.get('/check-first-login', userController.checkFirstLogin);
 router.post('/users', upload.single('user_img'), userController.createUser);
 router.get('/users', userController.getAllUsers);
 router.post('/login', userController.loginUser);
+router.put('/users/:user_id/role', userController.updateUserRole);
+router.delete('/users/:user_id', userController.deleteUser);
 
 //Rotas de Produtos
 router.post('/products', upload.single('product_img'), productController.createProduct, auditLogMiddleware);
 router.get('/products', productController.getAllProducts);
 router.get('/products/low-stock', productController.checkStockLevels);
 router.get('/products/:product_id', productController.getProductsbyId);
-router.put('/products/:product_id',auditLogMiddleware, productController.updateProduct);
+router.put('/products/:product_id', upload.single('product_img'), auditLogMiddleware, productController.updateProduct);
 router.delete('/products/:product_id',auditLogMiddleware, productController.deleteProduct);
 router.get('/products/category/:category_id', productController.getProductsByCategory);
 
@@ -79,6 +86,16 @@ router.delete('/supplier/:supplier_id', supplierController.deleteSupplier);
 
 // Rotas do Fluxo de Estoque "BUYANDSELL"
 router.put('/buyandsell/:batch_id', batchController.sellBatch);
+
+router.get('/buyandsell/:product_id/batches', batchController.getBatchesByProductId);
+
+router.put('/buyandsell/sell/:product_id', batchController.sellBatchByProductId);
+router.post('/buyandsell/buy/:product_id', batchController.buyBatchByProductId);
+
+
+// Rotas de Movimentação de estoque
+router.get('/movementpage', stockMoveController.getAllStockMovements);
+router.post('/filter-stock-movement', stockMoveController.getAllStockMovements);
 
 // fim das rotas
 

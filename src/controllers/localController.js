@@ -12,7 +12,7 @@ const createLocal = async (req, res) => {
         });
 
         if (existingLocal) {
-            return res.status(400).json({ error: "Local com este nome já existe." });
+            return res.status(400).json({ error });
         }
 
         const createLoc = await prisma.local.create({

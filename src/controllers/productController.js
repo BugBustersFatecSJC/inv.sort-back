@@ -64,12 +64,16 @@ const createProduct = async (req, res, next) => {
     const isPerishableBool = Boolean(is_perishable);
     const costNumber = Number(prod_cost_value);
     const sellNumber = Number(prod_sell_value);
+    const productStockInt = Number(product_stock)
+    const productStockMinInt = Number(product_stock_min)
+    const quantityMaxInt = Number(quantity_max)
+
     try {
         const newProduct = await prisma.product.create({
             data: {
-                product_stock,    
-                product_stock_min, 
-                quantity_max, 
+                product_stock: productStockInt,    
+                product_stock_min: productStockMinInt, 
+                quantity_max: quantityMaxInt, 
                 product_name,
                 description,
                 product_img,
@@ -104,6 +108,7 @@ const updateProduct = async (req, res) => {
     try {
         console.log(req.body);
         const id = parseInt(req.params.product_id);
+
         const { 
             product_name, 
             description, 
@@ -111,29 +116,44 @@ const updateProduct = async (req, res) => {
             supplier_id, 
             is_perishable, 
             unit_id, 
-            created_at,
+            prod_brand, 
+            prod_model, 
+            prod_cost_value, 
+            prod_sell_value, 
             product_stock,    
             product_stock_min,
             quantity_max 
         } = req.body;
 
-        const intCategoryId = Number(category_id)
-        const intSupplier = Number(supplier_id)
-        const boolIsPerishable = Boolean(is_perishable)
-        const intUnit = Number(unit_id)
+        const intCategoryId = Number(category_id);
+        const intSupplierId = Number(supplier_id);
+        const boolIsPerishable = Boolean(is_perishable);
+        const intUnitId = Number(unit_id);
+        const costNumber = Number(prod_cost_value);
+        const sellNumber = Number(prod_sell_value);
+        const productStockInt = Number(product_stock);
+        const productStockMinInt = Number(product_stock_min);
+        const quantityMaxInt = Number(quantity_max);
+
+        const productImage = req.file ? `/uploads/${req.file.filename}` : undefined;
+
         const updatedProduct = await prisma.product.update({
             where: { product_id: id },
             data: {
                 product_name,
                 description,
                 category_id: intCategoryId,
-                product_stock,    
-                product_stock_min,
-                quantity_max,
-                supplier_id: intSupplier,
+                supplier_id: intSupplierId,
                 is_perishable: boolIsPerishable,
-                unit_id: intUnit,
-                created_at
+                unit_id: intUnitId,
+                prod_brand,
+                prod_model,
+                prod_cost_value: costNumber,
+                prod_sell_value: sellNumber,
+                product_stock: productStockInt,    
+                product_stock_min: productStockMinInt,
+                quantity_max: quantityMaxInt,
+                ...(productImage && { product_img: productImage })
             },
             select: {
                 product_id: true, 
@@ -142,22 +162,25 @@ const updateProduct = async (req, res) => {
                 product_stock: true,    
                 product_stock_min: true,
                 quantity_max: true,
+                prod_brand: true,
+                prod_model: true,
+                prod_cost_value: true,
+                prod_sell_value: true,
+                product_img: true,
                 category_id: true,
                 supplier_id: true,
                 is_perishable: true,
                 unit_id: true,
-                created_at: true
             }
-        });
+        })
 
-        res.status(200).json(updatedProduct);
-        req.body.product_id = updatedProduct.product_id;
+        res.status(200).json(updatedProduct)
 
     } catch (error) {
-        console.error("Erro ao atualizar produto:", error);
-        res.status(400).json({ error: "Erro ao atualizar produto" });
+        console.error(error)
+        res.status(400).json({ error: "Erro ao atualizar produto" })
     }
-};
+}
 
 const deleteProduct = async (req, res) => {
     try {

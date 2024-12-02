@@ -14,7 +14,7 @@ const createSupplier = async (req, res) => {
         });
         res.status(201).json(createSup);
     } catch (error) {
-        res.status(400).json({error: "Erro ao criar supplier"});
+        res.status(400).json({ error });
     }
 };
 
