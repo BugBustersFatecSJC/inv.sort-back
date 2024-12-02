@@ -170,10 +170,10 @@ function SupplierPage() {
     }
   };
   
-    const handleDeleteCancel = () => {
-      setShowDeleteModal(false);
-      setSupplierToDelete(null);
-    };
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);
+    setSupplierToDelete(null);
+  };
 
   return (
     <MainPage title="Gestão de Fornecedores">

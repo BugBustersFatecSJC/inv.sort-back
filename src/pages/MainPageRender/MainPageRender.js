@@ -209,6 +209,7 @@ function MainPageRender() {
                   onCategoryDeleted={removeCategory}
                   onProductUpdated={updateProduct}
                   categoryImage={category.category_image}
+                  category={category}
                 />
             </motion.div>
             );
