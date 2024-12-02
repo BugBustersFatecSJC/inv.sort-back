@@ -104,7 +104,7 @@ function Category(props) {
             <div onClick={openModal} className='w-full alt-color-6-bg rounded shadow-md cursor-pointer h-[200px] '>
                 <div className='flex flex-col items-center justify-center h-full'>
                     <i className="fa-solid fa-plus text-4xl"></i>
-                    <p className='mt-4'>Adicionar categoria</p>
+                    <p className='mt-4 text-center'>Adicionar categoria</p>
                 </div>
             </div>
 

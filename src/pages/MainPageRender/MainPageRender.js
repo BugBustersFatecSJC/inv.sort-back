@@ -166,7 +166,7 @@ function MainPageRender() {
   
   return (<div className='flex '>
     <MainPage title="Categorias de Produtos">
-    <div className="flex justify-between items-center mb-4">
+    <div className="flex justify-between items-center mb-4 tools-container">
           <SearchBar onSearch={setSearchQuery} />
           <FilterButton onFilterChange={handleFilterChange} />
     </div>
@@ -176,7 +176,7 @@ function MainPageRender() {
 
       ) : (<> 
               
-        <div className="flex justify-between gap-4 grid mt-6 grid-cols-2 md:grid-cols-4 sm:grid-cols-3 ">
+        <div className="flex justify-between gap-4 grid mt-6 grid-cols-4 category-container-grid">
         
         <Category onCategoryAdded={(newCategory) => {
                 addCategory(newCategory)
