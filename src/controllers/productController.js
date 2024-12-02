@@ -1,7 +1,14 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-
+const formatarData = (data) => {
+    data = ((data.toISOString().split('T')[0]))
+    data = data.split('-')
+    data = data[2] + '/' + data[1] + '/' + data[0]
+    return data
+}
 const getAllProducts = async (req, res) => {
+    console.log('bbbbb');
+    
     try {
         const prod = await prisma.product.findMany({
             include: {
@@ -19,8 +26,12 @@ const getAllProducts = async (req, res) => {
 }
 
 const getProductsbyId = async (req, res) => {
+    console.log('aaaa');
+    
     try{
         const id = parseInt(req.params.product_id)
+        console.log('id',id);
+        
         const findProduct = await prisma.product.findUnique({
             where: {
                 product_id: id
@@ -28,9 +39,25 @@ const getProductsbyId = async (req, res) => {
             include: {
                 category: true,
                 supplier: true,
+                batches:true,
                 productUnit: true
             }
         })
+        console.log(findProduct);
+        
+        
+        
+        
+        if (findProduct.is_perishable === true) {
+            findProduct.is_perishable = '1'
+        } else {
+            findProduct.is_perishable = '0'
+        }
+        findProduct.batches.map((batch) => {
+            batch.expiration_date = formatarData(batch.expiration_date)
+        })
+        
+        
         res.status(201).json(findProduct)
     }
     catch (error) {

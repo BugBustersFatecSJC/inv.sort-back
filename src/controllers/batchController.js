@@ -50,7 +50,6 @@ const updateBatch = async (req, res) => {
             data: {
                 product_id,
                 quantity,
-                quantity_max,
                 expiration_date,
                 manufacture_date,
                 batch_value_total

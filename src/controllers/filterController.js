@@ -97,36 +97,36 @@ const filterTrimester = async (req, res) => {
   const result = [];
 
   try {
-    for (let i = 1; i <= 4; i++) {
-      let currentYear = ano;
-      let results = [];
+      for (let i = 1; i <= 4; i++) {
+        let currentYear = ano;
+        let results = [];
 
-      if (product === 'null' && category === 'null') {
-        // No product and no category provided
-        results = [];
-      } else if (product === 'null') {
-        // Only category provided
-        results = await prisma.$queryRaw`
-          SELECT 
-            SUM(quantity) AS vendas
-          FROM db.StockMovement
-          WHERE movement_type = 'venda' AND QUARTER(movement_date) = ${i} AND YEAR(movement_date) = ${currentYear} AND category_id = ${parseInt(category)};
-        `;
-        console.log('oi', results);
-      } else {
-        // Both product and category provided
-        results = await prisma.$queryRaw`
-          SELECT 
-            SUM(quantity) AS vendas
-          FROM StockMovement
-          WHERE movement_type = 'venda' AND QUARTER(movement_date) = ${i} AND YEAR(movement_date) = ${currentYear} AND category_id = ${category} AND product_id = ${product};
-        `;
+        if (product === 'null' && category === 'null') {
+          // No product and no category provided
+          results = [];
+        } else if (product === 'null') {
+          // Only category provided
+          results = await prisma.$queryRaw`
+            SELECT 
+              SUM(quantity) AS vendas
+            FROM db.StockMovement
+            WHERE movement_type = 'venda' AND QUARTER(movement_date) = ${i} AND YEAR(movement_date) = ${currentYear} AND category_id = ${parseInt(category)};
+          `;
+          
+        } else {
+          // Both product and category provided
+          results = await prisma.$queryRaw`
+            SELECT 
+              SUM(quantity) AS vendas
+            FROM StockMovement
+            WHERE movement_type = 'venda' AND QUARTER(movement_date) = ${i} AND YEAR(movement_date) = ${currentYear} AND category_id = ${parseInt(category)} AND product_id = ${parseInt(product)};
+          `;
+          
+        }
+
         
-      }
-
-      
-      const totalDifference = results[0]?.vendas ?? 0;
-      result.push({ name: `${i}° Tri/${currentYear - 2000}`, value: totalDifference });
+        const totalDifference = results[0]?.vendas ?? 0;
+        result.push({ name: `${i}° Tri/${currentYear - 2000}`, value: totalDifference });
     }
 
     return res.status(200).json(result);

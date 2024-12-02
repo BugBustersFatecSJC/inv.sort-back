@@ -5,7 +5,12 @@ const valorAntigo = async (req, res) => {
   const data = new Date();
   const ano = data.getFullYear();
   const result = await prisma.$queryRaw`select min(year(movement_date)) as ano from db.StockMovement where movement_type = 'venda' group by year(movement_date) limit 1;`;
+  if (result.length === 0) {
+    return res.status(404).json({ message: 'Nenhum registro encontrado' });
+  }
+  
   const anos =[]
+  
   for (let i = result[0].ano; i <= ano; i++) {
     anos.push(i.toString());
   }
@@ -15,10 +20,6 @@ const valorAntigo = async (req, res) => {
   return res.status(404).json({ message: 'Nenhum registro encontrado' });
 
 }
-aaa =`'SELECT 
-c.category_name,p.product_name, (sum(quantity)*p.prod_sell_value) as faturamento
-FROM db.StockMovement as sm join db.Product as p inner join Category as c
-WHERE movement_type = 'venda' and p.product_id = sm.product_id and sm.category_id=c.category_id AND MONTH(sm.movement_date) = 10 AND YEAR(movement_date) = 2024  group by p.product_name order by faturamento`
 const sectorYear = async (req, res) => {
     prisma.$connect()
 
@@ -27,7 +28,7 @@ const sectorYear = async (req, res) => {
   let mes = data.getMonth() + 1;
   let ano = req.query.ano|| data.getFullYear();
   const result = [];
-  const total = await prisma.$queryRaw`SELECT  SUM(quantity) AS total_difference FROM StockMovement WHERE movement_type = 'venda' AND YEAR(movement_date) = ${ano} and quantity is not null and category_id is not null ;`; 
+  const total = await prisma.$queryRaw`SELECT  SUM(quantity) AS total_difference FROM StockMovement as sm inner join Category as c on sm.category_id=c.category_id WHERE movement_type = 'venda' AND YEAR(movement_date) = ${ano} and quantity is not null and c.category_id is not null ;`; 
 
 
     console.log("total", total);
@@ -35,7 +36,7 @@ const sectorYear = async (req, res) => {
       SELECT 
         c.category_name,SUM(quantity) as total_difference
       FROM StockMovement as sm inner join Category as c on sm.category_id = c.category_id
-      WHERE sm.movement_type = 'venda' AND  YEAR(sm.movement_date) = ${ano} and c.category_name is not null  group by c.category_name ;
+      WHERE sm.movement_type = 'venda' AND  YEAR(sm.movement_date) = ${ano} and c.category_name is not null and c.category_id is not null  group by c.category_name ;
     `;
     console.log(results,'results');
     let top5 = results.sort((a, b) => b.total_difference - a.total_difference).slice(0, 5); 

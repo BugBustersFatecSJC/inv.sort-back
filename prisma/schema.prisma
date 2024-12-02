@@ -1,192 +1,191 @@
-generator client {
-  provider = "prisma-client-js"
-}
+  generator client {
+    provider = "prisma-client-js"
+  }
 
-datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
-}
+  datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+  }
 
-model User {
-  user_id        Int             @id @default(autoincrement())
-  username       String          @unique
-  email          String          @unique
-  password       String
-  role           Role
-  created_at     DateTime        @default(now())
-  status         Status          @default(ativo)
-  user_img       String? // pode ser null
-  stockMovements StockMovement[]
-  auditLogs      AuditLog[]
-}
+  model User {
+    user_id        Int             @id @default(autoincrement())
+    username       String          @unique
+    email          String          @unique
+    password       String
+    role           Role
+    created_at     DateTime        @default(now())
+    status         Status          @default(ativo)
+    user_img       String? // pode ser null
+    stockMovements StockMovement[]
+    auditLogs      AuditLog[]
+  }
 
-model Category {
-  category_id    Int             @id @default(autoincrement())
-  category_name  String          @unique
-  category_image String? // pode ser null
-  created_at     DateTime        @default(now())
-  products       Product[]
-  auditLogs      AuditLog[]
-  StockMovement  StockMovement[]
-}
+  model Category {
+    category_id    Int             @id @default(autoincrement())
+    category_name  String          @unique
+    category_image String? // pode ser null
+    created_at     DateTime        @default(now())
+    products       Product[]
+    auditLogs      AuditLog[]
+    StockMovement  StockMovement[]
+  }
 
-model Supplier {
-  supplier_id   Int        @id @default(autoincrement())
-  supplier_name String     @unique
-  contact_info  String?
-  supplier_img  String? 
-  address       String?
-  created_at    DateTime   @default(now())
-  products      Product[]
-  auditLogs     AuditLog[]
-}
+  model Supplier {
+    supplier_id   Int        @id @default(autoincrement())
+    supplier_name String     @unique
+    contact_info  String?
+    supplier_img  String? 
+    address       String?
+    created_at    DateTime   @default(now())
+    products      Product[]
+    auditLogs     AuditLog[]
+  }
 
-model ProductUnit {
-  unit_id   Int       @id @default(autoincrement())
-  unit_type UnitType
-  products  Product[]
-}
+  model ProductUnit {
+    unit_id   Int       @id @default(autoincrement())
+    unit_type UnitType
+    products  Product[]
+  }
 
-model Product {
-  product_id          Int             @id @default(autoincrement())
-  product_name        String
-  description         String?
-  product_img         String? 
-  product_stock       Int  // Add
-  product_stock_min   Int  // Add
-  quantity_max        Int
-  category_id         Int
-  prod_brand          String?
-  prod_model          String?
-  supplier_id         Int
-  unit_id             Int
-  is_perishable       Boolean         @default(false)
-  created_at          DateTime        @default(now())
-  prod_cost_value     Float?
-  prod_sell_value     Float?
-  category            Category        @relation(fields: [category_id], references: [category_id])
-  supplier            Supplier        @relation(fields: [supplier_id], references: [supplier_id])
-  productUnit         ProductUnit     @relation(fields: [unit_id], references: [unit_id])
-  batches             Batch[]
-  auditLogs           AuditLog[]
-  StockMovement       StockMovement[]
+  model Product {
+    product_id          Int             @id @default(autoincrement())
+    product_name        String
+    description         String?
+    product_img         String? 
+    product_stock       Int  // Add
+    product_stock_min   Int  // Add
+    quantity_max        Int
+    category_id         Int
+    supplier_id         Int
+    sector_id           Int
+    unit_id             Int
+    is_perishable       Boolean         @default(false)
+    created_at          DateTime        @default(now())
+    prod_cost_value     Float?
+    prod_sell_value     Float?
+    category            Category        @relation(fields: [category_id], references: [category_id])
+    supplier            Supplier        @relation(fields: [supplier_id], references: [supplier_id])
+    productUnit         ProductUnit     @relation(fields: [unit_id], references: [unit_id])
+    batches             Batch[]
+    auditLogs           AuditLog[]
+    StockMovement       StockMovement[]
 
-  @@index([product_name], name: "idx_product_name")
-  @@index([category_id], name: "idx_products_category")
-  @@index([supplier_id], name: "idx_products_supplier")
-  @@index([unit_id], name: "idx_products_unit")
-}
+    @@index([product_name], name: "idx_product_name")
+    @@index([category_id], name: "idx_products_category")
+    @@index([supplier_id], name: "idx_products_supplier")
+    @@index([unit_id], name: "idx_products_unit")
+  }
 
-model Local {
-  local_id      Int        @id @default(autoincrement())
-  local_name    String?    @unique
-  local_address String?
-  created_at    DateTime   @default(now())
-  auditLogs     AuditLog[]
-  Sector        Sector[]
-}
+  model Local {
+    local_id      Int        @id @default(autoincrement())
+    local_name    String?    @unique
+    local_address String?
+    created_at    DateTime   @default(now())
+    auditLogs     AuditLog[]
+    Sector        Sector[]
+  }
 
-model Sector {
-  sector_id   Int        @id @default(autoincrement())
-  local_id    Int
-  sector_name String     @unique
-  created_at  DateTime   @default(now())
-  auditLogs   AuditLog[]
-  Local       Local      @relation(fields: [local_id], references: [local_id])
-}
+  model Sector {
+    sector_id   Int        @id @default(autoincrement())
+    local_id    Int
+    sector_name String     @unique
+    created_at  DateTime   @default(now())
+    auditLogs   AuditLog[]
+    Local       Local      @relation(fields: [local_id], references: [local_id])
+  }
 
-model Batch {
-  batch_id          Int             @id @default(autoincrement())
-  product_id        Int
-  quantity          Int 
-  quantity_max      Int // Add
-  expiration_date   DateTime?
-  manufacture_date  DateTime?
-  batch_value_total Float?
-  created_at        DateTime        @default(now())
-  product           Product         @relation(fields: [product_id], references: [product_id])
-  stockMovements    StockMovement[]
-  auditLogs         AuditLog[]
-}
+  model Batch {
+    batch_id          Int             @id @default(autoincrement())
+    product_id        Int
+    quantity          Int 
+    expiration_date   DateTime 
+    manufacture_date  DateTime
+    batch_value_total Float?
+    local_id          Int
+    created_at        DateTime        @default(now())
+    product           Product         @relation(fields: [product_id], references: [product_id])
+    stockMovements    StockMovement[]
+    auditLogs         AuditLog[]
+  }
 
-model StockMovement {
-  movement_id   Int          @id @default(autoincrement())
-  batch_id      Int
-  quantity      Int
-  quantity_max    Int? // Add
-  product_stock      Int? // Add
-  product_stock_min  Int? // Add
-  movement_type MovementType
-  movement_date DateTime     @default(now())
-  user_id       Int
-  category_id   Int?
-  product_id    Int?
-  category      Category?    @relation(fields: [category_id], references: [category_id])
-  product       Product?     @relation(fields: [product_id], references: [product_id])
-  batch         Batch        @relation(fields: [batch_id], references: [batch_id])
-  user          User         @relation(fields: [user_id], references: [user_id])
+  model StockMovement {
+    movement_id   Int          @id @default(autoincrement())
+    batch_id      Int
+    quantity      Int
+    
+    product_stock      Int? // Add
+    product_stock_min  Int? // Add
+    movement_type MovementType // 'venda' ou 'compra'
+    movement_date DateTime     @default(now())
+    user_id       Int
+    category_id   Int?
+    product_id    Int?
+    category      Category?    @relation(fields: [category_id], references: [category_id])
+    product       Product?     @relation(fields: [product_id], references: [product_id])
+    batch         Batch        @relation(fields: [batch_id], references: [batch_id])
+    user          User         @relation(fields: [user_id], references: [user_id])
 
-  @@index([batch_id], name: "idx_stock_movements_batch")
-  @@index([user_id], name: "idx_stock_movements_user")
-  @@index([movement_type], name: "idx_stock_movements_type")
-}
+    @@index([batch_id], name: "idx_stock_movements_batch")
+    @@index([user_id], name: "idx_stock_movements_user")
+    @@index([movement_type], name: "idx_stock_movements_type")
+  }
 
-model AuditLog {
-  log_id            Int       @id @default(autoincrement())
-  user_id           Int
-  local_id          Int?
-  sector_id         Int?
-  supplier_id       Int?
-  supplier_name     String?
-  batch_id          Int?
-  category_id       Int?
-  category_name     String?
-  product_id        Int?
-  product_name      String?
-  action            Action
-  table_name        String
-  primary_key_value String
-  old_value         String?
-  new_value         String?
-  product_stock     Int? // Add
-  product_stock_min Int? // Add
-  quantity_max      Int? // Add
-  action_date       DateTime  @default(now())
-  user              User      @relation(fields: [user_id], references: [user_id])
-  batch             Batch?    @relation(fields: [batch_id], references: [batch_id])
-  local             Local?    @relation(fields: [local_id], references: [local_id])
-  sector            Sector?   @relation(fields: [sector_id], references: [sector_id])
-  product           Product?  @relation(fields: [product_id], references: [product_id])
-  supplier          Supplier? @relation(fields: [supplier_id], references: [supplier_id])
-  category          Category? @relation(fields: [category_id], references: [category_id])
-}
+  model AuditLog {
+    log_id            Int       @id @default(autoincrement())
+    user_id           Int
+    local_id          Int?
+    sector_id         Int?
+    supplier_id       Int?
+    supplier_name     String?
+    batch_id          Int?
+    category_id       Int?
+    category_name     String?
+    product_id        Int?
+    product_name      String?
+    action            Action
+    table_name        String
+    primary_key_value String
+    old_value         String?
+    new_value         String?
+    product_stock     Int? // Add
+    product_stock_min Int? // Add
+    quantity_max      Int? // Add
+    action_date       DateTime  @default(now())
+    user              User      @relation(fields: [user_id], references: [user_id])
+    batch             Batch?    @relation(fields: [batch_id], references: [batch_id])
+    local             Local?    @relation(fields: [local_id], references: [local_id])
+    sector            Sector?   @relation(fields: [sector_id], references: [sector_id])
+    product           Product?  @relation(fields: [product_id], references: [product_id])
+    supplier          Supplier? @relation(fields: [supplier_id], references: [supplier_id])
+    category          Category? @relation(fields: [category_id], references: [category_id])
+  }
 
-// Enums
+  // Enums
 
-enum Role {
-  admin
-  gerente
-  funcionario
-}
+  enum Role {
+    admin
+    gerente
+    funcionario
+  }
 
-enum Status {
-  ativo
-  inativo
-}
+  enum Status {
+    ativo
+    inativo
+  }
 
-enum UnitType {
-  un
-  kg
-  lt
-}
+  enum UnitType {
+    un
+    kg
+    lt
+  }
 
-enum MovementType {
-  compra
-  venda
-}
+  enum MovementType {
+    compra
+    venda
+  }
 
-enum Action {
-  INSERT
-  UPDATE
-  DELETE
-}
+  enum Action {
+    INSERT
+    UPDATE
+    DELETE
+  }

@@ -68,9 +68,21 @@ const deleteLocal = async (req, res) => {
     }
 };
 
+const getLocalByProdId = async (req, res) => {
+    try {
+        const id = parseInt(req.params.prod_id);
+        const getLoc = await prisma.local.findUnique({
+            where: { local_id: id },
+        });
+        res.json(getLoc);
+    } catch (error) {
+        res.status(500).json({ error: "Erro ao buscar local." });
+    }
+}
 module.exports = {
     createLocal,
     getAllLocals,
     updateLocal,
-    deleteLocal
+    deleteLocal,
+    getLocalByProdId
 }
