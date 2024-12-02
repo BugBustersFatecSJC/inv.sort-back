@@ -298,6 +298,43 @@ const sellBatchByProductId = async (req, res) => {
 
 
 
+const checkExpiringBatches = async (req, res) => {
+    try {
+        const currentDate = new Date();
+        const oneWeekFromNow = new Date();
+        oneWeekFromNow.setDate(currentDate.getDate() + 7);
+
+        const expiringBatches = await prisma.batch.findMany({
+            where: {
+                expiration_date: {
+                    lte: oneWeekFromNow,
+                    gte: currentDate
+                }
+            },
+            include: {
+                product: true,
+            }
+        });
+
+        if (expiringBatches.length > 0) {
+            expiringBatches.forEach(batch => {
+                console.log(`Notificação: O lote ${batch.batch_id} do produto ${batch.product.product_name} está próximo da data de validade!`);
+            });
+
+            res.status(200).json({
+                message: "Lotes próximos da validade:",
+                lotes: expiringBatches
+            });
+        } else {
+            res.status(200).json({
+                message: "Nenhum lote próximo da validade foi encontrado."
+            });
+        }
+    } catch (error) {
+        console.error("Erro ao verificar lotes próximos da validade:", error);
+        res.status(500).json({ error: "Erro ao verificar lotes próximos da validade." });
+    }
+};
 
 module.exports = {
     createBatch,
@@ -305,6 +342,7 @@ module.exports = {
     updateBatch,
     deleteBatch,
     sellBatch,
+    checkExpiringBatches,
     getBatchesByProductId,
     sellBatchByProductId,
     buyBatchByProductId
