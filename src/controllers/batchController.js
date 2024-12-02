@@ -150,84 +150,40 @@ const sellBatch = async (req, res) => { //Controler usado para compra e venda
 };
 
 const buyBatchByProductId = async (req, res) => {
+    console.log(req.body);
+    
     const productId = parseInt(req.params.product_id); // ID do produto
     const quantityToBuy = parseInt(req.body.quantity); // Quantidade a comprar
     const validadeLote = req.body.validade ? new Date(req.body.validade) : null; // Converte validade para Date se houver
+    const stock = await prisma.product.findUnique({
+        where: { product_id: productId },
+        select: { product_stock: true }
+    });
+    const newStock = stock.product_stock + quantityToBuy;
+    let alertaEstoque = false; // Variável de alerta de estoque baixo
+    if (newStock < 0) {
+        return res.status(400).json({ error: "Quantidade não pode ser negativa." });
+    }
 
-    try {
-        // Verifica se productId é um número válido
-        if (isNaN(productId)) {
-            return res.status(400).json({ error: "ID do produto inválido." });
-        }
+    try{
+        const product = await prisma.product.update({
+           where: { product_id: productId },
+              data: { product_stock: { increment: quantityToBuy } }
 
-        // Busca o produto pelo ID
-        const product = await prisma.product.findUnique({
-            where: { product_id: productId },
-            select: { 
-                is_perishable: true, 
-                quantity_max:true,
-            } // Seleciona apenas a propriedade de perecibilidade
         });
-
-        // Verifica se o produto existe
-        if (!product) {
-            return res.status(404).json({ error: "Produto não encontrado." });
-        }
-
-        const quantityMaxPerBatch = product.quantity_max
-
-        let remainingQuantity = quantityToBuy;
-
-        // Lógica para preencher lotes existentes ou criar novos
-        let batch = await prisma.batch.findFirst({
-            where: {
+        const result = await prisma.stockMovement.create({
+            data: {
                 product_id: productId,
-                quantity: { lt: quantityMaxPerBatch },
-                ...(product.is_perishable && validadeLote ? { expiration_date: validadeLote } : {}) // Condição para produtos perecíveis
-            },
-            orderBy: { created_at: 'asc' }
+                quantity: quantityToBuy,
+                movement_type: 'Venda',
+            }
         });
 
-        // Processamento para adicionar ou criar lotes até que a quantidade seja esgotada
-        while (remainingQuantity > 0) {
-            const quantityForBatch = Math.min(remainingQuantity, quantityMaxPerBatch - (batch ? batch.quantity : 0));
+    }
 
-            if (batch) {
-                // Atualiza o lote existente com a quantidade necessária
-                await prisma.batch.update({
-                    where: { batch_id: batch.batch_id },
-                    data: { quantity: { increment: quantityForBatch } }
-                });
-            } else {
-                // Cria um novo lote se não há lotes disponíveis ou se condições exigem um novo lote
-                batch = await prisma.batch.create({
-                    data: {
-                        product_id: productId,
-                        quantity: quantityForBatch,
-                        expiration_date: product.is_perishable ? validadeLote : null, // Apenas produtos perecíveis têm validade
-                        manufacture_date: new Date()
-                    }
-                });
-            }
-
-            remainingQuantity -= quantityForBatch;
-
-            if (remainingQuantity > 0) {
-                batch = await prisma.batch.findFirst({
-                    where: {
-                        product_id: productId,
-                        quantity: { lt: quantityMaxPerBatch },
-                        ...(product.is_perishable && validadeLote ? { expiration_date: validadeLote } : {})
-                    },
-                    orderBy: { created_at: 'asc' }
-                });
-            }
-        }
-
-        return res.status(201).json({ message: "Lotes criados e atualizados com sucesso." });
-    } catch (error) {
+    catch (error) {
         console.error(error);
-        return res.status(500).json({ error: "Erro ao criar ou atualizar os lotes." });
+        return res.status(500).json({ error: "Erro ao adicionar a quantidade ao produto." });
     }
 };
 
@@ -237,67 +193,46 @@ const sellBatchByProductId = async (req, res) => { //Principal Rota de Venda
     const productId = parseInt(req.params.product_id); // ID do produto
     const quantityToSubtract = parseInt(Math.abs(req.body.quantity)); // Quantidade a ser subtraída
     let alertaEstoque = false; // Variável de alerta de estoque baixo
-
-    try {
-        // Encontrar o lote mais antigo para o produto especificado
-        const batch = await prisma.batch.findFirst({
-            where: { product_id: productId },
-            include: {
-                product: { // Inclui as informações do produto
-                    select: {
-                        product_stock_min: true, // Seleciona o estoque mínimo
-                    }
-                }
-            },
-            orderBy: [
-                { expiration_date: 'asc' }, // Ordena pela data de expiração
-                { created_at: 'asc' }       // Em caso de empate, ordena pela data de criação
-            ]
-        });
-        
-        // Verificar se o lote existe
-        if (!batch) {
-            return res.status(404).json({ error: "Nenhum lote encontrado para este produto." });
-        }
-
-        // Verificar se o produto está definido
-        if (!batch.product) {
-            return res.status(404).json({ error: "Produto associado ao lote não encontrado." });
-        }
-
-        const newQuantity = batch.quantity - quantityToSubtract;
-
-        // Verificar se a nova quantidade é negativa
-        if (newQuantity < 0) {
-            return res.status(400).json({ error: "Quantidade não pode ser negativa." });
-        }
-
-        // Novo passo: Apagar o lote se a quantidade for zero
-        if (newQuantity == 0) {
-            await prisma.batch.delete({
-                where: { batch_id: batch.batch_id }
-            });
-            return res.status(200).json({ message: "Lote esvaziado e removido com sucesso." });
-        }
-
-        // Verificar o estoque mínimo do produto
-        if (batch.product.product_stock_min !== null && newQuantity < batch.product.product_stock_min) {
-            alertaEstoque = true; // Aciona o alerta de estoque
-        }
-
-        // Atualizar o lote no banco de dados com a nova quantidade
-        const updatedBatch = await prisma.batch.update({
-            where: { batch_id: batch.batch_id }, // Usar o batch_id do lote encontrado
-            data: { quantity: newQuantity },
-        });
-        
-        // Enviar a resposta com o lote atualizado e o alerta de estoque
-        return res.status(200).json({ updatedBatch, alertaEstoque });
-
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: "Erro ao subtrair a quantidade do lote." });
+    const stock = await prisma.product.findUnique({
+        where: { product_id: productId },
+        select: { product_stock: true }
+    });
+    const newStock = stock.product_stock - quantityToSubtract;
+    if (newStock < 0) {
+        return res.status(400).json({ error: "Quantidade não pode ser negativa." });
     }
+    
+    try {
+        try{
+            const product = await prisma.product.update({
+               where: { product_id: productId },
+                  data: { product_stock: { decrement: quantityToSubtract } }
+    
+            });
+            const result = await prisma.stockMovement.create({
+                data: {
+                    product_id: productId,
+                    quantity: quantityToSubtract,
+                    movement_type: 'Venda',
+                }
+            });
+    
+        }
+    
+        catch (error) {
+            console.error(error);
+            return res.status(500).json({ error: "Erro ao adicionar a quantidade ao produto." });
+        }
+
+    }
+
+   
+    
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Erro ao adicionar a quantidade ao produto." });
+    }
+
 };
 
 
