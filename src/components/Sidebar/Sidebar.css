@@ -11,6 +11,16 @@
   padding: 0;
   text-decoration: none;
 }
+
+.MenuItem a span {
+  margin: 0;
+  text-align: left;
+}
+
+.ps-submenu-root a span {
+  text-align: left;
+}
+
 .css-ewdv3l{
   background-color: #6b3710;
   margin-bottom: 0;

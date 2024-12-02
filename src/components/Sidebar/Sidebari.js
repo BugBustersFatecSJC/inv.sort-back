@@ -155,7 +155,7 @@ function Sidebari({ content }) {
                     >
                       {collapsed ? 'Usuários' : 'Gerenciar Usuários'}
                     </MenuItem>
-                    <MenuItem
+                    {/* <MenuItem
                       icon={<img id="person" src="/images/config.png" />}
                       className="poppins-semibold"
                       component={<Link to="/settings" />}
@@ -174,7 +174,7 @@ function Sidebari({ content }) {
                       }}
                     >
                       {collapsed ? 'Config' : 'Configurações'}
-                    </MenuItem>
+                    </MenuItem> */}
                     <MenuItem
                         icon={<img id="person" src="/images/supplier.png" />}
                         className="poppins-semibold"
@@ -246,7 +246,7 @@ function Sidebari({ content }) {
                   <MenuItem
                     className="MenuItem  w-full poppins-semibold"
                     title="Categorias"
-                    icon={<img id="carrinho" alt="Categorias" src="/images/grocery-store.png" />}
+                    icon={<i class="fa-solid fa-cart-shopping"></i>}
 
                     component={<Link to="/products" />}
                   >
@@ -258,7 +258,7 @@ function Sidebari({ content }) {
                     icon={<i class="fa-solid fa-chart-pie"></i>}
                     component={<Link to="/analytics" />}
                   >
-                    {collapsed? 'Analise' : ''}
+                    {collapsed? 'Análise' : ''}
                   </MenuItem>
                   <MenuItem
                     className="MenuItem poppins-semibold text-left"
@@ -268,7 +268,7 @@ function Sidebari({ content }) {
                   >
                     {collapsed ? 'Movimentações' : ''}
                   </MenuItem>
-                  <MenuItem
+                  {/* <MenuItem
                     className="MenuItem poppins-semibold text-left"
                     title=""
                     icon={<i class="fa-solid fa-truck-fast"></i>}
@@ -283,7 +283,7 @@ function Sidebari({ content }) {
                     component={<Link to="/sectors" />}
                   >
                     {windowWidth > 640 ? 'Setores e locais' : ''}
-                  </MenuItem>
+                  </MenuItem> */}
                   
                   {(role === 'admin' || role === 'gerente') && (
                     <SubMenu
@@ -295,7 +295,7 @@ function Sidebari({ content }) {
                       }}
                     >
                       <MenuItem
-                        icon={<img id="person" src="/images/userpage.png" />}
+                        icon={<i class="fa-solid fa-users"></i>}
                         className="poppins-semibold"
                         component={<Link to="/userpage" />}
                         onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3E1900'}
@@ -314,27 +314,7 @@ function Sidebari({ content }) {
                         {collapsed ? 'Gerenciar Usuários' : "Gerenciar usuários"}
                       </MenuItem>
                       <MenuItem
-                        icon={<img id="person" src="/images/config.png" />}
-                        className="poppins-semibold"
-                        component={<Link to="/settings" />}
-                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3E1900'}
-                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#6b3710'}
-                        style={{
-                          width:'100%',
-                          backgroundColor: '#6b3710',
-                          color: 'rgb(255,195,118)',
-                          margin: '0',
-                          border: 'none',
-                          padding: '10px',
-                          transition: 'background-color 0.3s ease',
-                          width: collapsed ? '200px' : '40px', 
-                          height: '40px',
-                        }}
-                      >
-                        {collapsed ? 'Configurações' : 'Configura...'}
-                      </MenuItem>
-                      <MenuItem
-                        icon={<img id="person" src="/images/supplier.png" />}
+                        icon={<i class="fa-solid fa-truck"></i>}
                       
                         className="poppins-semibold"
                         component={<Link to="/suppliers" />}
@@ -356,7 +336,7 @@ function Sidebari({ content }) {
                         {collapsed ? 'Fornecedores' : 'Fornecedo...'}
                       </MenuItem>
                       <MenuItem
-                        icon={<img id="person" src="/images/sector.png" />}
+                        icon={<i class="fa-solid fa-box-open"></i>}
                         className="poppins-semibold"
                         component={<Link to="/sectors" />}
                         onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3E1900'}
