@@ -64,12 +64,15 @@ const createProduct = async (req, res, next) => {
     const isPerishableBool = Boolean(is_perishable);
     const costNumber = Number(prod_cost_value);
     const sellNumber = Number(prod_sell_value);
+    const stockInt = Number(product_stock);
+    const stockMinInt = Number(product_stock_min);
+    const stockMaxInt = Number(quantity_max);
     try {
         const newProduct = await prisma.product.create({
             data: {
-                product_stock,    
-                product_stock_min, 
-                quantity_max, 
+                product_stock: stockInt,    
+                product_stock_min: stockMinInt, 
+                quantity_max: stockMaxInt, 
                 product_name,
                 description,
                 product_img,
