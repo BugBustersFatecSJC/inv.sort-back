@@ -45,7 +45,6 @@ function ModalProducts(props) {
       try {
         const result = await api.put(`/products/${productInfo.product_id}`, editProd)
         console.log(result)
-
       }
       catch (error) {
         console.log(error)
@@ -60,7 +59,42 @@ function ModalProducts(props) {
     const sellModal = () => {
       setIsModal(3)
     }
-    
+    const [quantity, setQuantity] = useState(0);
+    const [validade, setExpiration] = useState("");
+    const [buyorsell, setBuyorSell] = useState("");
+    function palmeirasFlamengo(){
+      buyModal()
+      setBuyorSell("buy")
+    };
+    function flamengoPalmeiras(){
+      sellModal()
+      setBuyorSell("sell")
+    }
+    const prodId2= productInfo.product_id //id produto
+    const vendaOuCompra={quantity,validade}
+
+    const handleSubmit1=async(e)=>{
+      e.preventDefault()
+      console.log("OLA")
+      try {
+        const response = await api.post(`/buyandsell/${buyorsell}/${prodId2}`,vendaOuCompra)
+      console.log(response)}catch(err){console.log(err)}
+      console.log("info:",buyorsell,prodId2,vendaOuCompra)
+      console.log("Oi")
+      // window.location.reload()
+    }
+
+    const handleSubmit2=async(e)=>{
+      e.preventDefault()
+      console.log("OLA")
+      try {
+        const response = await api.post(`/buyandsell/${buyorsell}/${prodId2}`,vendaOuCompra)
+      console.log(response)}catch(err){console.log(err)}
+      console.log("info:",buyorsell,prodId2,vendaOuCompra)
+      console.log("Oi")
+      // window.location.reload()
+    }
+
     if (modal == 1){
       return (
     
@@ -133,13 +167,8 @@ function ModalProducts(props) {
           <p className='mt-2'> É perecível :</p>
           <p className={inputmodal}>{productInfo.product_perishable ? 'Sim' : 'Não'}</p>
           <div className='my-4 flex justify-center '>
-          <a onClick={buyModal} className="bg-[#30551A] cursor-pointer mx-1 px-3 py-2 text-white rounded-md" >Comprar</a>
-          <a onClick={sellModal} className="bg-[#8B2121]  cursor-pointer mx-1 px-3 py-2 text-white rounded-md"
-           
-           
-          >
-            Vender
-          </a>
+          <a onClick={palmeirasFlamengo} className="bg-[#30551A] cursor-pointer mx-1 px-3 py-2 text-white rounded-md" >Comprar</a>
+          <a onClick={flamengoPalmeiras} className="bg-[#8B2121]  cursor-pointer mx-1 px-3 py-2 text-white rounded-md">Vender</a>
           </div>
       </div>
       </div>
@@ -148,35 +177,35 @@ function ModalProducts(props) {
     </div>
       )
     }
-    else if (modal == 0){
-      return (
+    // else if (modal == 0){
+    //   return (
     
-        <div className='flex w-full flex-wrap   ' >
+    //     <div className='flex w-full flex-wrap   ' >
          
-        <div className='flex mx-auto   w-32 h-32 sm:w-38 sm:h-38'>
-          <img src={productInfo.product_img || '../../images/default.png'} alt={'image do produto:' + productInfo.product_name} className={`   ${productInfo.product_img===null?'rounded-full':' rounded-full border-[0.25rem] border-[#D87B26]'} text-start  bg-[#3E1900]   m-auto object-fill `} />
+    //     <div className='flex mx-auto   w-32 h-32 sm:w-38 sm:h-38'>
+    //       <img src={productInfo.product_img || '../../images/default.png'} alt={'image do produto:' + productInfo.product_name} className={`   ${productInfo.product_img===null?'rounded-full':' rounded-full border-[0.25rem] border-[#D87B26]'} text-start  bg-[#3E1900]   m-auto object-fill `} />
           
-        </div>
-        <form  className='w-full mt-10 sm:mt-0  '>
+    //     </div>
+        
           
          
           
           
-          <div>
-          <p> Nome : </p>
-          <input id='prod_nome' className={inputmodaledit } placeholder={'Un.'}/>
-          <p> Estoque : </p>
-          <input id='edit_stock' className={inputmodaledit } placeholder={'Un.'}/>
+    //       <div>
+    //       <p> Nome : </p>
+    //       <input id='prod_nome' className={inputmodaledit } placeholder={'Un.'}/>
+    //       <p> Estoque : </p>
+    //       <input id='edit_stock' className={inputmodaledit } placeholder={'Un.'}/>
 
-          <p> Estoque Mínimo : </p>
-          <input id='edit_stock_min' className={inputmodaledit} placeholder={'Un.'}/>
-          <p> Valor de custo : </p>
-          <input id='edit_cost_value' className={inputmodaledit} placeholder={'R$'}/>
-          <p> Valor de venda : </p>
-          <input id='edit_sell_value' className={inputmodaledit} placeholder={'R$'}/>
-          <p> Quantidade máxima por lote : </p>
-          <input id='edit_sell_value' className={inputmodaledit} placeholder={'R$'}/>
-          </div>
+    //       <p> Estoque Mínimo : </p>
+    //       <input id='edit_stock_min' className={inputmodaledit} placeholder={'Un.'}/>
+    //       <p> Valor de custo : </p>
+    //       <input id='edit_cost_value' className={inputmodaledit} placeholder={'R$'}/>
+    //       <p> Valor de venda : </p>
+    //       <input id='edit_sell_value' className={inputmodaledit} placeholder={'R$'}/>
+    //       <p> Quantidade máxima por lote : </p>
+    //       <input id='edit_sell_value' className={inputmodaledit} placeholder={'R$'}/>
+    //       </div>
           
          
     
@@ -184,76 +213,80 @@ function ModalProducts(props) {
           
           
           
-          <div className="form-control my-1">
-          <label className={inputmodaledit + "cursor-pointer label"}>
-            <span className=" text-[#6B3710] ">É perecível</span>
-            <input
-              id='edit_perishable'
-              type="checkbox"
-              className="toggle toggle-primary"
+    //       <div className="form-control my-1">
+    //       <label className={inputmodaledit + "cursor-pointer label"}>
+    //         <span className=" text-[#6B3710] ">É perecível</span>
+    //         <input
+    //           id='edit_perishable'
+    //           type="checkbox"
+    //           className="toggle toggle-primary"
             
       
-            />
-          </label>
-        </div>
+    //         />
+    //       </label>
+    //     </div>
 
-        <div className="form-control mb-4">
-          <label className="label">
-            <span className="label-text  text-[#6B3710]">Data de Validade</span>
-          </label>
-          <input
-            id='edit_expiration_date'
-            type="date"
-            className={inputmodaledit + "cursor-pointer label"}
-            name="expiration_date"
+    //     <div className="form-control mb-4">
+    //       <label className="label">
+    //         <span className="label-text  text-[#6B3710]">Data de Validade</span>
+    //       </label>
+    //       <input
+    //         id='edit_expiration_date'
+    //         type="date"
+    //         className={inputmodaledit + "cursor-pointer label"}
+    //         name="expiration_date"
             
-          />
-        </div>
+    //       />
+    //     </div>
 
-            <div className='my-4 flex justify-center '>
+    //         <div className='my-4 flex justify-center '>
             
-                <div className="modal-action pb-2 ">
-                  <label htmlFor={props.modalName} className="px-5 py-1 quinteral-color-bg rounded poppins align-middle my-auto shadow-md hvr-grow alt-color-5-bg tertiary-color cursor-pointer" onClick={props.closeModal}>Cancelar</label>
-                  <button type="submit" className="px-5 py-1 quarternary-color-bg rounded  poppins align-middle my-auto shadow-md hvr-grow alt-color-5">Salvar</button>
-                </div>
-            </div>
+    //             <div className="modal-action pb-2 ">
+    //               <label htmlFor={props.modalName} className="px-5 py-1 quinteral-color-bg rounded poppins align-middle my-auto shadow-md hvr-grow alt-color-5-bg tertiary-color cursor-pointer" onClick={props.closeModal}>Cancelar</label>
+    //               <button type="submit" className="px-5 py-1 quarternary-color-bg rounded  poppins align-middle my-auto shadow-md hvr-grow alt-color-5">Salvar</button>
+    //             </div>
+    //         </div>
           
-      </form>
+      
     
         
-    </div>
-      )
-    }
+    // </div>
+    //   )
+    // }
     else if (modal == 2 ){
       return (
-    
+      <div>
         <div className='flex w-full flex-wrap  flex-col' >
           <h1>Registro de Compra</h1>
           <p> Quantidade : </p>
-          <input id='qtdbuy' className={inputmodaledit } placeholder={'Un.'}/>
-              {productInfo.is_perishable ?<><p> Quantidade : </p><input id='expiração' className={inputmodaledit } type='date' /></> : <></>}
+          <input id='qtdbuy' className={inputmodaledit } placeholder={'Un.'} onChange={(e) => {setQuantity(e.target.value)}}/>
+              {productInfo.is_perishable ?<><p> Validade : </p><input id='expiração' className={inputmodaledit } type='date' onChange={(e) => {setExpiration(e.target.value)}} /></> : <></>}
               <div className="modal-action pb-2 ml-auto text-end align-end text-end justify-end">
                 <label htmlFor={props.modalName} className="px-5 py-1 quinteral-color-bg rounded poppins align-middle my-auto shadow-md hvr-grow alt-color-5-bg tertiary-color cursor-pointer" onClick={props.closeModal}>Cancelar</label>
-                <button type="submit" className="px-5 py-1 quarternary-color-bg rounded  poppins align-middle my-autoshadow-md hvr-grow alt-color-5">Finalizar</button>
+                <button type="submit" onClick={handleSubmit1} className="px-5 py-1 quarternary-color-bg rounded  poppins align-middle my-autoshadow-md hvr-grow alt-color-5">Finalizar</button>
+                 
               </div>
       </div>
+      </div>
       )
+      
     }
     else if (modal == 3 ){
+
       return (
-    
+      <div>
         <div className='flex w-full flex-wrap  flex' >
           <h1>Registro de Venda</h1>
           <p> Quantidade : </p>
-          <input id='qtd' className={inputmodaledit } placeholder={'Un.'}/>
-          
+          <input id='qtd' className={inputmodaledit } placeholder={'Un.'} onChange={(e) => {setQuantity(e.target.value)}}/>
            <div className="modal-action pb-2 ml-auto text-end align-end text-end justify-end">
                   <label htmlFor={props.modalName} className="px-5 py-1 quinteral-color-bg rounded poppins align-middle my-auto shadow-md hvr-grow alt-color-5-bg tertiary-color cursor-pointer" onClick={props.closeModal}>Cancelar</label>
-                  <button type="submit" className="px-5 py-1 quarternary-color-bg rounded  poppins align-middle my-autoshadow-md hvr-grow alt-color-5">Finalizar</button>
+                  <button type="submit" onClick={handleSubmit2} className="px-5 py-1 quarternary-color-bg rounded  poppins align-middle my-autoshadow-md hvr-grow alt-color-5">Finalizar</button>
                 </div>
+      </div>
       </div>
       )
     }
-}
 
+  };
 export default ModalProducts
