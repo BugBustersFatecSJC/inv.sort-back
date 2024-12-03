@@ -165,7 +165,7 @@ const buyBatchByProductId = async (req, res) => {
             where: { product_id: productId },
             select: { 
                 is_perishable: true, 
-                quantity_max:true
+                quantity_max:true,
             } // Seleciona apenas a propriedade de perecibilidade
         });
 
@@ -205,7 +205,7 @@ const buyBatchByProductId = async (req, res) => {
                         product_id: productId,
                         quantity: quantityForBatch,
                         expiration_date: product.is_perishable ? validadeLote : null, // Apenas produtos perecíveis têm validade
-                        quantity_max: quantityMaxPerBatch
+                        manufacture_date: new Date()
                     }
                 });
             }
