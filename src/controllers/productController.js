@@ -64,16 +64,17 @@ const createProduct = async (req, res, next) => {
     const isPerishableBool = Boolean(is_perishable);
     const costNumber = Number(prod_cost_value);
     const sellNumber = Number(prod_sell_value);
-    const productStockInt = Number(product_stock)
-    const productStockMinInt = Number(product_stock_min)
-    const quantityMaxInt = Number(quantity_max)
 
+    const stockInt = Number(product_stock);
+    const stockMinInt = Number(product_stock_min);
+    const stockMaxInt = Number(quantity_max);
     try {
         const newProduct = await prisma.product.create({
             data: {
-                product_stock: productStockInt,    
-                product_stock_min: productStockMinInt, 
-                quantity_max: quantityMaxInt, 
+                product_stock: stockInt,    
+                product_stock_min: stockMinInt, 
+                quantity_max: stockMaxInt, 
+
                 product_name,
                 description,
                 product_img,
@@ -225,6 +226,34 @@ const getProductsByCategory = async (req, res) => {
     }
 }
 
+const checkStockLevels = async (req, res) => {
+    try {
+        const productsWithLowStock = await prisma.$queryRaw`
+            SELECT product_id, product_name, product_stock, product_stock_min
+            FROM Product
+            WHERE product_stock <= product_stock_min + (product_stock_min * 0.20)
+        `;
+
+        if (productsWithLowStock.length > 0) {
+            productsWithLowStock.forEach(product => {
+                console.log(`Notificação: Produto ${product.product_name} está com estoque baixo!`);
+            });
+
+            res.status(200).json({
+                message: "Produtos com estoque baixo",
+                produtos: productsWithLowStock
+            });
+        } else {
+            res.status(200).json({
+                message: "Nenhum produto com estoque baixo foi encontrado."
+            });
+        }
+    } catch (error) {
+        console.error("Erro ao verificar níveis de estoque:", error);
+        res.status(500).json({ error: "Erro ao verificar níveis de estoque." });
+    }
+};
+
 module.exports = {
     getAllProducts,
     createProduct,
@@ -232,5 +261,6 @@ module.exports = {
     deleteProduct,
     getProductsbyId,  
     getAllBatches,
-    getProductsByCategory
+    getProductsByCategory,
+    checkStockLevels
 };
