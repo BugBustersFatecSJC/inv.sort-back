@@ -343,9 +343,7 @@ module.exports = {
     updateBatch,
     deleteBatch,
     sellBatch,
-
-    checkExpiringBatches
-
+    checkExpiringBatches,
     getBatchesByProductId,
     sellBatchByProductId,
     buyBatchByProductId
