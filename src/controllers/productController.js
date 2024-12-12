@@ -254,6 +254,69 @@ const checkStockLevels = async (req, res) => {
     }
 };
 
+const createStockMovement = async (req, res) => {
+    const { 
+        product_id, 
+        quantity, 
+        movement_type, 
+        user_id, 
+        batch_id 
+    } = req.body;
+
+    try {
+        if (!['compra', 'venda'].includes(movement_type)) {
+            return res.status(400).json({ error: "Tipo de movimento inválido." });
+        }
+
+        const product = await prisma.product.findUnique({
+            where: { product_id: parseInt(product_id) },
+            include: { category: true } 
+        });
+
+        if (!product) {
+            return res.status(404).json({ error: "Produto não encontrado." });
+        }
+
+        let newStock;
+        if (movement_type === 'compra') {
+            newStock = product.product_stock + parseInt(quantity);
+        } else if (movement_type === 'venda') {
+            if (product.product_stock < quantity) {
+                return res.status(400).json({ error: "Estoque insuficiente para realizar a venda." });
+            }
+            newStock = product.product_stock - parseInt(quantity);
+        }
+
+        const updatedProduct = await prisma.product.update({
+            where: { product_id: parseInt(product_id) },
+            data: { product_stock: newStock }
+        });
+
+        const stockMovement = await prisma.stockMovement.create({
+            data: {
+                product_id: parseInt(product_id),
+                quantity: parseInt(quantity),
+                movement_type: movement_type,
+                user_id: parseInt(user_id),
+                batch_id: batch_id ? parseInt(batch_id) : null,
+                category_id: product.category_id,
+                product_stock: newStock,
+                product_stock_min: product.product_stock_min,
+                quantity_max: product.quantity_max
+            }
+        });
+
+        res.status(201).json({
+            message: `Movimentação de ${movement_type} registrada com sucesso.`,
+            stockMovement,
+            updatedProduct
+        });
+    } catch (error) {
+        console.error("Erro ao criar movimentação de estoque:", error);
+        res.status(500).json({ error: "Erro ao criar movimentação de estoque." });
+    }
+};
+
 module.exports = {
     getAllProducts,
     createProduct,
@@ -262,5 +325,6 @@ module.exports = {
     getProductsbyId,  
     getAllBatches,
     getProductsByCategory,
-    checkStockLevels
+    checkStockLevels,
+    createStockMovement
 };

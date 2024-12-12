@@ -96,6 +96,7 @@ router.post('/buyandsell/buy/:product_id', batchController.buyBatchByProductId);
 // Rotas de Movimentação de estoque
 router.get('/movementpage', stockMoveController.getAllStockMovements);
 router.post('/filter-stock-movement', stockMoveController.getAllStockMovements);
+router.post('/movements', productController.createStockMovement);
 
 // fim das rotas
 
