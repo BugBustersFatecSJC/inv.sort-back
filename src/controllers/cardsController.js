@@ -31,7 +31,7 @@ const cardsYear = async (req, res) => {
     JOIN Product AS p ON sm.category_id = p.category_id
     JOIN Category AS category ON p.category_id = category.category_id
     WHERE sm.movement_type = 'venda'
-      AND MONTH(sm.movement_date) = ${mes} AND YEAR(sm.movement_date) = ${ano} AND category.category_name IS NOT NULL
+      AND YEAR(sm.movement_date) = ${ano} AND category.category_name IS NOT NULL
     GROUP BY category.category_name
     ORDER BY SUM(sm.quantity) DESC
     LIMIT 1;
@@ -46,7 +46,7 @@ const cardsYear = async (req, res) => {
     FROM StockMovement AS sm
     JOIN Product AS p ON sm.product_id = p.product_id
     WHERE sm.movement_type = 'venda'
-      AND MONTH(sm.movement_date) = ${mes} AND YEAR(sm.movement_date) = ${ano}
+      AND YEAR(sm.movement_date) = ${ano}
     GROUP BY p.product_name
     ORDER BY SUM(sm.quantity) DESC
     LIMIT 1;
@@ -60,7 +60,7 @@ const cardsYear = async (req, res) => {
      FROM StockMovement AS sm
      JOIN Product AS p ON sm.product_id = p.product_id
      WHERE sm.movement_type = 'venda'
-       AND MONTH(sm.movement_date) = ${mes} AND YEAR(sm.movement_date) = ${ano} AND p.product_name IS NOT NULL
+        AND YEAR(sm.movement_date) = ${ano} AND p.product_name IS NOT NULL
      GROUP BY p.product_name
      ORDER BY faturamento DESC
      LIMIT 1;
@@ -75,7 +75,7 @@ const cardsYear = async (req, res) => {
       FROM StockMovement AS sm
       JOIN Product AS p ON sm.category_id = p.category_id
       WHERE sm.movement_type = 'venda'
-        AND MONTH(sm.movement_date) = ${mes} AND YEAR(sm.movement_date) = ${ano}
+         AND YEAR(sm.movement_date) = ${ano}
       GROUP BY p.product_name
     ) AS faturamentos
     JOIN Category AS c ON faturamentos.category_id = c.category_id
